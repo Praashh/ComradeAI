@@ -1,0 +1,27 @@
+import Masthead from "@/app/_components/Masthead";
+import Hero from "@/app/_components/Hero";
+import Difference from "@/app/_components/Difference";
+import Memory from "@/app/_components/Memory";
+import Method from "@/app/_components/Method";
+import Principles from "@/app/_components/Principles";
+import PullQuote from "@/app/_components/PullQuote";
+import CTA from "@/app/_components/CTA";
+import Footer from "@/app/_components/Footer";
+
+export default function Home() {
+  return (
+    <>
+      <Masthead />
+      <main>
+        <Hero />
+        <Difference />
+        <Memory />
+        <Method />
+        <Principles />
+        <PullQuote />
+        <CTA />
+      </main>
+      <Footer />
+    </>
+  );
+}
