@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Masthead from "@/app/_components/Masthead";
 import { MilkdownEditorClient } from "@/app/_components/MilkdownEditorClient";
+import type { MilkdownEditorHandle } from "@/app/_components/MilkdownEditor";
+import { api } from "@/trpc/react";
 import {
   SidebarProvider,
   Sidebar,
@@ -51,6 +53,15 @@ function SidebarToggler() {
 function ChatPageContent() {
   const [decorTab, setDecorTab] = useState<"page" | "plain">("plain");
   const [photoTab, setPhotoTab] = useState<"chat" | "uploads">("chat");
+  const editorRef = useRef<MilkdownEditorHandle>(null);
+
+  const saveMemory = api.memory.saveMemory.useMutation();
+
+  function handleApplyChanges() {
+    const journalText = editorRef.current?.getMarkdown() ?? "";
+    if (!journalText.trim()) return;
+    saveMemory.mutate({ journalText });
+  }
 
   return (
     <div className="chat-workspace">
@@ -145,11 +156,15 @@ function ChatPageContent() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton className="sidebar-action-btn apply-changes-btn h-10 w-full justify-center">
+                  <SidebarMenuButton
+                    className="sidebar-action-btn apply-changes-btn h-10 w-full justify-center"
+                    onClick={handleApplyChanges}
+                    disabled={saveMemory.isPending}
+                  >
                     <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                     </svg>
-                    <span>Apply Changes</span>
+                    <span>{saveMemory.isPending ? "Saving..." : "Apply Changes"}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               </SidebarMenu>
@@ -169,7 +184,7 @@ function ChatPageContent() {
               </div>
 
               {/* Crepe Editor */}
-              <MilkdownEditorClient />
+              <MilkdownEditorClient ref={editorRef} />
             </div>
           </main>
         </div>
