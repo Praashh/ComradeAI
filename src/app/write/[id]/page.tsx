@@ -103,7 +103,7 @@ function JournalEditor({ journalId }: { journalId: number }) {
     );
   }
 
-  const defaultContent = data?.journal?.content || "";
+  const defaultContent = data?.journal?.content ?? "";
 
   return (
     <div className="chat-workspace">

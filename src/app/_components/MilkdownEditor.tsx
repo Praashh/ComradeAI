@@ -30,7 +30,7 @@ export const MilkdownEditor = forwardRef<MilkdownEditorHandle, MilkdownEditorPro
 
       const crepe = new Crepe({
         root: containerRef.current,
-        defaultValue: defaultValue || "# Start writing...\n\nYour thoughts here.",
+        defaultValue: defaultValue ?? "# Start writing...\n\nYour thoughts here.",
       });
 
       crepe.on((listener) => {
