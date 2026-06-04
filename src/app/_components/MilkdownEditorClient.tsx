@@ -9,8 +9,13 @@ const MilkdownEditor = dynamic(
   { ssr: false },
 );
 
-export const MilkdownEditorClient = forwardRef<MilkdownEditorHandle>(
-  function MilkdownEditorClient(_props, ref) {
-    return <MilkdownEditor ref={ref} />;
+interface MilkdownEditorClientProps {
+  onChange?: () => void;
+  defaultValue?: string;
+}
+
+export const MilkdownEditorClient = forwardRef<MilkdownEditorHandle, MilkdownEditorClientProps>(
+  function MilkdownEditorClient({ onChange, defaultValue }, ref) {
+    return <MilkdownEditor ref={ref} onChange={onChange} defaultValue={defaultValue} />;
   }
 );

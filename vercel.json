@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/summarize",
+      "schedule": "*/5 * * * *"
+    },
+    {
+      "path": "/api/cron/sync-memory",
+      "schedule": "*/5 * * * *"
+    }
+  ]
+}

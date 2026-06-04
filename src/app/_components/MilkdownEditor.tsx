@@ -9,10 +9,17 @@ export interface MilkdownEditorHandle {
   getMarkdown: () => string;
 }
 
-export const MilkdownEditor = forwardRef<MilkdownEditorHandle>(
-  function MilkdownEditor(_props, ref) {
+interface MilkdownEditorProps {
+  onChange?: () => void;
+  defaultValue?: string;
+}
+
+export const MilkdownEditor = forwardRef<MilkdownEditorHandle, MilkdownEditorProps>(
+  function MilkdownEditor({ onChange, defaultValue }, ref) {
     const containerRef = useRef<HTMLDivElement>(null);
     const crepeRef = useRef<Crepe | null>(null);
+    const onChangeRef = useRef(onChange);
+    onChangeRef.current = onChange;
 
     useImperativeHandle(ref, () => ({
       getMarkdown: () => crepeRef.current?.getMarkdown() ?? "",
@@ -23,7 +30,13 @@ export const MilkdownEditor = forwardRef<MilkdownEditorHandle>(
 
       const crepe = new Crepe({
         root: containerRef.current,
-        defaultValue: "# Start writing...\n\nYour thoughts here.",
+        defaultValue: defaultValue || "# Start writing...\n\nYour thoughts here.",
+      });
+
+      crepe.on((listener) => {
+        listener.markdownUpdated(() => {
+          onChangeRef.current?.();
+        });
       });
 
       crepe.create().then(() => {

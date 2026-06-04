@@ -1,5 +1,6 @@
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 import { memoryRouter } from "./routers/memory";
+import { journalRouter } from "./routers/journal";
 
 /**
  * This is the primary router for your server.
@@ -8,6 +9,7 @@ import { memoryRouter } from "./routers/memory";
  */
 export const appRouter = createTRPCRouter({
   memory: memoryRouter,
+  journal: journalRouter,
 });
 
 // export type definition of API
