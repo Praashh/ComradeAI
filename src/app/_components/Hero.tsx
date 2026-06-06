@@ -1,5 +1,4 @@
 import Transcript from "./Transcript";
-import NewJournalDialog from "./NewJournalDialog";
 import Link from "next/link";
 
 export default function Hero() {

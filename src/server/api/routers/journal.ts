@@ -90,4 +90,15 @@ export const journalRouter = createTRPCRouter({
 
       return { journal: updated };
     }),
+
+  getAllJournals: protectedProcedure.query(async ({ ctx }) => {
+    const userId = await getUserId(ctx.session.userId!);
+
+    const allJournals = await db
+      .select()
+      .from(journals)
+      .where(eq(journals.userId, userId));
+
+    return { journals: allJournals };
+  }),
 });

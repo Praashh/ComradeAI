@@ -4,6 +4,7 @@ import { useState } from "react";
 import { redirect, useRouter } from "next/navigation";
 import { api } from "@/trpc/react";
 import * as Icons from "@phosphor-icons/react";
+import { useJournals } from "@/lib/journals-context";
 import {
   Dialog,
   DialogContent,
@@ -55,6 +56,7 @@ interface NewJournalDialogProps {
 
 export default function NewJournalDialog({ children, defaultOpen = false }: NewJournalDialogProps) {
   const router = useRouter();
+  const { refetch: refetchJournals } = useJournals();
   const [open, setOpen] = useState(defaultOpen);
   const [title, setTitle] = useState("");
   const [mood, setMood] = useState("");
@@ -65,6 +67,7 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
   const createJournal = api.journal.create.useMutation({
     onSuccess: (data) => {
       setOpen(false);
+      refetchJournals();
       router.push(`/write/${data.journal.id}`);
     },
     onError: (err) => {

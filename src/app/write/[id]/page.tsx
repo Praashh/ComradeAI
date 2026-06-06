@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect, use } from "react";
+import Link from "next/link";
 import Masthead from "@/app/_components/Masthead";
 import { MilkdownEditorClient } from "@/app/_components/MilkdownEditorClient";
 import type { MilkdownEditorHandle } from "@/app/_components/MilkdownEditor";
 import { api } from "@/trpc/react";
 import * as Icons from "@phosphor-icons/react";
+import { JournalsProvider, useJournals } from "@/lib/journals-context";
 import {
   SidebarProvider,
   Sidebar,
@@ -58,16 +60,72 @@ function FocusToggler({ focusMode, onToggle }: { focusMode: boolean; onToggle: (
   );
 }
 
+function JournalList({ activeJournalId }: { activeJournalId: number }) {
+  const { journals, isLoading } = useJournals();
+
+  if (isLoading) {
+    return (
+      <SidebarMenu>
+        {Array.from({ length: 3 }).map((_, i) => (
+          <SidebarMenuItem key={i}>
+            <SidebarMenuButton disabled>
+              <span className="text-[var(--ink-3)] text-xs italic">Loading...</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ))}
+      </SidebarMenu>
+    );
+  }
+
+  if (!journals.length) {
+    return (
+      <p className="text-xs text-[var(--ink-3)] italic px-2 py-1">No journals yet.</p>
+    );
+  }
+
+  return (
+    <SidebarMenu>
+      {journals.map((journal) => {
+        const IconComponent = journal.icon
+          ? ((Icons[journal.icon as keyof typeof Icons] ?? Icons.BookOpen) as React.ElementType)
+          : Icons.BookOpen;
+        return (
+          <SidebarMenuItem key={journal.id}>
+            <SidebarMenuButton
+              isActive={journal.id === activeJournalId}
+              render={<Link href={`/write/${journal.id}`} target="_blank" />}
+            >
+              <IconComponent
+                size={16}
+                weight="duotone"
+                style={{ color: journal.color ?? "var(--ink-2)" }}
+              />
+              <span>{journal.title ?? "Untitled"}</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        );
+      })}
+    </SidebarMenu>
+  );
+}
+
 function JournalEditor({ journalId }: { journalId: number }) {
-  const [decorTab, setDecorTab] = useState<"page" | "plain">("plain");
-  const [photoTab, setPhotoTab] = useState<"chat" | "uploads">("chat");
   const [focusMode, setFocusMode] = useState(false);
+  const [title, setTitle] = useState("");
   const editorRef = useRef<MilkdownEditorHandle>(null);
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const titleDebounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const { refetch: refetchJournals } = useJournals();
   const { data, isLoading } = api.journal.get.useQuery({ id: journalId });
   const saveMemory = api.memory.saveMemory.useMutation();
   const saveJournal = api.journal.save.useMutation();
+
+  useEffect(() => {
+    if (data?.journal?.title != null) {
+      setTitle(data.journal.title);
+    }
+  }, [data?.journal?.title]);
 
   const debouncedSave = useCallback(() => {
     if (debounceTimer.current) {
@@ -80,10 +138,33 @@ function JournalEditor({ journalId }: { journalId: number }) {
     }, 500);
   }, [journalId, saveJournal]);
 
+  const saveTitle = useCallback(
+    (newTitle: string) => {
+      if (titleDebounceTimer.current) {
+        clearTimeout(titleDebounceTimer.current);
+      }
+      titleDebounceTimer.current = setTimeout(() => {
+        const content = editorRef.current?.getMarkdown() ?? "";
+        saveJournal.mutate(
+          { id: journalId, title: newTitle, content },
+          {
+            onSuccess: () => {
+              refetchJournals();
+            },
+          },
+        );
+      }, 500);
+    },
+    [journalId, saveJournal, refetchJournals],
+  );
+
   useEffect(() => {
     return () => {
       if (debounceTimer.current) {
         clearTimeout(debounceTimer.current);
+      }
+      if (titleDebounceTimer.current) {
+        clearTimeout(titleDebounceTimer.current);
       }
     };
   }, []);
@@ -92,11 +173,6 @@ function JournalEditor({ journalId }: { journalId: number }) {
     setFocusMode((prev) => !prev);
   }, []);
 
-  function handleApplyChanges() {
-    const journalText = editorRef.current?.getMarkdown() ?? "";
-    if (!journalText.trim()) return;
-    saveMemory.mutate({ journalText });
-  }
 
   if (isLoading) {
     return (
@@ -118,18 +194,26 @@ function JournalEditor({ journalId }: { journalId: number }) {
       >
         <Masthead />
       </div>
-      <SidebarProvider open={!focusMode} onOpenChange={(open) => setFocusMode(!open)} className="flex-1 min-h-0">
+      <SidebarProvider
+        open={!focusMode}
+        onOpenChange={(open) => setFocusMode(!open)}
+        className="flex-1 min-h-0"
+      >
         <div className="flex flex-1 w-full relative overflow-hidden">
           {/* Custom Lefthand Sidebar using ShadCN sidebar components */}
           <Sidebar side="left" collapsible="offcanvas">
             <SidebarHeader className="p-4 border-b border-[var(--rule-soft)]">
               <div className="flex items-center justify-between">
-                <span className="font-serif italic text-lg text-[var(--ink)] tracking-wide">Decorations</span>
+                <span className="font-serif italic text-lg text-[var(--ink)] tracking-wide">Journals</span>
               </div>
             </SidebarHeader>
             <SidebarContent className="p-2 gap-4">
-
-              
+              <SidebarGroup>
+                <SidebarGroupLabel>Your Journals</SidebarGroupLabel>
+                <SidebarGroupContent>
+                  <JournalList activeJournalId={journalId} />
+                </SidebarGroupContent>
+              </SidebarGroup>
             </SidebarContent>
 
             <SidebarFooter className="p-4 border-t border-[var(--rule-soft)]">
@@ -165,9 +249,16 @@ function JournalEditor({ journalId }: { journalId: number }) {
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
-                    <h1 className="font-disp text-3xl text-[var(--ink)] tracking-tight leading-tight">
-                      {data.journal.title ?? "Untitled Journal"}
-                    </h1>
+                    <input
+                      type="text"
+                      value={title}
+                      onChange={(e) => {
+                        setTitle(e.target.value);
+                        saveTitle(e.target.value);
+                      }}
+                      placeholder="Untitled Journal"
+                      className="w-full bg-transparent font-disp text-3xl text-[var(--ink)] tracking-tight leading-tight outline-none border-none placeholder:text-[var(--ink-3)]"
+                    />
                     {data.journal.mood && (
                       <p className="text-[10px] text-[var(--ink-3)] tracking-widest font-mono uppercase mt-0.5">
                         Feeling: <span className="text-[var(--ink-2)] font-semibold">{data.journal.mood}</span>
@@ -199,5 +290,9 @@ export default function WriteJournalPage({
   const { id } = use(params);
   const journalId = Number(id);
 
-  return <JournalEditor journalId={journalId} />;
+  return (
+    <JournalsProvider>
+      <JournalEditor journalId={journalId} />
+    </JournalsProvider>
+  );
 }
