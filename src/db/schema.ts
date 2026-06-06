@@ -27,6 +27,8 @@ export const journals = pgTable("journals", {
     title: text("title"),
     content: text("content").notNull(),
     mood: text("mood"),
+    icon: text("icon"),
+    color: text("color"),
 
     summary: text("summary"),
     summarizedAt: timestamp("summarized_at"),
