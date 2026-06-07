@@ -18,19 +18,32 @@ async function getUserId(clerkId: string) {
 }
 
 export const journalRouter = createTRPCRouter({
-  create: protectedProcedure.mutation(async ({ ctx }) => {
-    const userId = await getUserId(ctx.session.userId!);
-
-    const [journal] = await db
-      .insert(journals)
-      .values({
-        userId,
-        content: "",
+  create: protectedProcedure
+    .input(
+      z.object({
+        title: z.string().min(1, "Title is required"),
+        mood: z.string().optional(),
+        icon: z.string().optional(),
+        color: z.string().optional(),
       })
-      .returning();
+    )
+    .mutation(async ({ input, ctx }) => {
+      const userId = await getUserId(ctx.session.userId!);
 
-    return { journal: journal! };
-  }),
+      const [journal] = await db
+        .insert(journals)
+        .values({
+          userId,
+          title: input.title,
+          content: "",
+          mood: input.mood,
+          icon: input.icon,
+          color: input.color,
+        })
+        .returning();
+
+      return { journal: journal! };
+    }),
 
   get: protectedProcedure
     .input(z.object({ id: z.number() }))
@@ -77,4 +90,15 @@ export const journalRouter = createTRPCRouter({
 
       return { journal: updated };
     }),
+
+  getAllJournals: protectedProcedure.query(async ({ ctx }) => {
+    const userId = await getUserId(ctx.session.userId!);
+
+    const allJournals = await db
+      .select()
+      .from(journals)
+      .where(eq(journals.userId, userId));
+
+    return { journals: allJournals };
+  }),
 });

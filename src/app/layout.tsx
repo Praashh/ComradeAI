@@ -7,11 +7,11 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { TRPCReactProvider } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 
-const jetbrainsMono = JetBrains_Mono({subsets:['latin'],variable:'--font-mono'});
+const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
 
 export const metadata: Metadata = {
-  title: "talkamore — a thinking partner that remembers",
-  description: "Most AI forgets you the second you close the tab. Maya remembers — across weeks, across moods, across the things you only half-said — and reflects the patterns back to you when they finally matter.",
+  title: "Mira - A thinking, consoling and understanding AI friend.",
+  description: "Mira is an AI application, that stores your journal, learns about you from your journals, and console you, understand you and help you in decision making based on your nature, situation or circumstances.",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 

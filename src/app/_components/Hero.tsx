@@ -1,5 +1,5 @@
-import Link from "next/link";
 import Transcript from "./Transcript";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -45,11 +45,13 @@ export default function Hero() {
             and reflects the patterns back to you when they finally matter.
           </p>
           <div className="flex gap-[14px] items-center flex-wrap mt-[30px]">
-            <Link
-              href="/write"
-              className="[font-family:var(--body)] cursor-pointer text-[0.96rem] tracking-[0.02em] transition-all duration-200 inline-flex items-center gap-2 bg-red text-paper px-[24px] py-[13px] border-0 rounded-[2px] font-medium hover:bg-red-d hover:-translate-y-px"
-            >
-              Start writing — it&rsquo;s free
+            <Link href={"/write"}>
+              <button
+                type="button"
+                className="[font-family:var(--body)] cursor-pointer text-[0.96rem] tracking-[0.02em] transition-all duration-200 inline-flex items-center gap-2 bg-red text-paper px-[24px] py-[13px] border-0 rounded-[2px] font-medium hover:bg-red-d hover:-translate-y-px"
+              >
+                Start writing — it&rsquo;s free
+              </button>
             </Link>
           </div>
         </div>

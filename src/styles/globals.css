@@ -20,7 +20,7 @@
   --body: var(--font-newsreader), Georgia, serif;
   --maxw: 1140px;
   --pad: clamp(20px, 5vw, 40px);
-  
+
   /* Shadcn defaults - mapped to our palette where possible */
   --background: var(--paper);
   --foreground: var(--ink);
@@ -94,36 +94,37 @@
     box-sizing: border-box;
     @apply border-border;
   }
-  
+
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
     @apply font-body;
   }
-  
+
   body {
-    @apply bg-paper text-ink antialiased font-body;
+    @apply bg-paper text-ink font-body antialiased;
     font-size: 18px;
     line-height: 1.62;
     overflow-x: hidden;
     font-weight: 400;
   }
-  
-  img, svg {
+
+  img,
+  svg {
     display: block;
     max-width: 100%;
   }
-  
+
   a {
     color: inherit;
     text-decoration: none;
   }
-  
+
   ::selection {
     background: var(--red);
     color: var(--paper);
   }
-  
+
   p {
     font-optical-sizing: auto;
   }
@@ -194,7 +195,7 @@ h2 .it.r {
 .nav-btn-start::after,
 .start::after {
   content: "";
-  @apply absolute left-0 right-0 bottom-0 h-[1.5px] bg-red;
+  @apply bg-red absolute right-0 bottom-0 left-0 h-[1.5px];
 }
 
 /* Animated underline button */
@@ -203,7 +204,7 @@ h2 .it.r {
 }
 .btn-text::after {
   content: "";
-  @apply absolute left-0 bottom-0 w-0 h-[1.5px] bg-ink transition-[width] duration-280;
+  @apply bg-ink absolute bottom-0 left-0 h-[1.5px] w-0 transition-[width] duration-280;
 }
 .btn-text:hover::after {
   @apply w-full;
@@ -218,16 +219,16 @@ h2 .it.r {
 /* .insight decorative left border */
 .insight::before {
   content: "";
-  @apply absolute left-0 top-[6px] bottom-[6px] w-[2px] bg-red;
+  @apply bg-red absolute top-[6px] bottom-[6px] left-0 w-[2px];
 }
 
 /* Strikethrough animation */
 .strike {
-  @apply relative text-ink-3;
+  @apply text-ink-3 relative;
 }
 .strike::after {
   content: "";
-  @apply absolute left-[-2px] right-[-2px] top-[52%] h-[2px] bg-red origin-left transition-transform duration-600 ease-[cubic-bezier(0,0,0,1)] delay-200 scale-x-0;
+  @apply bg-red absolute top-[52%] right-[-2px] left-[-2px] h-[2px] origin-left scale-x-0 transition-transform delay-200 duration-600 ease-[cubic-bezier(0,0,0,1)];
 }
 .in .strike::after {
   @apply scale-x-100;
@@ -239,10 +240,10 @@ h2 .it.r {
 
 /* ========== NAV TOGGLE (hamburger → X animation) ========== */
 .nav-toggle {
-  @apply hidden bg-none border-none cursor-pointer w-[34px] h-[30px] relative;
+  @apply relative hidden h-[30px] w-[34px] cursor-pointer border-none bg-none;
 }
 .nav-toggle span {
-  @apply absolute left-[5px] w-[24px] h-[2px] bg-ink transition-all duration-300;
+  @apply bg-ink absolute left-[5px] h-[2px] w-[24px] transition-all duration-300;
 }
 .nav-toggle span:nth-child(1) {
   @apply top-[9px];
@@ -265,19 +266,19 @@ body.menu-open .nav-toggle span:nth-child(2) {
 
 /* ========== MOBILE MENU OVERLAY ========== */
 .mobile-menu {
-  @apply fixed inset-0 z-[290] bg-paper flex flex-col invisible opacity-0 -translate-y-full transition-all duration-400 ease-[cubic-bezier(0.2,0.7,0.3,1)];
+  @apply bg-paper invisible fixed inset-0 z-[290] flex -translate-y-full flex-col opacity-0 transition-all duration-400 ease-[cubic-bezier(0.2,0.7,0.3,1)];
   padding: 90px var(--pad) 40px;
 }
 body.menu-open .mobile-menu {
-  @apply visible opacity-100 translate-y-0;
+  @apply visible translate-y-0 opacity-100;
 }
 
 /* ========== SCROLL REVEAL ========== */
 .reveal {
-  @apply opacity-0 translate-y-[24px] transition-all duration-800 ease-[cubic-bezier(0.2,0.7,0.3,1)];
+  @apply translate-y-[24px] opacity-0 transition-all duration-800 ease-[cubic-bezier(0.2,0.7,0.3,1)];
 }
 .reveal.in {
-  @apply opacity-100 translate-y-0;
+  @apply translate-y-0 opacity-100;
 }
 
 /* ========== RESPONSIVE ========== */
@@ -306,8 +307,12 @@ body.menu-open .mobile-menu {
 }
 
 /* ========== MILKDOWN CREPE EDITOR STYLING ========== */
+.milkdown .milkdown-block-handle {
+  display: none !important;
+}
+
 .milkdown-crepe-container {
-  @apply w-full max-w-full mt-[20px] bg-paper-2 border border-rule-soft rounded-[4px] shadow-[0_4px_20px_rgba(33,28,22,0.05)];
+  @apply bg-paper-2 border-rule-soft mt-[20px] w-full max-w-full rounded-[4px] border shadow-[0_4px_20px_rgba(33,28,22,0.05)];
   padding: 24px clamp(16px, 4vw, 36px);
 }
 
@@ -351,7 +356,7 @@ body.menu-open .mobile-menu {
 }
 
 .chat-title {
-  @apply font-disp font-normal text-ink mb-[20px] leading-[1.1];
+  @apply font-disp text-ink mb-[20px] leading-[1.1] font-normal;
   font-size: clamp(2.5rem, 6vw, 4.2rem);
 }
 
@@ -530,7 +535,7 @@ body.menu-open .mobile-menu {
 }
 
 .editor-title-input {
-  @apply w-full bg-transparent border-none font-disp font-normal text-ink mb-[16px] leading-[1.1] pt-[4px] pb-[10px] px-0 border-b-[1.5px] border-rule-soft transition-colors duration-250 ease-in-out focus:outline-none focus:border-rule;
+  @apply font-disp text-ink border-rule-soft focus:border-rule mb-[16px] w-full border-b-[1.5px] border-none bg-transparent px-0 pt-[4px] pb-[10px] leading-[1.1] font-normal transition-colors duration-250 ease-in-out focus:outline-none;
   font-size: clamp(2.4rem, 6vw, 3.8rem);
 }
 .editor-title-input::placeholder {

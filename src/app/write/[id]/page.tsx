@@ -1,10 +1,13 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect, use } from "react";
+import Link from "next/link";
 import Masthead from "@/app/_components/Masthead";
 import { MilkdownEditorClient } from "@/app/_components/MilkdownEditorClient";
 import type { MilkdownEditorHandle } from "@/app/_components/MilkdownEditor";
 import { api } from "@/trpc/react";
+import * as Icons from "@phosphor-icons/react";
+import { JournalsProvider, useJournals } from "@/lib/journals-context";
 import {
   SidebarProvider,
   Sidebar,
@@ -17,7 +20,6 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  useSidebar,
 } from "@/components/ui/sidebar";
 
 function getFormattedDate() {
@@ -31,16 +33,15 @@ function getFormattedDate() {
     .toUpperCase();
 }
 
-function SidebarToggler() {
-  const { toggleSidebar } = useSidebar();
+function FocusToggler({ focusMode, onToggle }: { focusMode: boolean; onToggle: () => void }) {
   return (
     <button
-      onClick={toggleSidebar}
-      className="flex items-center gap-1.5 text-xs text-[var(--ink-2)] hover:text-[var(--ink)] transition-colors cursor-pointer"
-      title="Toggle Sidebar"
+      onClick={onToggle}
+      className={`flex items-center gap-1.5 text-xs transition-colors cursor-pointer ${focusMode ? "text-[var(--ink-2)] hover:text-[var(--ink)]" : "text-[var(--red)] hover:opacity-80"}`}
+      title="Toggle Focus Mode"
     >
       <svg
-        className="w-4.5 h-4.5 text-[var(--ink-2)]"
+        className="w-4.5 h-4.5"
         fill="none"
         stroke="currentColor"
         strokeWidth="1.5"
@@ -52,20 +53,79 @@ function SidebarToggler() {
           d="M9 4.5v15m6-15v15m-12-3h18c.6 0 1-.4 1-1V5c0-.6-.4-1-1-1H3c-.6 0-1 .4-1 1v13c0 .6.4 1 1 1z"
         />
       </svg>
-      <span className="text-[10px] tracking-wider uppercase font-medium">focus mode</span>
+      <span className="text-[10px] tracking-wider uppercase font-medium">
+        {focusMode ? "back to normal" : "focus mode"}
+      </span>
     </button>
   );
 }
 
+function JournalList({ activeJournalId }: { activeJournalId: number }) {
+  const { journals, isLoading } = useJournals();
+
+  if (isLoading) {
+    return (
+      <SidebarMenu>
+        {Array.from({ length: 3 }).map((_, i) => (
+          <SidebarMenuItem key={i}>
+            <SidebarMenuButton disabled>
+              <span className="text-[var(--ink-3)] text-xs italic">Loading...</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ))}
+      </SidebarMenu>
+    );
+  }
+
+  if (!journals.length) {
+    return (
+      <p className="text-xs text-[var(--ink-3)] italic px-2 py-1">No journals yet.</p>
+    );
+  }
+
+  return (
+    <SidebarMenu>
+      {journals.map((journal) => {
+        const IconComponent = journal.icon
+          ? ((Icons[journal.icon as keyof typeof Icons] ?? Icons.BookOpen) as React.ElementType)
+          : Icons.BookOpen;
+        return (
+          <SidebarMenuItem key={journal.id}>
+            <SidebarMenuButton
+              isActive={journal.id === activeJournalId}
+              render={<Link href={`/write/${journal.id}`} target="_blank" />}
+            >
+              <IconComponent
+                size={16}
+                weight="duotone"
+                style={{ color: journal.color ?? "var(--ink-2)" }}
+              />
+              <span>{journal.title ?? "Untitled"}</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        );
+      })}
+    </SidebarMenu>
+  );
+}
+
 function JournalEditor({ journalId }: { journalId: number }) {
-  const [decorTab, setDecorTab] = useState<"page" | "plain">("plain");
-  const [photoTab, setPhotoTab] = useState<"chat" | "uploads">("chat");
+  const [focusMode, setFocusMode] = useState(false);
+  const [title, setTitle] = useState("");
   const editorRef = useRef<MilkdownEditorHandle>(null);
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const titleDebounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const { refetch: refetchJournals } = useJournals();
   const { data, isLoading } = api.journal.get.useQuery({ id: journalId });
   const saveMemory = api.memory.saveMemory.useMutation();
   const saveJournal = api.journal.save.useMutation();
+
+  useEffect(() => {
+    if (data?.journal?.title != null) {
+      setTitle(data.journal.title);
+    }
+  }, [data?.journal?.title]);
 
   const debouncedSave = useCallback(() => {
     if (debounceTimer.current) {
@@ -78,19 +138,41 @@ function JournalEditor({ journalId }: { journalId: number }) {
     }, 500);
   }, [journalId, saveJournal]);
 
+  const saveTitle = useCallback(
+    (newTitle: string) => {
+      if (titleDebounceTimer.current) {
+        clearTimeout(titleDebounceTimer.current);
+      }
+      titleDebounceTimer.current = setTimeout(() => {
+        const content = editorRef.current?.getMarkdown() ?? "";
+        saveJournal.mutate(
+          { id: journalId, title: newTitle, content },
+          {
+            onSuccess: () => {
+              refetchJournals();
+            },
+          },
+        );
+      }, 500);
+    },
+    [journalId, saveJournal, refetchJournals],
+  );
+
   useEffect(() => {
     return () => {
       if (debounceTimer.current) {
         clearTimeout(debounceTimer.current);
       }
+      if (titleDebounceTimer.current) {
+        clearTimeout(titleDebounceTimer.current);
+      }
     };
   }, []);
 
-  function handleApplyChanges() {
-    const journalText = editorRef.current?.getMarkdown() ?? "";
-    if (!journalText.trim()) return;
-    saveMemory.mutate({ journalText });
-  }
+  const toggleFocusMode = useCallback(() => {
+    setFocusMode((prev) => !prev);
+  }, []);
+
 
   if (isLoading) {
     return (
@@ -106,124 +188,85 @@ function JournalEditor({ journalId }: { journalId: number }) {
   const defaultContent = data?.journal?.content ?? "";
 
   return (
-    <div className="chat-workspace">
-      <Masthead />
-      <SidebarProvider defaultOpen={true}>
+    <div className="chat-workspace flex flex-col h-screen overflow-hidden">
+      <div
+        className={`shrink-0 transition-all duration-300 ease-in-out ${focusMode ? "max-h-0 opacity-0 overflow-hidden" : "max-h-[200px] opacity-100"}`}
+      >
+        <Masthead />
+      </div>
+      <SidebarProvider
+        open={!focusMode}
+        onOpenChange={(open) => setFocusMode(!open)}
+        className="flex-1 min-h-0"
+      >
         <div className="flex flex-1 w-full relative overflow-hidden">
           {/* Custom Lefthand Sidebar using ShadCN sidebar components */}
-          <Sidebar side="left" collapsible="icon">
+          <Sidebar side="left" collapsible="offcanvas">
             <SidebarHeader className="p-4 border-b border-[var(--rule-soft)]">
               <div className="flex items-center justify-between">
-                <span className="font-serif italic text-lg text-[var(--ink)] tracking-wide">Decorations</span>
+                <span className="font-serif italic text-lg text-[var(--ink)] tracking-wide">Journals</span>
               </div>
             </SidebarHeader>
             <SidebarContent className="p-2 gap-4">
-
-              {/* DECORATIONS SECTION */}
               <SidebarGroup>
-                <SidebarGroupLabel className="[font-family:var(--body)] text-[0.72rem] font-semibold tracking-[0.16em] uppercase text-ink-2 mb-3 flex items-center justify-between px-0">
-                  Decorations
-                </SidebarGroupLabel>
+                <SidebarGroupLabel>Your Journals</SidebarGroupLabel>
                 <SidebarGroupContent>
-                  <div className="flex bg-paper-3 p-[3px] rounded border border-rule-soft w-full">
-                    <button
-                      onClick={() => setDecorTab("page")}
-                      className={`bg-transparent border-0 text-ink-2 px-3 py-[6px] rounded-[2px] [font-family:var(--body)] text-[0.8rem] font-medium tracking-[0.06em] uppercase cursor-pointer transition-all duration-[250ms] flex-1 text-center hover:text-ink${decorTab === "page" ? " bg-paper text-ink shadow-[0_1px_3px_rgba(33,28,22,0.12)] !font-semibold" : ""}`}
-                    >
-                      Page
-                    </button>
-                    <button
-                      onClick={() => setDecorTab("plain")}
-                      className={`bg-transparent border-0 text-ink-2 px-3 py-[6px] rounded-[2px] [font-family:var(--body)] text-[0.8rem] font-medium tracking-[0.06em] uppercase cursor-pointer transition-all duration-[250ms] flex-1 text-center hover:text-ink${decorTab === "plain" ? " bg-paper text-ink shadow-[0_1px_3px_rgba(33,28,22,0.12)] !font-semibold" : ""}`}
-                    >
-                      Plain
-                    </button>
-                  </div>
-                </SidebarGroupContent>
-              </SidebarGroup>
-
-              {/* PHOTOS SECTION */}
-              <SidebarGroup>
-                <div className="flex items-center justify-between [font-family:var(--body)] text-[0.72rem] font-semibold tracking-[0.16em] uppercase text-ink-2 mb-3">
-                  <SidebarGroupLabel className="px-0">
-                    Photos
-                  </SidebarGroupLabel>
-                  <a href="#" className="text-[10px] lowercase tracking-normal text-[var(--red)] hover:underline normal-case">
-                    tap to add ⌃
-                  </a>
-                </div>
-                <SidebarGroupContent>
-                  <SidebarMenu className="flex flex-row gap-4 border-b border-[var(--rule-soft)] mb-3 pb-1">
-                    <SidebarMenuItem>
-                      <button
-                        className={`bg-transparent border-0 cursor-pointer [font-family:var(--body)] text-[0.8rem] tracking-[0.08em] uppercase pb-[6px] transition-all duration-200 border-b-2${photoTab === "chat" ? " text-red border-red" : " text-ink-3 border-transparent hover:text-ink"}`}
-                        onClick={() => setPhotoTab("chat")}
-                      >
-                        Chat
-                      </button>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                      <button
-                        className={`bg-transparent border-0 cursor-pointer [font-family:var(--body)] text-[0.8rem] tracking-[0.08em] uppercase pb-[6px] transition-all duration-200 border-b-2${photoTab === "uploads" ? " text-red border-red" : " text-ink-3 border-transparent hover:text-ink"}`}
-                        onClick={() => setPhotoTab("uploads")}
-                      >
-                        Uploads
-                      </button>
-                    </SidebarMenuItem>
-                  </SidebarMenu>
-                  <div className="[font-family:var(--body)] italic text-[0.88rem] leading-[1.6] text-ink-2 px-5 py-4 bg-[rgba(236,230,215,0.4)] border-[1.5px] border-dashed border-rule-soft rounded mt-[10px] text-center shadow-[inset_0_1px_3px_rgba(33,28,22,0.02)]">
-                    no chat photos yet. share one with maya, sage, theo, or luna and they&apos;ll appear here.
-                  </div>
+                  <JournalList activeJournalId={journalId} />
                 </SidebarGroupContent>
               </SidebarGroup>
             </SidebarContent>
 
             <SidebarFooter className="p-4 border-t border-[var(--rule-soft)]">
-              <SidebarMenu className="gap-2">
-                <SidebarMenuItem>
-                  <SidebarMenuButton className="sidebar-action-btn h-10 w-full justify-center">
-                    <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                    </svg>
-                    <span>Upload Photo</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton className="sidebar-action-btn h-10 w-full justify-center">
-                    <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
-                    </svg>
-                    <span>Camera</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    className="sidebar-action-btn apply-changes-btn h-10 w-full justify-center"
-                    onClick={handleApplyChanges}
-                    disabled={saveMemory.isPending}
-                  >
-                    <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                    </svg>
-                    <span>{saveMemory.isPending ? "Saving..." : "Apply Changes"}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
             </SidebarFooter>
           </Sidebar>
 
           {/* Main Writing Pad Editor Canvas */}
-          <main className="flex-1 min-h-screen px-6 py-12 overflow-y-auto">
+          <main className="flex-1 min-h-0 px-6 py-12 overflow-y-auto">
             <div className="mx-auto max-w-2xl relative">
 
               {/* Header inside writing space displaying Date & Sidebar Toggle focus controls */}
-              <div className="flex items-center justify-between border-b border-[var(--rule-soft)] pb-3 mb-6">
+              <div className="flex items-center justify-between border-b border-[var(--rule-soft)] pb-3 mb-4">
                 <span className="text-xs uppercase tracking-widest text-[var(--ink-2)] font-mono">
                   {getFormattedDate()}
                 </span>
-                <SidebarToggler />
+                <FocusToggler focusMode={focusMode} onToggle={toggleFocusMode} />
               </div>
+
+              {/* Journal Title, Icon and Mood Header */}
+              {data?.journal && (
+                <div className="mb-6 flex items-center gap-4 animate-fade-in">
+                  {data.journal.icon && (
+                    <div
+                      className="w-14 h-14 rounded-full flex items-center justify-center text-white shadow-sm shrink-0"
+                      style={{
+                        background: data.journal.color ?? "var(--red)",
+                      }}
+                    >
+                      {(() => {
+                        const IconComponent = (Icons[data.journal.icon as keyof typeof Icons] ?? Icons.BookOpen) as React.ElementType;
+                        return <IconComponent size={28} weight="duotone" />;
+                      })()}
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <input
+                      type="text"
+                      value={title}
+                      onChange={(e) => {
+                        setTitle(e.target.value);
+                        saveTitle(e.target.value);
+                      }}
+                      placeholder="Untitled Journal"
+                      className="w-full bg-transparent font-disp text-3xl text-[var(--ink)] tracking-tight leading-tight outline-none border-none placeholder:text-[var(--ink-3)]"
+                    />
+                    {data.journal.mood && (
+                      <p className="text-[10px] text-[var(--ink-3)] tracking-widest font-mono uppercase mt-0.5">
+                        Feeling: <span className="text-[var(--ink-2)] font-semibold">{data.journal.mood}</span>
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Crepe Editor */}
               <MilkdownEditorClient
@@ -247,5 +290,9 @@ export default function WriteJournalPage({
   const { id } = use(params);
   const journalId = Number(id);
 
-  return <JournalEditor journalId={journalId} />;
+  return (
+    <JournalsProvider>
+      <JournalEditor journalId={journalId} />
+    </JournalsProvider>
+  );
 }
