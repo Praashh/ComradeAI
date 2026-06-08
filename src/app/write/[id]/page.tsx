@@ -7,7 +7,8 @@ import { MilkdownEditorClient } from "@/app/_components/MilkdownEditorClient";
 import type { MilkdownEditorHandle } from "@/app/_components/MilkdownEditor";
 import { api } from "@/trpc/react";
 import * as Icons from "@phosphor-icons/react";
-import { JournalsProvider, useJournals } from "@/lib/journals-context";
+import { useJournals } from "@/lib/journals-context";
+import NewJournalDialog from "@/app/_components/NewJournalDialog";
 import {
   SidebarProvider,
   Sidebar,
@@ -118,7 +119,6 @@ function JournalEditor({ journalId }: { journalId: number }) {
 
   const { refetch: refetchJournals } = useJournals();
   const { data, isLoading } = api.journal.get.useQuery({ id: journalId });
-  const saveMemory = api.memory.saveMemory.useMutation();
   const saveJournal = api.journal.save.useMutation();
 
   useEffect(() => {
@@ -209,7 +209,18 @@ function JournalEditor({ journalId }: { journalId: number }) {
             </SidebarHeader>
             <SidebarContent className="p-2 gap-4">
               <SidebarGroup>
-                <SidebarGroupLabel>Your Journals</SidebarGroupLabel>
+                <SidebarGroupLabel className="flex items-center justify-between">
+                  Your Journals
+                  <NewJournalDialog>
+                    <button
+                      type="button"
+                      className="ml-auto p-0.5 rounded hover:bg-[var(--paper-3)] text-[var(--ink-3)] hover:text-[var(--ink)] transition-colors cursor-pointer"
+                      title="New Journal"
+                    >
+                      <Icons.Plus size={16} weight="bold" />
+                    </button>
+                  </NewJournalDialog>
+                </SidebarGroupLabel>
                 <SidebarGroupContent>
                   <JournalList activeJournalId={journalId} />
                 </SidebarGroupContent>
@@ -290,9 +301,5 @@ export default function WriteJournalPage({
   const { id } = use(params);
   const journalId = Number(id);
 
-  return (
-    <JournalsProvider>
-      <JournalEditor journalId={journalId} />
-    </JournalsProvider>
-  );
+  return <JournalEditor journalId={journalId} />;
 }

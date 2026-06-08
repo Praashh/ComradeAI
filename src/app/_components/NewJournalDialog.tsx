@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { api } from "@/trpc/react";
 import * as Icons from "@phosphor-icons/react";
 import { useJournals } from "@/lib/journals-context";
@@ -99,14 +99,13 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
       setSelectedIcon("MasksPlay");
       setErrorMsg("");
     }
-    redirect("/")
   };
 
   const PreviewIcon = (Icons[selectedIcon as keyof typeof Icons] ?? Icons.BookOpen) as React.ElementType;
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger render={<span />}>
+      <DialogTrigger nativeButton={false} render={<span />}>
         {children}
       </DialogTrigger>
       <DialogContent
