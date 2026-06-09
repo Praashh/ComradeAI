@@ -9,24 +9,24 @@ export default function Memory() {
             § 02
           </span>
           <h2 className="[font-family:var(--disp)] font-normal text-[clamp(2rem,5.5vw,3.6rem)] leading-[1.02] tracking-[-0.01em]">
-            Scattered moments,
+            She knows your story,
             <br />
-            <span className="it">woven into a pattern.</span>
+            <span className="it">not just your words.</span>
           </h2>
         </RevealOnScroll>
         <RevealOnScroll
           as="p"
           className="text-[clamp(1.05rem,2.2vw,1.25rem)] text-ink-2 max-w-[30em] mt-[18px]"
         >
-          Mira doesn&rsquo;t merely store what you say — she connects it. Months
-          of half-thoughts become a single observation you could never have
-          reached alone.
+          Mira learns about you from every journal entry — your nature, your
+          situation, your circumstances — and connects the dots you
+          couldn&rsquo;t see yourself.
         </RevealOnScroll>
 
         <div className="grid grid-cols-[0.85fr_1.15fr] gap-[clamp(34px,5vw,64px)] mt-[46px] items-center max-tablet:grid-cols-1 max-tablet:gap-[34px]">
           <RevealOnScroll>
             <p className="text-[0.7rem] tracking-[0.2em] uppercase text-ink-3 mb-[18px]">
-              Four things you said —
+              Four journal entries —
             </p>
             <div className="grid grid-cols-[auto_1fr] gap-[16px] py-[13px] border-b border-rule-soft items-baseline">
               <span className="text-[0.72rem] tracking-[0.1em] uppercase text-red font-medium whitespace-nowrap">Feb 03</span>
@@ -48,7 +48,7 @@ export default function Memory() {
 
           <RevealOnScroll className="insight relative pl-[clamp(18px,3vw,34px)]">
             <span className="text-[0.72rem] tracking-[0.2em] uppercase text-red mb-[16px] block">
-              — And one thing Mira saw
+              — What Mira understood
             </span>
             <p className="[font-family:var(--disp)] text-[clamp(1.55rem,3.4vw,2.2rem)] leading-[1.18] font-normal">
               &ldquo;There&rsquo;s a rhythm here. For three springs running, the
@@ -72,7 +72,7 @@ export default function Memory() {
               from?&rdquo;
             </p>
             <p className="text-[0.82rem] text-ink-3 mt-[20px] italic">
-              Synthesized from four conversations across fourteen weeks.
+              Understood from four journal entries across fourteen weeks.
             </p>
           </RevealOnScroll>
         </div>

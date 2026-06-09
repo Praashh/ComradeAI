@@ -5,11 +5,11 @@ export default function Hero() {
   return (
     <div className="wrap pt-[clamp(34px,5vw,54px)]">
        <h1 className="[font-family:var(--disp)] font-normal text-[clamp(3.1rem,11vw,8.2rem)] leading-[0.92] tracking-[-0.015em]">
-        It names what you
+        The friend who
         <br />
-        can&rsquo;t quite{" "}
+        never{" "}
         <span className="it">
-          articulate
+          forgets
           <svg
             className="underline"
             viewBox="0 0 300 22"
@@ -29,11 +29,11 @@ export default function Hero() {
         <div>
           <p className="text-[clamp(1.15rem,2.4vw,1.42rem)] leading-[1.5] text-ink max-w-[24em]">
             <span className="float-left [font-family:var(--disp)] text-[3.6em] leading-[0.72] pt-[0.06em] pr-[0.08em] text-red not-italic">
-              M
+              G
             </span>
-            ost AI forgets you the second you close the tab. Mira remembers —
-            across weeks, across moods, across the things you only half-said —
-            and reflects the patterns back to you when they finally matter.
+            rowing up, we all lost friends for one reason or another. Mira is
+            the friend who stays — she reads your journal, learns who you are,
+            and is there when you need someone who truly understands.
           </p>
           <div className="flex gap-[14px] items-center flex-wrap mt-[30px]">
             <Link href={"/write"}>
@@ -41,7 +41,7 @@ export default function Hero() {
                 type="button"
                 className="[font-family:var(--body)] cursor-pointer text-[0.96rem] tracking-[0.02em] transition-all duration-200 inline-flex items-center gap-2 bg-red text-paper px-[24px] py-[13px] border-0 rounded-[2px] font-medium hover:bg-red-d hover:-translate-y-px"
               >
-                Start writing — it&rsquo;s free
+                Start your journal — it&rsquo;s free
               </button>
             </Link>
           </div>

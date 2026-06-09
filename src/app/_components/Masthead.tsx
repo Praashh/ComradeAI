@@ -55,7 +55,13 @@ export default function Masthead() {
                 href="/chat"
                 className="font-body text-[0.82rem] tracking-[0.14em] uppercase text-ink-2 transition-colors duration-200 hover:text-ink"
               >
-                Chat
+                AskMira
+              </Link>
+              <Link
+                href="/mind"
+                className="font-body text-[0.82rem] tracking-[0.14em] uppercase text-ink-2 transition-colors duration-200 hover:text-ink"
+              >
+                MiraMind
               </Link>
               <UserButton
                 appearance={{
@@ -136,7 +142,14 @@ export default function Masthead() {
             onClick={closeMenu}
             className="font-disp text-[2.2rem] py-[16px] border-b border-rule-soft text-ink hover:text-red transition-colors"
           >
-            Chat
+            AskMira
+          </Link>
+          <Link
+            href="/mind"
+            onClick={closeMenu}
+            className="font-disp text-[2.2rem] py-[16px] border-b border-rule-soft text-ink hover:text-red transition-colors"
+          >
+            MiraMind
           </Link>
           <div className="flex items-center justify-between py-[20px] border-b border-rule-soft">
             <span className="font-disp text-[1.8rem] text-ink-2">
