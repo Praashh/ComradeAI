@@ -2,7 +2,7 @@ import RevealOnScroll from "./RevealOnScroll";
 
 export default function Principles() {
   return (
-    <section id="maya">
+    <section id="mira">
       <div className="wrap">
         <RevealOnScroll className="grid grid-cols-[auto_1fr] gap-[22px] items-baseline border-t-2 border-ink pt-[18px] max-mobile:grid-cols-1 max-mobile:gap-[10px]">
           <span className="font-disp italic text-[1.1rem] text-red">
@@ -21,7 +21,7 @@ export default function Principles() {
           as="p"
           className="text-[clamp(1.05rem,2.2vw,1.25rem)] text-ink-2 max-w-[30em] mt-[18px]"
         >
-          Maya isn&rsquo;t built to keep you scrolling, nor to tell you what you
+          Mira isn&rsquo;t built to keep you scrolling, nor to tell you what you
           want to hear. She&rsquo;s built to understand you over time — and to
           be honest enough to be useful.
         </RevealOnScroll>

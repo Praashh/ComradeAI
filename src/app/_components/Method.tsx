@@ -40,7 +40,7 @@ export default function Method() {
                 She remembers
               </h3>
               <p className="text-ink-2 text-[1.05rem] max-w-[34em] mt-[6px]">
-                Maya quietly keeps the thread of who you are — what you&rsquo;re
+                Mira quietly keeps the thread of who you are — what you&rsquo;re
                 building, what weighs on you, what you keep circling back to —
                 and builds on it every time.
               </p>

@@ -109,23 +109,37 @@ export const conversationRouter = createTRPCRouter({
         })
         .returning();
 
-      // Recall memories for context
+      // Recall memories and user profile for context
       let memoryContext = "";
-      try {
-        const recalled = await memoryInstance.recallMemory(
-          input.content,
-          clerkId,
-        );
-        if (recalled?.results?.length) {
-          memoryContext = recalled.results
-            .map(
-              (r: { content?: string | null }) => r.content ?? "",
-            )
-            .filter(Boolean)
-            .join("\n\n");
-        }
-      } catch {
-        console.log("[CHAT]: Memory recall failed, continuing without context");
+      let userProfile = "";
+
+      const [recallResult, profileResult] = await Promise.allSettled([
+        memoryInstance.recallMemory(input.content, clerkId),
+        memoryInstance.getUserProfile(clerkId),
+      ]);
+
+      if (recallResult.status === "fulfilled" && recallResult.value?.results?.length) {
+        memoryContext = recallResult.value.results
+          .map((r: { chunks?: Array<{ content: string }>; content?: string | null }) => {
+            // chunks contain the actual matching content; content is only present with includeFullDocs
+            if (r.chunks?.length) {
+              return r.chunks.map((c) => c.content).join("\n");
+            }
+            return r.content ?? "";
+          })
+          .filter(Boolean)
+          .join("\n\n");
+        console.log(`[CHAT]: Memory context retrieved, length=${memoryContext.length}`);
+      } else {
+        console.log(`[CHAT]: Memory recall ${recallResult.status === "rejected" ? `failed: ${String(recallResult.reason)}` : "returned no results"}`);
+      }
+
+      if (profileResult.status === "fulfilled" && profileResult.value) {
+        const profile = profileResult.value;
+        userProfile = typeof profile === "string" ? profile : JSON.stringify(profile);
+        console.log(`[CHAT]: User profile retrieved, length=${userProfile.length}`);
+      } else {
+        console.log(`[CHAT]: Profile fetch ${profileResult.status === "rejected" ? "failed" : "returned empty"}`);
       }
 
       // Fetch conversation history for Groq
@@ -135,12 +149,27 @@ export const conversationRouter = createTRPCRouter({
         .where(eq(messages.conversationId, input.conversationId))
         .orderBy(asc(messages.createdAt));
 
+      const systemParts = [
+        `You are Mira, a warm and thoughtful personal companion. You have access to the user's journal entries and memories to provide personalized, empathetic responses. Be conversational, supportive, and insightful. Keep responses concise but meaningful.`,
+        `IMPORTANT: When the user asks personal questions (like "who am I", "what do I do", etc.), you MUST use the context provided below to answer with specific details. Never say you don't know something if the information is available in the context.`,
+      ];
+
+      if (userProfile) {
+        systemParts.push(`Here is the user's profile summary:\n\n${userProfile}`);
+      }
+
+      if (memoryContext) {
+        systemParts.push(`Here is relevant context from the user's journals and memories:\n\n${memoryContext}`);
+      }
+
+      if (!userProfile && !memoryContext) {
+        systemParts.push(`Note: No memories or profile data were found for this user yet. Let them know you'll learn more about them as they write journal entries.`);
+      }
+
       const groqMessages: Groq.Chat.ChatCompletionMessageParam[] = [
         {
           role: "system",
-          content: `You are Mira, a warm and thoughtful personal companion. You have access to the user's journal entries and memories to provide personalized, empathetic responses. Be conversational, supportive, and insightful. Keep responses concise but meaningful.
-
-${memoryContext ? `Here is relevant context from the user's journals and memories:\n\n${memoryContext}` : ""}`,
+          content: systemParts.join("\n\n"),
         },
         ...history.map((msg) => ({
           role: msg.role,

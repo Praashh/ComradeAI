@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Masthead from "@/app/_components/Masthead";
@@ -19,11 +20,29 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 function ConversationList() {
   const { conversations, isLoading, refetch } = useConversations();
+  const [deleteTarget, setDeleteTarget] = useState<{
+    id: number;
+    title: string;
+  } | null>(null);
+
   const deleteConversation = api.conversation.delete.useMutation({
-    onSuccess: () => refetch(),
+    onSuccess: () => {
+      refetch();
+      setDeleteTarget(null);
+    },
   });
 
   if (isLoading) {
@@ -51,33 +70,71 @@ function ConversationList() {
   }
 
   return (
-    <SidebarMenu>
-      {conversations.map((conv) => (
-        <SidebarMenuItem key={conv.id}>
-          <SidebarMenuButton
-            render={<Link href={`/chat/${conv.id}`} />}
-            className="group"
-          >
-            <ChatCircleDots size={16} weight="duotone" />
-            <span className="flex-1 truncate">
-              {conv.title ?? "New conversation"}
-            </span>
-            <button
-              type="button"
-              className="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-[var(--paper-3)] text-[var(--ink-3)] hover:text-[var(--red)] transition-all cursor-pointer"
-              title="Delete"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                deleteConversation.mutate({ id: conv.id });
+    <>
+      <SidebarMenu>
+        {conversations.map((conv) => (
+          <SidebarMenuItem key={conv.id}>
+            <SidebarMenuButton
+              render={<Link href={`/chat/${conv.id}`} />}
+              className="group"
+            >
+              <ChatCircleDots size={16} weight="duotone" />
+              <span className="flex-1 truncate">
+                {conv.title ?? "New conversation"}
+              </span>
+              <button
+                type="button"
+                className="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-[var(--paper-3)] text-[var(--ink-3)] hover:text-[var(--red)] transition-all cursor-pointer"
+                title="Delete"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setDeleteTarget({
+                    id: conv.id,
+                    title: conv.title ?? "New conversation",
+                  });
+                }}
+              >
+                <Trash size={14} weight="bold" />
+              </button>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ))}
+      </SidebarMenu>
+
+      <Dialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => {
+          if (!open) setDeleteTarget(null);
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete conversation</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete &ldquo;{deleteTarget?.title}
+              &rdquo;? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose render={<Button variant="outline" />}>
+              Cancel
+            </DialogClose>
+            <Button
+              variant="destructive"
+              disabled={deleteConversation.isPending}
+              onClick={() => {
+                if (deleteTarget) {
+                  deleteConversation.mutate({ id: deleteTarget.id });
+                }
               }}
             >
-              <Trash size={14} weight="bold" />
-            </button>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
-      ))}
-    </SidebarMenu>
+              {deleteConversation.isPending ? "Deleting..." : "Delete"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 

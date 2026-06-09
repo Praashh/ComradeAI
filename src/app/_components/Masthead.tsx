@@ -28,7 +28,7 @@ export default function Masthead() {
             href="/"
             className="font-disp text-[1.9rem] leading-none tracking-[-0.01em]"
           >
-            talkamore<span className="text-red">.</span>
+            Mira<span className="text-red">.</span>
           </Link>
           <nav className="flex items-center gap-[26px] max-tablet:hidden">
               <Show when="signed-out">
@@ -97,11 +97,11 @@ export default function Masthead() {
           Method
         </Link>
         <Link
-          href="#maya"
+          href="#mira"
           onClick={closeMenu}
           className="font-disp text-[2.2rem] py-[16px] border-b border-rule-soft text-ink hover:text-red transition-colors"
         >
-          Maya
+          Mira
         </Link>
 
         <Show when="signed-out">

@@ -20,43 +20,49 @@ export class Memory {
     }
 
     async saveInMemory(journalText: string, userId: string) {
+        const start = Date.now();
+        console.log(`[MEMORY:ADD] user=${userId} contentLength=${journalText.length}`);
         try {
             const result = await this.memory.add({
                 content: journalText,
                 containerTag: userId
             });
-            console.log(`[MEMORY]: ${journalText} saved in memory`)
+            console.log(`[MEMORY:ADD] success user=${userId} duration=${Date.now() - start}ms`);
             return result;
         }
         catch (error) {
-            console.error(`[MEMORY]: Error saving ${journalText} in memory: ${String(error)}`);
+            console.error(`[MEMORY:ADD] failed user=${userId} duration=${Date.now() - start}ms error=${String(error)}`);
             throw error;
         }
     }
 
     async recallMemory(journalText: string, userId: string) {
+        const start = Date.now();
+        console.log(`[MEMORY:SEARCH] user=${userId} query="${journalText.slice(0, 100)}"`);
         try {
             const result = await this.memory.search.documents({
                 q: journalText,
                 containerTags: [userId]
             });
-            console.log(`[MEMORY]: ${journalText} recalled from memory`)
+            const resultCount = result?.results?.length ?? 0;
+            console.log(`[MEMORY:SEARCH] success user=${userId} results=${resultCount} duration=${Date.now() - start}ms`);
             return result;
         }
         catch (error) {
-            console.error(`[MEMORY]: Error recalling ${journalText} from memory: ${String(error)}`);
+            console.error(`[MEMORY:SEARCH] failed user=${userId} duration=${Date.now() - start}ms error=${String(error)}`);
             throw error;
         }
     }
 
     async getUserProfile(userId: string) {
+        const start = Date.now();
+        console.log(`[MEMORY:PROFILE] user=${userId}`);
         try {
             const profile = await this.memory.profile({ containerTag: userId });
-            console.log(`[MEMORY]: User profile for ${userId} fetched successfully`)
-            console.log(profile)
-            return profile
+            console.log(`[MEMORY:PROFILE] success user=${userId} duration=${Date.now() - start}ms`);
+            return profile;
         } catch (error) {
-            console.log(`[MEMORY]: Error fetching user profile for ${userId}: ${String(error)}`);
+            console.error(`[MEMORY:PROFILE] failed user=${userId} duration=${Date.now() - start}ms error=${String(error)}`);
             throw error;
         }
     }

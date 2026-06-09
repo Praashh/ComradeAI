@@ -11,7 +11,7 @@ export default function Difference() {
           <h2 className="font-disp font-normal text-[clamp(2rem,5.5vw,3.6rem)] leading-[1.02] tracking-[-0.01em]">
             What ChatGPT forgets,
             <br />
-            <span className="it r">talkamore remembers.</span>
+            <span className="it r">Mira remembers.</span>
           </h2>
 
         </RevealOnScroll>
@@ -42,7 +42,7 @@ export default function Difference() {
           </div>
           <div className="p-[clamp(26px,3.5vw,40px)] border-l border-rule bg-paper-2 max-tablet:border-l-0 max-tablet:border-t">
             <p className="text-[0.72rem] tracking-[0.2em] uppercase text-red mb-[20px]">
-              With Maya
+              With Mira
             </p>
             <h3 className="font-disp text-[1.7rem] font-normal mb-[14px] leading-[1.1]">
               A partner who keeps the thread

@@ -26,11 +26,31 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 function ConversationList({ activeId }: { activeId: number }) {
   const { conversations, isLoading, refetch } = useConversations();
+  const router = useRouter();
+  const [deleteTarget, setDeleteTarget] = useState<{
+    id: number;
+    title: string;
+  } | null>(null);
+
   const deleteConversation = api.conversation.delete.useMutation({
-    onSuccess: () => refetch(),
+    onSuccess: () => {
+      refetch();
+      setDeleteTarget(null);
+      router.push("/chat");
+    },
   });
 
   if (isLoading) {
@@ -58,34 +78,72 @@ function ConversationList({ activeId }: { activeId: number }) {
   }
 
   return (
-    <SidebarMenu>
-      {conversations.map((conv) => (
-        <SidebarMenuItem key={conv.id}>
-          <SidebarMenuButton
-            isActive={conv.id === activeId}
-            render={<Link href={`/chat/${conv.id}`} />}
-            className="group"
-          >
-            <ChatCircleDots size={16} weight="duotone" />
-            <span className="flex-1 truncate">
-              {conv.title ?? "New conversation"}
-            </span>
-            <button
-              type="button"
-              className="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-[var(--paper-3)] text-[var(--ink-3)] hover:text-[var(--red)] transition-all cursor-pointer"
-              title="Delete"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                deleteConversation.mutate({ id: conv.id });
+    <>
+      <SidebarMenu>
+        {conversations.map((conv) => (
+          <SidebarMenuItem key={conv.id}>
+            <SidebarMenuButton
+              isActive={conv.id === activeId}
+              render={<Link href={`/chat/${conv.id}`} />}
+              className="group"
+            >
+              <ChatCircleDots size={16} weight="duotone" />
+              <span className="flex-1 truncate">
+                {conv.title ?? "New conversation"}
+              </span>
+              <button
+                type="button"
+                className="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-[var(--paper-3)] text-[var(--ink-3)] hover:text-[var(--red)] transition-all cursor-pointer"
+                title="Delete"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setDeleteTarget({
+                    id: conv.id,
+                    title: conv.title ?? "New conversation",
+                  });
+                }}
+              >
+                <Trash size={14} weight="bold" />
+              </button>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ))}
+      </SidebarMenu>
+
+      <Dialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => {
+          if (!open) setDeleteTarget(null);
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete conversation</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete &ldquo;{deleteTarget?.title}
+              &rdquo;? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose render={<Button variant="outline" />}>
+              Cancel
+            </DialogClose>
+            <Button
+              variant="destructive"
+              disabled={deleteConversation.isPending}
+              onClick={() => {
+                if (deleteTarget) {
+                  deleteConversation.mutate({ id: deleteTarget.id });
+                }
               }}
             >
-              <Trash size={14} weight="bold" />
-            </button>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
-      ))}
-    </SidebarMenu>
+              {deleteConversation.isPending ? "Deleting..." : "Delete"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 
@@ -117,8 +175,63 @@ function MessageBubble({ message }: { message: Message }) {
   );
 }
 
+function ChatSkeleton() {
+  return (
+    <div className="flex-1 min-h-0 flex flex-col">
+      {/* Chat header skeleton */}
+      <div className="shrink-0 px-6 py-3 border-b border-[var(--rule-soft)]">
+        <div className="h-6 w-48 bg-[var(--paper-2)] rounded animate-pulse" />
+      </div>
+
+      {/* Messages skeleton */}
+      <div className="flex-1 overflow-y-auto px-6 py-6">
+        <div className="mx-auto max-w-2xl space-y-4">
+          {/* User message skeleton */}
+          <div className="flex justify-end">
+            <div className="max-w-[75%] rounded-lg px-4 py-3 bg-[var(--red)]/20 animate-pulse">
+              <div className="h-4 w-40 rounded" />
+            </div>
+          </div>
+          {/* Assistant message skeleton */}
+          <div className="flex justify-start">
+            <div className="max-w-[75%] rounded-lg px-4 py-3 bg-[var(--paper-2)] border border-[var(--rule-soft)] animate-pulse space-y-2">
+              <div className="h-4 w-64 bg-[var(--paper-3)] rounded" />
+              <div className="h-4 w-48 bg-[var(--paper-3)] rounded" />
+            </div>
+          </div>
+          {/* User message skeleton */}
+          <div className="flex justify-end">
+            <div className="max-w-[75%] rounded-lg px-4 py-3 bg-[var(--red)]/20 animate-pulse">
+              <div className="h-4 w-32 rounded" />
+            </div>
+          </div>
+          {/* Assistant message skeleton */}
+          <div className="flex justify-start">
+            <div className="max-w-[75%] rounded-lg px-4 py-3 bg-[var(--paper-2)] border border-[var(--rule-soft)] animate-pulse space-y-2">
+              <div className="h-4 w-56 bg-[var(--paper-3)] rounded" />
+              <div className="h-4 w-72 bg-[var(--paper-3)] rounded" />
+              <div className="h-4 w-40 bg-[var(--paper-3)] rounded" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Input skeleton */}
+      <div className="shrink-0 border-t border-[var(--rule-soft)] px-6 py-4">
+        <div className="mx-auto max-w-2xl flex gap-3 items-end">
+          <div className="flex-1 h-[46px] bg-[var(--paper-2)] border border-[var(--rule-soft)] rounded-lg animate-pulse" />
+          <div className="shrink-0 w-10 h-10 rounded-lg bg-[var(--paper-2)] animate-pulse" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ChatView({ conversationId }: { conversationId: number }) {
   const [input, setInput] = useState("");
+  const [optimisticMessage, setOptimisticMessage] = useState<string | null>(
+    null,
+  );
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const router = useRouter();
@@ -138,9 +251,24 @@ function ChatView({ conversationId }: { conversationId: number }) {
 
   const utils = api.useUtils();
   const sendMessage = api.conversation.sendMessage.useMutation({
-    onSuccess: () => {
-      void utils.conversation.get.invalidate({ id: conversationId });
+    onSuccess: (result) => {
+      setOptimisticMessage(null);
+      // Append both messages into the cache instead of refetching
+      utils.conversation.get.setData({ id: conversationId }, (old) => {
+        if (!old) return old;
+        return {
+          ...old,
+          messages: [
+            ...old.messages,
+            result.userMessage,
+            result.assistantMessage,
+          ],
+        };
+      });
       refetchConversations();
+    },
+    onError: () => {
+      setOptimisticMessage(null);
     },
   });
 
@@ -150,12 +278,13 @@ function ChatView({ conversationId }: { conversationId: number }) {
 
   useEffect(() => {
     scrollToBottom();
-  }, [data?.messages, scrollToBottom]);
+  }, [data?.messages, optimisticMessage, scrollToBottom]);
 
   const handleSend = useCallback(() => {
     const trimmed = input.trim();
     if (!trimmed || sendMessage.isPending) return;
 
+    setOptimisticMessage(trimmed);
     setInput("");
     sendMessage.mutate({
       conversationId,
@@ -172,16 +301,6 @@ function ChatView({ conversationId }: { conversationId: number }) {
     },
     [handleSend],
   );
-
-  if (isLoading) {
-    return (
-      <div className="flex-1 flex items-center justify-center">
-        <span className="text-[var(--ink-3)] text-sm italic">
-          Loading conversation...
-        </span>
-      </div>
-    );
-  }
 
   return (
     <div className="chat-workspace flex flex-col h-screen overflow-hidden">
@@ -218,6 +337,9 @@ function ChatView({ conversationId }: { conversationId: number }) {
             <SidebarFooter className="p-4 border-t border-[var(--rule-soft)]" />
           </Sidebar>
 
+          {isLoading ? (
+            <ChatSkeleton />
+          ) : (
           <main className="flex-1 min-h-0 flex flex-col">
             {/* Chat header */}
             <div className="shrink-0 px-6 py-3 border-b border-[var(--rule-soft)]">
@@ -229,7 +351,7 @@ function ChatView({ conversationId }: { conversationId: number }) {
             {/* Messages */}
             <div className="flex-1 overflow-y-auto px-6 py-6">
               <div className="mx-auto max-w-2xl">
-                {data?.messages.length === 0 && (
+                {data?.messages.length === 0 && !optimisticMessage && (
                   <div className="text-center py-12">
                     <ChatCircleDots
                       size={40}
@@ -245,6 +367,14 @@ function ChatView({ conversationId }: { conversationId: number }) {
                 {data?.messages.map((msg) => (
                   <MessageBubble key={msg.id} message={msg} />
                 ))}
+
+                {optimisticMessage && (
+                  <div className="flex justify-end mb-4">
+                    <div className="max-w-[75%] rounded-lg px-4 py-3 text-[0.95rem] leading-relaxed bg-[var(--red)] text-[var(--paper)]">
+                      <p className="whitespace-pre-wrap">{optimisticMessage}</p>
+                    </div>
+                  </div>
+                )}
 
                 {sendMessage.isPending && (
                   <div className="flex justify-start mb-4">
@@ -294,6 +424,7 @@ function ChatView({ conversationId }: { conversationId: number }) {
               </div>
             </div>
           </main>
+          )}
         </div>
       </SidebarProvider>
     </div>

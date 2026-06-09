@@ -4,16 +4,7 @@ import Link from "next/link";
 export default function Hero() {
   return (
     <div className="wrap pt-[clamp(34px,5vw,54px)]">
-      <div className="flex justify-between gap-[20px] flex-wrap pb-[14px] border-b border-rule">
-        <span className="font-body text-[0.72rem] font-medium tracking-[0.22em] uppercase text-ink-3">
-          An AI thinking partner — with long-term memory
-        </span>
-        <span className="font-body text-[0.72rem] font-medium tracking-[0.22em] uppercase text-ink-3">
-          No. 001 · Web Edition
-        </span>
-      </div>
-
-      <h1 className="[font-family:var(--disp)] font-normal text-[clamp(3.1rem,11vw,8.2rem)] leading-[0.92] tracking-[-0.015em] mt-[clamp(30px,5vw,52px)]">
+       <h1 className="[font-family:var(--disp)] font-normal text-[clamp(3.1rem,11vw,8.2rem)] leading-[0.92] tracking-[-0.015em]">
         It names what you
         <br />
         can&rsquo;t quite{" "}
@@ -40,7 +31,7 @@ export default function Hero() {
             <span className="float-left [font-family:var(--disp)] text-[3.6em] leading-[0.72] pt-[0.06em] pr-[0.08em] text-red not-italic">
               M
             </span>
-            ost AI forgets you the second you close the tab. Maya remembers —
+            ost AI forgets you the second you close the tab. Mira remembers —
             across weeks, across moods, across the things you only half-said —
             and reflects the patterns back to you when they finally matter.
           </p>

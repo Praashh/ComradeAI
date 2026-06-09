@@ -18,7 +18,7 @@ export default function Memory() {
           as="p"
           className="text-[clamp(1.05rem,2.2vw,1.25rem)] text-ink-2 max-w-[30em] mt-[18px]"
         >
-          Maya doesn&rsquo;t merely store what you say — she connects it. Months
+          Mira doesn&rsquo;t merely store what you say — she connects it. Months
           of half-thoughts become a single observation you could never have
           reached alone.
         </RevealOnScroll>
@@ -48,7 +48,7 @@ export default function Memory() {
 
           <RevealOnScroll className="insight relative pl-[clamp(18px,3vw,34px)]">
             <span className="text-[0.72rem] tracking-[0.2em] uppercase text-red mb-[16px] block">
-              — And one thing Maya saw
+              — And one thing Mira saw
             </span>
             <p className="[font-family:var(--disp)] text-[clamp(1.55rem,3.4vw,2.2rem)] leading-[1.18] font-normal">
               &ldquo;There&rsquo;s a rhythm here. For three springs running, the

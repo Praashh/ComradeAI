@@ -14,7 +14,7 @@ export default function PullQuote() {
             me something true about myself.
           </blockquote>
           <cite className="block mt-[26px] italic text-[0.95rem] text-ink-3">
-            — what people keep saying about Maya
+            — what people keep saying about Mira
           </cite>
         </RevealOnScroll>
       </div>
