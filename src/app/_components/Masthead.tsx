@@ -31,7 +31,7 @@ export default function Masthead() {
             Mira<span className="text-red">.</span>
           </Link>
           <nav className="flex items-center gap-[26px] max-tablet:hidden">
-              <Show when="signed-out">
+            <Show when="signed-out">
               <SignInButton mode="modal">
                 <button className="bg-transparent border-0 cursor-pointer p-0 font-body text-[0.82rem] tracking-[0.14em] uppercase text-ink-2 transition-colors duration-200 hover:text-ink">
                   Sign in
@@ -56,6 +56,12 @@ export default function Masthead() {
                 className="font-body text-[0.82rem] tracking-[0.14em] uppercase text-ink-2 transition-colors duration-200 hover:text-ink"
               >
                 AskMira
+              </Link>
+              <Link
+                href="/talk"
+                className="font-body text-[0.82rem] tracking-[0.14em] uppercase text-ink-2 transition-colors duration-200 hover:text-red-d"
+              >
+                Call Mira
               </Link>
               <Link
                 href="/mind"
@@ -143,6 +149,13 @@ export default function Masthead() {
             className="font-disp text-[2.2rem] py-[16px] border-b border-rule-soft text-ink hover:text-red transition-colors"
           >
             AskMira
+          </Link>
+          <Link
+            href="/talk"
+            onClick={closeMenu}
+            className="font-disp text-[2.2rem] py-[16px] border-b border-rule-soft text-red hover:text-red-d transition-colors"
+          >
+            TalkToMira
           </Link>
           <Link
             href="/mind"
