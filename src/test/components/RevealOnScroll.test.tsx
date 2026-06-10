@@ -80,7 +80,7 @@ describe("RevealOnScroll", () => {
     const el = container.firstChild as HTMLElement;
 
     observerCallback(
-      [{ target: el, isIntersecting: true } as IntersectionObserverEntry],
+      [{ target: el, isIntersecting: true } as unknown as IntersectionObserverEntry],
       {} as IntersectionObserver,
     );
 
@@ -98,7 +98,7 @@ describe("RevealOnScroll", () => {
     const el = container.firstChild as HTMLElement;
 
     observerCallback(
-      [{ target: el, isIntersecting: false } as IntersectionObserverEntry],
+      [{ target: el, isIntersecting: false } as unknown as IntersectionObserverEntry],
       {} as IntersectionObserver,
     );
 
