@@ -18,9 +18,9 @@ jobs:
       GROQ_API_KEY: dummy_grok_key
       CRON_SECRET: dummy_cron_secret
       NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: dummy_next_public_clerk_publishable_key
-      LIVEKIT_API_KEY=dummy_livekit_key
-      LIVEKIT_API_SECRET=dummy_livekit_secret
-      LIVEKIT_URL=dummy_livekit_url      
+      LIVEKIT_API_KEY: dummy_livekit_key
+      LIVEKIT_API_SECRET: dummy_livekit_secret
+      LIVEKIT_URL: dummy_livekit_url
 
     steps:
       - name: Checkout
