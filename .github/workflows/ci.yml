@@ -10,6 +10,14 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+     CLERK_SECRET_KEY=dummy_clerk_key
+     CLERK_WEBHOOK_SECRET=dummy_clerk_webhook_secret
+     SUPERMEMORY_API_KEY=dummy_supermemory_api_key
+     DATABASE_URL=postgresql://admin:password123@localhost:5432/mira?schema=public
+     GROQ_API_KEY=dummy_grok_key
+     CRON_SECRET=dummy_cron_secret
+     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=dummy_next_public_clerk_publishable_key
 
     steps:
       - name: Checkout
