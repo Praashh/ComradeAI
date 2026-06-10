@@ -9,9 +9,9 @@ export default function Difference() {
             § 01
           </span>
           <h2 className="font-disp font-normal text-[clamp(2rem,5.5vw,3.6rem)] leading-[1.02] tracking-[-0.01em]">
-            What ChatGPT forgets,
+            A diary that listens.
             <br />
-            <span className="it r">talkamore remembers.</span>
+            <span className="it r">A friend that remembers.</span>
           </h2>
 
         </RevealOnScroll>
@@ -19,39 +19,39 @@ export default function Difference() {
           as="p"
           className="text-[clamp(1.05rem,2.2vw,1.25rem)] text-ink-2 max-w-[30em] mt-[18px]"
         >
-          A thinking partner that can&rsquo;t remember isn&rsquo;t really
-          thinking with you — it&rsquo;s just answering. Most chats begin from
-          nothing: a courteous stranger, every single time.
+          Your diary never talked back. Chatbots never remembered you.
+          Mira does both — she listens like a diary and responds like a
+          best friend who&rsquo;s read every page.
         </RevealOnScroll>
 
         <RevealOnScroll className="grid grid-cols-2 mt-[46px] border border-rule max-tablet:grid-cols-1">
           <div className="p-[clamp(26px,3.5vw,40px)]">
             <p className="text-[0.72rem] tracking-[0.2em] uppercase text-ink-3 mb-[20px]">
-              Without memory
+              A regular diary
             </p>
             <h3 className="font-disp text-[1.7rem] font-normal mb-[14px] leading-[1.1]">
-              The blank-slate bot
+              Pages that sit in silence
             </h3>
             <p className="text-ink-2 text-[1.06rem]">
-              You re-explain your whole life each session. What you get back is{" "}
-              <span className="strike">continuity</span>,{" "}
-              <span className="strike">a sense of being known</span>,{" "}
-              <span className="strike">a thread to pull on next week</span>{" "}
-              — all gone the moment the tab closes.
+              You pour your heart out, but the diary can&rsquo;t{" "}
+              <span className="strike">console you</span>,{" "}
+              <span className="strike">help you decide</span>,{" "}
+              <span className="strike">ask the right question</span>{" "}
+              — it just holds your words and nothing more.
             </p>
           </div>
           <div className="p-[clamp(26px,3.5vw,40px)] border-l border-rule bg-paper-2 max-tablet:border-l-0 max-tablet:border-t">
             <p className="text-[0.72rem] tracking-[0.2em] uppercase text-red mb-[20px]">
-              With Maya
+              With Mira
             </p>
             <h3 className="font-disp text-[1.7rem] font-normal mb-[14px] leading-[1.1]">
-              A partner who keeps the thread
+              A friend who reads between the lines
             </h3>
             <p className="text-ink-2 text-[1.06rem]">
-              She links today to something from{" "}
-              <span className="keep">two months ago</span>, notices what keeps{" "}
-              <span className="keep">returning</span>, and tells you the{" "}
-              <span className="keep">truth</span> — gently, but honestly.
+              She remembers your{" "}
+              <span className="keep">nature</span>, understands your{" "}
+              <span className="keep">circumstances</span>, and helps you{" "}
+              <span className="keep">decide</span> — like a best friend who truly knows you.
             </p>
           </div>
         </RevealOnScroll>

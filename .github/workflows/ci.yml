@@ -1,0 +1,46 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CLERK_SECRET_KEY: dummy_clerk_key
+      CLERK_WEBHOOK_SECRET: dummy_clerk_webhook_secret
+      SUPERMEMORY_API_KEY: dummy_supermemory_api_key
+      DATABASE_URL: postgresql://admin:password123@localhost:5432/mira?schema=public
+      GROQ_API_KEY: dummy_grok_key
+      CRON_SECRET: dummy_cron_secret
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: dummy_next_public_clerk_publishable_key
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.15
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: TypeChecking
+        run: bun run typecheck
+
+      - name: Linting
+        run: bun run lint
+
+      - name: Test
+        run: bun run test
+
+      - name: Build
+        run: bun run build

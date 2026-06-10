@@ -28,29 +28,10 @@ export default function Masthead() {
             href="/"
             className="font-disp text-[1.9rem] leading-none tracking-[-0.01em]"
           >
-            talkamore<span className="text-red">.</span>
+            Mira<span className="text-red">.</span>
           </Link>
           <nav className="flex items-center gap-[26px] max-tablet:hidden">
-            <Link
-              href="#memory"
-              className="font-body text-[0.82rem] tracking-[0.14em] uppercase text-ink-2 transition-colors duration-200 hover:text-ink"
-            >
-              Memory
-            </Link>
-            <Link
-              href="#how"
-              className="font-body text-[0.82rem] tracking-[0.14em] uppercase text-ink-2 transition-colors duration-200 hover:text-ink"
-            >
-              Method
-            </Link>
-            <Link
-              href="#maya"
-              className="font-body text-[0.82rem] tracking-[0.14em] uppercase text-ink-2 transition-colors duration-200 hover:text-ink"
-            >
-              Maya
-            </Link>
-
-            <Show when="signed-out">
+              <Show when="signed-out">
               <SignInButton mode="modal">
                 <button className="bg-transparent border-0 cursor-pointer p-0 font-body text-[0.82rem] tracking-[0.14em] uppercase text-ink-2 transition-colors duration-200 hover:text-ink">
                   Sign in
@@ -64,6 +45,24 @@ export default function Masthead() {
             </Show>
 
             <Show when="signed-in">
+              <Link
+                href="/write"
+                className="font-body text-[0.82rem] tracking-[0.14em] uppercase text-ink-2 transition-colors duration-200 hover:text-ink"
+              >
+                Write
+              </Link>
+              <Link
+                href="/chat"
+                className="font-body text-[0.82rem] tracking-[0.14em] uppercase text-ink-2 transition-colors duration-200 hover:text-ink"
+              >
+                AskMira
+              </Link>
+              <Link
+                href="/mind"
+                className="font-body text-[0.82rem] tracking-[0.14em] uppercase text-ink-2 transition-colors duration-200 hover:text-ink"
+              >
+                MiraMind
+              </Link>
               <UserButton
                 appearance={{
                   elements: {
@@ -104,11 +103,11 @@ export default function Masthead() {
           Method
         </Link>
         <Link
-          href="#maya"
+          href="#mira"
           onClick={closeMenu}
           className="font-disp text-[2.2rem] py-[16px] border-b border-rule-soft text-ink hover:text-red transition-colors"
         >
-          Maya
+          Mira
         </Link>
 
         <Show when="signed-out">
@@ -131,6 +130,27 @@ export default function Masthead() {
         </Show>
 
         <Show when="signed-in">
+          <Link
+            href="/write"
+            onClick={closeMenu}
+            className="font-disp text-[2.2rem] py-[16px] border-b border-rule-soft text-ink hover:text-red transition-colors"
+          >
+            Write
+          </Link>
+          <Link
+            href="/chat"
+            onClick={closeMenu}
+            className="font-disp text-[2.2rem] py-[16px] border-b border-rule-soft text-ink hover:text-red transition-colors"
+          >
+            AskMira
+          </Link>
+          <Link
+            href="/mind"
+            onClick={closeMenu}
+            className="font-disp text-[2.2rem] py-[16px] border-b border-rule-soft text-ink hover:text-red transition-colors"
+          >
+            MiraMind
+          </Link>
           <div className="flex items-center justify-between py-[20px] border-b border-rule-soft">
             <span className="font-disp text-[1.8rem] text-ink-2">
               Logged in as

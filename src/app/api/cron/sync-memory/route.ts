@@ -26,6 +26,7 @@ export async function GET(req: Request) {
       sql`${journals.content} != '' AND (${journals.memorySyncedAt} IS NULL OR ${journals.memorySyncedAt} < ${journals.updatedAt})`,
     );
 
+  console.log('[SYNC-MEMORY]: got this stale', stale);
   let processed = 0;
 
   for (const journal of stale) {

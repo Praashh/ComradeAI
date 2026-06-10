@@ -1,4 +1,4 @@
-import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { integer, pgTable, serial, text, timestamp, pgEnum } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
     id: serial("id").primaryKey(),
@@ -38,3 +38,29 @@ export const journals = pgTable("journals", {
     updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+
+export const messageRoleEnum = pgEnum("message_role", ["user", "assistant", "system"]);
+
+export const conversations = pgTable("conversations", {
+    id: serial("id").primaryKey(),
+
+    userId: integer("user_id")
+        .notNull()
+        .references(() => users.id, { onDelete: "cascade" }),
+    title: text("title"),
+
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const messages = pgTable("messages", {
+    id: serial("id").primaryKey(),
+
+    conversationId: integer("conversation_id")
+        .notNull()
+        .references(() => conversations.id, { onDelete: "cascade" }),
+    role: messageRoleEnum("role").notNull(),
+    content: text("content").notNull(),
+
+    createdAt: timestamp("created_at").defaultNow(),
+});

@@ -47,7 +47,7 @@ export const MilkdownEditor = forwardRef<MilkdownEditorHandle, MilkdownEditorPro
         crepeRef.current = null;
         void crepe.destroy().catch(console.error);
       };
-    }, []);
+    }, [defaultValue]);
 
     return <div ref={containerRef} className="milkdown-crepe-container" />;
   }

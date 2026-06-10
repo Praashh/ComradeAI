@@ -2,7 +2,7 @@ import RevealOnScroll from "./RevealOnScroll";
 
 export default function Principles() {
   return (
-    <section id="maya">
+    <section id="mira">
       <div className="wrap">
         <RevealOnScroll className="grid grid-cols-[auto_1fr] gap-[22px] items-baseline border-t-2 border-ink pt-[18px] max-mobile:grid-cols-1 max-mobile:gap-[10px]">
           <span className="font-disp italic text-[1.1rem] text-red">
@@ -11,9 +11,9 @@ export default function Principles() {
           <h2 className="font-disp font-normal text-[clamp(2rem,5.5vw,3.6rem)] leading-[1.02] tracking-[-0.01em]">
             Not a chatbot.{" "}
             <span className="it">
-              A presence
+              A friend
               <br />
-              that grows with you.
+              who grows with you.
             </span>
           </h2>
         </RevealOnScroll>
@@ -21,9 +21,9 @@ export default function Principles() {
           as="p"
           className="text-[clamp(1.05rem,2.2vw,1.25rem)] text-ink-2 max-w-[30em] mt-[18px]"
         >
-          Maya isn&rsquo;t built to keep you scrolling, nor to tell you what you
-          want to hear. She&rsquo;s built to understand you over time — and to
-          be honest enough to be useful.
+          Mira isn&rsquo;t a chatbot that forgets you, nor a diary that sits
+          in silence. She&rsquo;s the best friend you always needed — one who
+          listens, understands, consoles, and stays.
         </RevealOnScroll>
         <RevealOnScroll className="grid grid-cols-3 mt-[42px] border border-rule max-tablet:grid-cols-1">
           <div className="p-[clamp(26px,3.5vw,38px)]">
@@ -31,14 +31,14 @@ export default function Principles() {
               i.
             </span>
             <h4 className="font-disp text-[1.5rem] font-normal leading-[1.1] mb-[10px]">
-              Honest,
+              She consoles,
               <br />
-              not flattering
+              not just responds
             </h4>
             <p className="text-ink-2 text-[1.02rem]">
-              She&rsquo;ll gently disagree, push back, and name the thing
-              you&rsquo;ve been avoiding. A yes-machine never helped anyone
-              think.
+              When you&rsquo;re sad or going through a hard time, Mira
+              doesn&rsquo;t give generic advice. She reminds you of your
+              goals, your values, and the person you want to be.
             </p>
           </div>
           <div className="p-[clamp(26px,3.5vw,38px)] border-l border-rule max-tablet:border-l-0 max-tablet:border-t">
@@ -46,13 +46,13 @@ export default function Principles() {
               ii.
             </span>
             <h4 className="font-disp text-[1.5rem] font-normal leading-[1.1] mb-[10px]">
-              Continuous,
+              She decides
               <br />
-              not episodic
+              with you
             </h4>
             <p className="text-ink-2 text-[1.02rem]">
-              No &ldquo;remind me what we discussed.&rdquo; She picks up exactly
-              where you left off — even three weeks and four moods later.
+              Need help making a decision? Mira understands your nature and
+              circumstances — so her advice isn&rsquo;t generic, it&rsquo;s personal.
             </p>
           </div>
           <div className="p-[clamp(26px,3.5vw,38px)] border-l border-rule max-tablet:border-l-0 max-tablet:border-t">
@@ -60,13 +60,13 @@ export default function Principles() {
               iii.
             </span>
             <h4 className="font-disp text-[1.5rem] font-normal leading-[1.1] mb-[10px]">
-              Yours,
+              She&rsquo;s yours,
               <br />
               and private
             </h4>
             <p className="text-ink-2 text-[1.02rem]">
-              Your memory belongs to you. A place to think out loud — not a
-              feed, not a profile, not training fodder.
+              Your journal, your story, your friend. A safe place to express
+              yourself — not a feed, not a profile, not training fodder.
             </p>
           </div>
         </RevealOnScroll>
