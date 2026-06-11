@@ -14,6 +14,9 @@ export const env = createEnv({
     DATABASE_URL: z.string(),
     GROQ_API_KEY: z.string(),
     CRON_SECRET: z.string(),
+    LIVEKIT_URL: z.string(),
+    LIVEKIT_API_KEY: z.string(),
+    LIVEKIT_API_SECRET: z.string(),
   },
 
   /**
@@ -39,6 +42,9 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     GROQ_API_KEY: process.env.GROQ_API_KEY,
     CRON_SECRET: process.env.CRON_SECRET,
+    LIVEKIT_URL: process.env.LIVEKIT_URL,
+    LIVEKIT_API_KEY: process.env.LIVEKIT_API_KEY,
+    LIVEKIT_API_SECRET: process.env.LIVEKIT_API_SECRET
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

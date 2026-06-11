@@ -541,3 +541,159 @@ body.menu-open .mobile-menu {
 .editor-title-input::placeholder {
   @apply text-ink-3 italic;
 }
+
+/* ========== VOICE CALL UI ========== */
+.call-card {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Pulse rings around avatar during active call */
+.call-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--red);
+  opacity: 0;
+  animation: callPulse 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+.call-pulse-2 {
+  animation-delay: 1.2s;
+}
+
+@keyframes callPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+/* Connecting spinner */
+.call-spinner {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid var(--rule-soft);
+  border-top-color: var(--ink-3);
+  animation: callSpin 0.8s linear infinite;
+}
+
+@keyframes callSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Main call button (green phone / start) */
+.call-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  color: var(--paper);
+}
+
+.call-btn-start {
+  background-color: #3d8c40;
+  box-shadow: 0 4px 16px rgba(61, 140, 64, 0.3);
+}
+.call-btn-start:hover {
+  background-color: #357a38;
+  transform: scale(1.08);
+  box-shadow: 0 6px 24px rgba(61, 140, 64, 0.4);
+}
+.call-btn-start:active {
+  transform: scale(0.96);
+}
+
+.call-btn-connecting {
+  background-color: var(--ink-3);
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.call-btn-end {
+  background-color: var(--red) !important;
+  box-shadow: 0 4px 16px rgba(203, 58, 40, 0.3);
+  border: none !important;
+  border-radius: 50% !important;
+  width: 64px !important;
+  height: 64px !important;
+  padding: 0 !important;
+}
+.call-btn-end:hover {
+  background-color: var(--red-d) !important;
+  transform: scale(1.08);
+  box-shadow: 0 6px 24px rgba(203, 58, 40, 0.4);
+}
+
+/* Secondary (mute) button */
+.call-btn-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid var(--rule);
+  background-color: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.call-btn-secondary:hover {
+  background-color: var(--paper-3);
+  border-color: var(--ink-3);
+}
+.call-btn-muted {
+  background-color: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.call-btn-muted:hover {
+  background-color: var(--ink-2);
+}
+
+/* Bar visualizer override to match theme */
+.call-visualizer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.call-bars {
+  gap: 6px !important;
+}
+
+.call-bars .lk-bar {
+  background-color: var(--red) !important;
+  border-radius: 2px !important;
+  width: 6px !important;
+  transition: height 0.15s ease !important;
+}
+
+/* Override LiveKit default styles */
+[data-lk-theme] {
+  --lk-bg: transparent !important;
+  --lk-fg: var(--ink) !important;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .call-pulse {
+    animation: none !important;
+  }
+  .call-spinner {
+    animation: none !important;
+    border-top-color: var(--red);
+  }
+}

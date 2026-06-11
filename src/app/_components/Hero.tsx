@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Hero() {
   return (
     <div className="wrap pt-[clamp(34px,5vw,54px)]">
-       <h1 className="[font-family:var(--disp)] font-normal text-[clamp(3.1rem,11vw,8.2rem)] leading-[0.92] tracking-[-0.015em]">
+      <h1 className="[font-family:var(--disp)] font-normal text-[clamp(3.1rem,11vw,8.2rem)] leading-[0.92] tracking-[-0.015em]">
         The friend who
         <br />
         never{" "}
