@@ -231,7 +231,7 @@ export default function SignUpPage() {
                 ref={(el) => { otpRefs.current[i] = el; }}
                 type="text"
                 inputMode="numeric"
-                maxLength={1}
+                maxLength={i}
                 className="auth-otp-input"
                 value={digit}
                 onChange={(e) => handleOtpChange(i, e.target.value)}

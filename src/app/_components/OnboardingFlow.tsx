@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef } from "react";
+import { flushSync } from "react-dom";
 import { useRouter } from "next/navigation";
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
@@ -70,17 +71,18 @@ export default function OnboardingFlow() {
   const nicknameRef = useRef<HTMLInputElement>(null);
 
   // Hydration-safe today's date for the date input max
-  const [todayDate, setTodayDate] = useState<string | undefined>(undefined);
-  useEffect(() => {
-    setTodayDate(new Date().toISOString().split("T")[0]);
-  }, []);
+  const todayDate = new Date().toISOString().split("T")[0];
 
-  // Focus the nickname input when the step becomes "nickname"
-  useEffect(() => {
-    if (step === "nickname") {
+  const changeStep = useCallback((newStep: Step) => {
+    if (newStep === "nickname") {
+      flushSync(() => {
+        setStep("nickname");
+      });
       nicknameRef.current?.focus();
+    } else {
+      setStep(newStep);
     }
-  }, [step]);
+  }, []);
 
   // Import state
   const [importText, setImportText] = useState("");
@@ -92,7 +94,7 @@ export default function OnboardingFlow() {
 
   const completeOnboarding = api.onboarding.completeOnboarding.useMutation({
     onSuccess: () => router.push("/write"),
-    onError: () => setStep("character"),
+    onError: () => changeStep("character"),
   });
 
   const importMemory = api.onboarding.importMemory.useMutation();
@@ -106,23 +108,23 @@ export default function OnboardingFlow() {
       });
       setImportResult(result);
       // Auto-advance after a brief pause
-      setTimeout(() => setStep("nickname"), 1500);
+      setTimeout(() => changeStep("nickname"), 1500);
     } catch {
       // Allow user to retry or skip
       setImporting(false);
     }
-  }, [importText, importMemory]);
+  }, [importText, importMemory, changeStep]);
 
   const handleComplete = useCallback(() => {
     if (!nickname.trim() || !pronouns || !dob) return;
-    setStep("completing");
+    changeStep("completing");
     completeOnboarding.mutate({
       nickname: nickname.trim(),
       pronouns,
       dob,
       preferredSpeaker: selectedCharacter,
     });
-  }, [nickname, pronouns, dob, selectedCharacter, completeOnboarding]);
+  }, [nickname, pronouns, dob, selectedCharacter, completeOnboarding, changeStep]);
 
   const canGoNext = () => {
     switch (step) {
@@ -143,7 +145,7 @@ export default function OnboardingFlow() {
     const flow: Step[] = ["nickname", "pronouns", "dob", "character"];
     const currentIndex = flow.indexOf(step);
     if (currentIndex < flow.length - 1) {
-      setStep(flow[currentIndex + 1]!);
+      changeStep(flow[currentIndex + 1]!);
     } else if (step === "character") {
       handleComplete();
     }
@@ -153,9 +155,9 @@ export default function OnboardingFlow() {
     const flow: Step[] = ["choose-path", "nickname", "pronouns", "dob", "character"];
     const currentIndex = flow.indexOf(step);
     if (step === "import") {
-      setStep("choose-path");
+      changeStep("choose-path");
     } else if (currentIndex > 0) {
-      setStep(flow[currentIndex - 1]!);
+      changeStep(flow[currentIndex - 1]!);
     }
   };
 
@@ -199,7 +201,7 @@ export default function OnboardingFlow() {
           <div className="flex w-full flex-col gap-4">
             <button
               type="button"
-              onClick={() => setStep("import")}
+              onClick={() => changeStep("import")}
               className="w-full rounded-[6px] border border-rule-soft bg-paper-2 px-6 py-5 text-left transition-all hover:border-rule hover:shadow-[0_4px_20px_rgba(33,28,22,0.08)]"
             >
               <span className="mb-1 block font-disp text-[1.2rem] text-ink">
@@ -213,7 +215,7 @@ export default function OnboardingFlow() {
 
             <button
               type="button"
-              onClick={() => setStep("nickname")}
+              onClick={() => changeStep("nickname")}
               className="w-full rounded-[6px] border border-rule-soft bg-paper-2 px-6 py-5 text-left transition-all hover:border-rule hover:shadow-[0_4px_20px_rgba(33,28,22,0.08)]"
             >
               <span className="mb-1 block font-disp text-[1.2rem] text-ink">
@@ -288,7 +290,7 @@ export default function OnboardingFlow() {
             </button>
             <button
               type="button"
-              onClick={() => setStep("nickname")}
+              onClick={() => changeStep("nickname")}
               className="rounded-[4px] border border-rule-soft px-6 py-3 font-body text-[0.85rem] text-ink-3 transition-colors hover:border-rule hover:text-ink"
             >
               Skip
@@ -345,11 +347,10 @@ export default function OnboardingFlow() {
                 type="button"
                 key={p}
                 onClick={() => setPronouns(p)}
-                className={`rounded-full border px-5 py-2.5 font-body text-[0.88rem] transition-colors ${
-                  pronouns === p
+                className={`rounded-full border px-5 py-2.5 font-body text-[0.88rem] transition-colors ${pronouns === p
                     ? "border-ink bg-ink text-paper"
                     : "border-rule text-ink-3 hover:border-ink-3"
-                }`}
+                  }`}
               >
                 {p}
               </button>
@@ -413,19 +414,17 @@ export default function OnboardingFlow() {
                 type="button"
                 key={c.id}
                 onClick={() => setSelectedCharacter(c.id)}
-                className={`flex flex-col items-start rounded-[6px] border p-4 text-left transition-all ${
-                  selectedCharacter === c.id
+                className={`flex flex-col items-start rounded-[6px] border p-4 text-left transition-all ${selectedCharacter === c.id
                     ? "border-red bg-paper-2 shadow-[0_4px_20px_rgba(203,58,40,0.1)]"
                     : "border-rule-soft bg-paper-2 hover:border-rule"
-                }`}
+                  }`}
               >
                 <div className="mb-2 flex items-center gap-2.5">
                   <div
-                    className={`flex h-9 w-9 items-center justify-center rounded-full border ${
-                      selectedCharacter === c.id
+                    className={`flex h-9 w-9 items-center justify-center rounded-full border ${selectedCharacter === c.id
                         ? "border-red bg-red text-paper"
                         : "border-rule bg-paper text-ink"
-                    } font-disp text-[1.1rem] leading-none transition-colors`}
+                      } font-disp text-[1.1rem] leading-none transition-colors`}
                   >
                     {c.name[0]}
                   </div>
