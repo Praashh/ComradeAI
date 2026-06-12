@@ -37,6 +37,7 @@ function getFormattedDate() {
 function FocusToggler({ focusMode, onToggle }: { focusMode: boolean; onToggle: () => void }) {
   return (
     <button
+      type="button"
       onClick={onToggle}
       className={`flex items-center gap-1.5 text-xs transition-colors cursor-pointer ${focusMode ? "text-[var(--ink-2)] hover:text-[var(--ink)]" : "text-[var(--red)] hover:opacity-80"}`}
       title="Toggle Focus Mode"
@@ -112,7 +113,7 @@ function JournalList({ activeJournalId }: { activeJournalId: number }) {
 
 function JournalEditor({ journalId }: { journalId: number }) {
   const [focusMode, setFocusMode] = useState(false);
-  const [title, setTitle] = useState("");
+  const [localTitle, setLocalTitle] = useState<string | null>(null);
   const editorRef = useRef<MilkdownEditorHandle>(null);
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const titleDebounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -121,11 +122,7 @@ function JournalEditor({ journalId }: { journalId: number }) {
   const { data, isLoading } = api.journal.get.useQuery({ id: journalId });
   const saveJournal = api.journal.save.useMutation();
 
-  useEffect(() => {
-    if (data?.journal?.title != null) {
-      setTitle(data.journal.title);
-    }
-  }, [data?.journal?.title]);
+  const title = localTitle ?? data?.journal?.title ?? "";
 
   const debouncedSave = useCallback(() => {
     if (debounceTimer.current) {
@@ -159,12 +156,14 @@ function JournalEditor({ journalId }: { journalId: number }) {
   );
 
   useEffect(() => {
+    const debounceRef = debounceTimer.current;
+    const titleDebounceRef = titleDebounceTimer.current;
     return () => {
-      if (debounceTimer.current) {
-        clearTimeout(debounceTimer.current);
+      if (debounceRef) {
+        clearTimeout(debounceRef);
       }
-      if (titleDebounceTimer.current) {
-        clearTimeout(titleDebounceTimer.current);
+      if (titleDebounceRef) {
+        clearTimeout(titleDebounceRef);
       }
     };
   }, []);
@@ -264,10 +263,11 @@ function JournalEditor({ journalId }: { journalId: number }) {
                       type="text"
                       value={title}
                       onChange={(e) => {
-                        setTitle(e.target.value);
+                        setLocalTitle(e.target.value);
                         saveTitle(e.target.value);
                       }}
                       placeholder="Untitled Journal"
+                      aria-label="Journal title"
                       className="w-full bg-transparent font-disp text-3xl text-[var(--ink)] tracking-tight leading-tight outline-none border-none placeholder:text-[var(--ink-3)]"
                     />
                     {data.journal.mood && (

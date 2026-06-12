@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
@@ -65,6 +65,22 @@ export default function OnboardingFlow() {
   const [dob, setDob] = useState("");
   const [selectedCharacter, setSelectedCharacter] =
     useState<CharacterId>(DEFAULT_CHARACTER);
+
+  // Focus ref for nickname input (replaces autoFocus to avoid lint warning)
+  const nicknameRef = useRef<HTMLInputElement>(null);
+
+  // Hydration-safe today's date for the date input max
+  const [todayDate, setTodayDate] = useState<string | undefined>(undefined);
+  useEffect(() => {
+    setTodayDate(new Date().toISOString().split("T")[0]);
+  }, []);
+
+  // Focus the nickname input when the step becomes "nickname"
+  useEffect(() => {
+    if (step === "nickname") {
+      nicknameRef.current?.focus();
+    }
+  }, [step]);
 
   // Import state
   const [importText, setImportText] = useState("");
@@ -148,6 +164,7 @@ export default function OnboardingFlow() {
       {/* Back button */}
       {step !== "choose-path" && step !== "completing" && (
         <button
+          type="button"
           onClick={handleBack}
           className="mb-6 flex items-center gap-1 font-body text-[0.82rem] text-ink-3 transition-colors hover:text-ink"
         >
@@ -181,6 +198,7 @@ export default function OnboardingFlow() {
 
           <div className="flex w-full flex-col gap-4">
             <button
+              type="button"
               onClick={() => setStep("import")}
               className="w-full rounded-[6px] border border-rule-soft bg-paper-2 px-6 py-5 text-left transition-all hover:border-rule hover:shadow-[0_4px_20px_rgba(33,28,22,0.08)]"
             >
@@ -194,6 +212,7 @@ export default function OnboardingFlow() {
             </button>
 
             <button
+              type="button"
               onClick={() => setStep("nickname")}
               className="w-full rounded-[6px] border border-rule-soft bg-paper-2 px-6 py-5 text-left transition-all hover:border-rule hover:shadow-[0_4px_20px_rgba(33,28,22,0.08)]"
             >
@@ -226,6 +245,7 @@ export default function OnboardingFlow() {
                 Prompt to copy
               </span>
               <button
+                type="button"
                 onClick={() => {
                   void navigator.clipboard.writeText(IMPORT_PROMPT);
                   toast.success("Prompt copied to clipboard");
@@ -242,6 +262,7 @@ export default function OnboardingFlow() {
 
           {/* Paste area */}
           <textarea
+            aria-label="Paste imported memories here"
             value={importText}
             onChange={(e) => setImportText(e.target.value)}
             placeholder="Paste the response here..."
@@ -258,6 +279,7 @@ export default function OnboardingFlow() {
 
           <div className="flex gap-3">
             <button
+              type="button"
               onClick={handleImport}
               disabled={!importText.trim() || importing}
               className="flex-1 rounded-[4px] bg-ink px-6 py-3 font-body text-[0.85rem] tracking-[0.04em] text-paper transition-colors hover:bg-ink-2 disabled:cursor-not-allowed disabled:opacity-40"
@@ -265,6 +287,7 @@ export default function OnboardingFlow() {
               {importing ? "Importing..." : "Import & Continue"}
             </button>
             <button
+              type="button"
               onClick={() => setStep("nickname")}
               className="rounded-[4px] border border-rule-soft px-6 py-3 font-body text-[0.85rem] text-ink-3 transition-colors hover:border-rule hover:text-ink"
             >
@@ -284,6 +307,8 @@ export default function OnboardingFlow() {
             A name, nickname, whatever feels right.
           </p>
           <input
+            ref={nicknameRef}
+            aria-label="Your name or nickname"
             type="text"
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
@@ -291,11 +316,11 @@ export default function OnboardingFlow() {
               if (e.key === "Enter" && canGoNext()) handleNext();
             }}
             placeholder="Your name"
-            autoFocus
             maxLength={50}
             className="mb-8 w-full max-w-[320px] border-b-[1.5px] border-rule-soft bg-transparent px-0 py-3 text-center font-disp text-[1.6rem] text-ink placeholder:text-ink-3 focus:border-rule focus:outline-none"
           />
           <button
+            type="button"
             onClick={handleNext}
             disabled={!canGoNext()}
             className="rounded-[4px] bg-ink px-8 py-3 font-body text-[0.85rem] tracking-[0.04em] text-paper transition-colors hover:bg-ink-2 disabled:cursor-not-allowed disabled:opacity-40"
@@ -317,6 +342,7 @@ export default function OnboardingFlow() {
           <div className="mb-8 flex gap-3">
             {(["he/him", "she/her", "they/them"] as const).map((p) => (
               <button
+                type="button"
                 key={p}
                 onClick={() => setPronouns(p)}
                 className={`rounded-full border px-5 py-2.5 font-body text-[0.88rem] transition-colors ${
@@ -330,6 +356,7 @@ export default function OnboardingFlow() {
             ))}
           </div>
           <button
+            type="button"
             onClick={handleNext}
             disabled={!canGoNext()}
             className="rounded-[4px] bg-ink px-8 py-3 font-body text-[0.85rem] tracking-[0.04em] text-paper transition-colors hover:bg-ink-2 disabled:cursor-not-allowed disabled:opacity-40"
@@ -349,16 +376,18 @@ export default function OnboardingFlow() {
             So we can celebrate with you.
           </p>
           <input
+            aria-label="Date of birth"
             type="date"
             value={dob}
             onChange={(e) => setDob(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter" && canGoNext()) handleNext();
             }}
-            max={new Date().toISOString().split("T")[0]}
+            max={todayDate}
             className="mb-8 w-full max-w-[280px] rounded-[4px] border border-rule-soft bg-paper-2 px-4 py-3 font-body text-[0.95rem] text-ink focus:border-rule focus:outline-none"
           />
           <button
+            type="button"
             onClick={handleNext}
             disabled={!canGoNext()}
             className="rounded-[4px] bg-ink px-8 py-3 font-body text-[0.85rem] tracking-[0.04em] text-paper transition-colors hover:bg-ink-2 disabled:cursor-not-allowed disabled:opacity-40"
@@ -381,6 +410,7 @@ export default function OnboardingFlow() {
           <div className="mb-8 grid w-full grid-cols-2 gap-3">
             {CHARACTERS.map((c) => (
               <button
+                type="button"
                 key={c.id}
                 onClick={() => setSelectedCharacter(c.id)}
                 className={`flex flex-col items-start rounded-[6px] border p-4 text-left transition-all ${
@@ -416,6 +446,7 @@ export default function OnboardingFlow() {
           </div>
 
           <button
+            type="button"
             onClick={handleComplete}
             disabled={completeOnboarding.isPending}
             className="rounded-[4px] bg-red px-8 py-3 font-body text-[0.85rem] tracking-[0.04em] text-paper transition-colors hover:bg-red-d disabled:cursor-not-allowed disabled:opacity-60"

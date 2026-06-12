@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   LiveKitRoom,
   RoomAudioRenderer,
@@ -25,13 +25,19 @@ type ConnectionDetails = {
 
 type CallState = "idle" | "connecting" | "active" | "ended";
 
+function formatDuration(seconds: number) {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+}
+
 export default function VoiceAgent() {
   const [connectionDetails, setConnectionDetails] =
     useState<ConnectionDetails | null>(null);
   const [callState, setCallState] = useState<CallState>("idle");
   const [callDuration, setCallDuration] = useState(0);
-  const [durationInterval, setDurationInterval] =
-    useState<ReturnType<typeof setInterval> | null>(null);
+  const durationIntervalRef =
+    useRef<ReturnType<typeof setInterval> | null>(null);
 
   const { data: userStatus } = api.onboarding.getOnboardingStatus.useQuery();
   const [selectedSpeaker, setSelectedSpeaker] = useState<CharacterId>(
@@ -64,7 +70,7 @@ export default function VoiceAgent() {
         () => setCallDuration((d) => d + 1),
         1000,
       );
-      setDurationInterval(interval);
+      durationIntervalRef.current = interval;
     } catch {
       setCallState("idle");
     }
@@ -73,18 +79,12 @@ export default function VoiceAgent() {
   const endCall = useCallback(() => {
     setConnectionDetails(null);
     setCallState("ended");
-    if (durationInterval) {
-      clearInterval(durationInterval);
-      setDurationInterval(null);
+    if (durationIntervalRef.current) {
+      clearInterval(durationIntervalRef.current);
+      durationIntervalRef.current = null;
     }
     setTimeout(() => setCallState("idle"), 2000);
-  }, [durationInterval]);
-
-  const formatDuration = (seconds: number) => {
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
-  };
+  }, []);
 
   return (
     <div className="flex w-full max-w-[420px] flex-col items-center px-[var(--pad)]">
@@ -152,28 +152,11 @@ export default function VoiceAgent() {
           </p>
         )}
 
-        {/* Character picker */}
-        {callState === "idle" && (
-          <div className="mb-6 flex flex-wrap justify-center gap-2">
-            {CHARACTERS.map((c) => (
-              <button
-                key={c.id}
-                onClick={() => setSelectedSpeaker(c.id)}
-                className={`rounded-full border px-3 py-1 font-body text-[0.78rem] transition-colors ${
-                  selectedSpeaker === c.id
-                    ? "border-ink bg-ink text-paper"
-                    : "border-rule text-ink-3 hover:border-ink-3"
-                }`}
-              >
-                {c.name}
-              </button>
-            ))}
-          </div>
-        )}
 
         {/* Controls when not connected */}
         {callState === "idle" && (
           <button
+            type="button"
             onClick={startCall}
             className="call-btn call-btn-start group"
             aria-label="Start call"
@@ -183,7 +166,7 @@ export default function VoiceAgent() {
         )}
 
         {callState === "connecting" && (
-          <button disabled className="call-btn call-btn-connecting">
+          <button type="button" disabled className="call-btn call-btn-connecting">
             <PhoneIcon />
           </button>
         )}
@@ -251,6 +234,7 @@ function ActiveCallUI({
       <div className="flex items-center gap-6">
         {/* Mute button */}
         <button
+          type="button"
           onClick={toggleMute}
           className={`call-btn-secondary ${muted ? "call-btn-muted" : ""}`}
           aria-label={muted ? "Unmute" : "Mute"}

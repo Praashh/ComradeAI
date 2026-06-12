@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { forwardRef } from "react";
+import type React from "react";
 import type { MilkdownEditorHandle } from "@/app/_components/MilkdownEditor";
 
 const MilkdownEditor = dynamic(
@@ -12,10 +12,13 @@ const MilkdownEditor = dynamic(
 interface MilkdownEditorClientProps {
   onChange?: () => void;
   defaultValue?: string;
+  ref?: React.Ref<MilkdownEditorHandle>;
 }
 
-export const MilkdownEditorClient = forwardRef<MilkdownEditorHandle, MilkdownEditorClientProps>(
-  function MilkdownEditorClient({ onChange, defaultValue }, ref) {
-    return <MilkdownEditor ref={ref} onChange={onChange} defaultValue={defaultValue} />;
-  }
-);
+export const MilkdownEditorClient = function MilkdownEditorClient({
+  onChange,
+  defaultValue,
+  ref,
+}: MilkdownEditorClientProps) {
+  return <MilkdownEditor ref={ref} onChange={onChange} defaultValue={defaultValue} />;
+};

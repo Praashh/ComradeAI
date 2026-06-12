@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext } from "react";
+import { createContext, use, useMemo } from "react";
 import { api } from "@/trpc/react";
 
 type Conversation = {
@@ -31,15 +31,17 @@ export function ConversationsProvider({
     { staleTime: Infinity },
   );
 
+  const value = useMemo(
+    () => ({
+      conversations: data?.conversations ?? [],
+      isLoading,
+      refetch,
+    }),
+    [data?.conversations, isLoading, refetch],
+  );
+
   return (
-    <ConversationsContext.Provider
-      value={{
-        conversations: data?.conversations ?? [],
-        isLoading,
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        refetch,
-      }}
-    >
+    <ConversationsContext.Provider value={value}>
       {children}
     </ConversationsContext.Provider>
   );
@@ -54,6 +56,6 @@ const fallback: ConversationsContextValue = {
 };
 
 export function useConversations() {
-  const context = useContext(ConversationsContext);
+  const context = use(ConversationsContext);
   return context ?? fallback;
 }

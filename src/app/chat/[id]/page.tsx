@@ -404,6 +404,7 @@ function ChatView({ conversationId }: { conversationId: number }) {
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Type a message..."
+                  aria-label="Type a message"
                   rows={1}
                   className="flex-1 resize-none bg-[var(--paper-2)] border border-[var(--rule-soft)] rounded-lg px-4 py-3 text-[var(--ink)] text-[0.95rem] font-body placeholder:text-[var(--ink-3)] placeholder:italic focus:outline-none focus:border-[var(--rule)] transition-colors"
                   style={{ maxHeight: "120px" }}
@@ -414,6 +415,7 @@ function ChatView({ conversationId }: { conversationId: number }) {
                   }}
                 />
                 <button
+                  type="button"
                   onClick={handleSend}
                   disabled={!input.trim() || sendMessage.isPending}
                   className="shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-[var(--red)] text-[var(--paper)] hover:bg-[var(--red-d)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"

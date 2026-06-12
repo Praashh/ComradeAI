@@ -82,6 +82,7 @@ export default function Masthead() {
             </Show>
           </nav>
           <button
+            type="button"
             className="nav-toggle"
             id="toggle"
             aria-label="Menu"

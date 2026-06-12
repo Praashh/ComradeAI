@@ -45,7 +45,7 @@ export const journals = pgTable("journals", {
 });
 
 
-export const messageRoleEnum = pgEnum("message_role", ["user", "assistant", "system"]);
+const messageRoleEnum = pgEnum("message_role", ["user", "assistant", "system"]);
 
 export const conversations = pgTable("conversations", {
     id: serial("id").primaryKey(),
