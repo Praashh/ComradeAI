@@ -3,6 +3,7 @@ import { memoryRouter } from "./routers/memory";
 import { journalRouter } from "./routers/journal";
 import { conversationRouter } from "./routers/conversation";
 import { mindRouter } from "./routers/mind";
+import { onboardingRouter } from "./routers/onboarding";
 
 /**
  * This is the primary router for your server.
@@ -14,6 +15,7 @@ export const appRouter = createTRPCRouter({
   journal: journalRouter,
   conversation: conversationRouter,
   mind: mindRouter,
+  onboarding: onboardingRouter,
 });
 
 // export type definition of API

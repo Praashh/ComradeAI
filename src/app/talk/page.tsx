@@ -1,3 +1,4 @@
+import { requireOnboarded } from "@/lib/check-onboarding";
 import Masthead from "@/app/_components/Masthead";
 import VoiceAgent from "@/app/_components/VoiceAgent";
 
@@ -6,7 +7,8 @@ export const metadata = {
   description: "Have a voice conversation with Mira",
 };
 
-export default function TalkPage() {
+export default async function TalkPage() {
+  await requireOnboarded();
   return (
     <>
       <Masthead />

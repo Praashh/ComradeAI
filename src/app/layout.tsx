@@ -4,6 +4,7 @@ import { type Metadata } from "next";
 import { Instrument_Serif, Newsreader, JetBrains_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 
+import { Toaster } from "sonner";
 import { TRPCReactProvider } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 
@@ -37,6 +38,17 @@ export default function RootLayout({
       <html lang="en" className={cn(instrumentSerif.variable, newsreader.variable, "font-mono", jetbrainsMono.variable)}>
         <body className="loaded">
           <TRPCReactProvider>{children}</TRPCReactProvider>
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              style: {
+                background: "var(--paper-2)",
+                color: "var(--ink)",
+                border: "1px solid var(--rule-soft)",
+                fontFamily: "var(--body)",
+              },
+            }}
+          />
         </body>
       </html>
     </ClerkProvider>
