@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
-import { flushSync } from "react-dom";
+import { useState, useCallback, startTransition } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
@@ -68,20 +67,19 @@ export default function OnboardingFlow() {
     useState<CharacterId>(DEFAULT_CHARACTER);
 
   // Focus ref for nickname input (replaces autoFocus to avoid lint warning)
-  const nicknameRef = useRef<HTMLInputElement>(null);
+  const nicknameRef = useCallback((node: HTMLInputElement | null) => {
+    if (node) {
+      node.focus();
+    }
+  }, []);
 
   // Hydration-safe today's date for the date input max
   const todayDate = new Date().toISOString().split("T")[0];
 
   const changeStep = useCallback((newStep: Step) => {
-    if (newStep === "nickname") {
-      flushSync(() => {
-        setStep("nickname");
-      });
-      nicknameRef.current?.focus();
-    } else {
+    startTransition(() => {
       setStep(newStep);
-    }
+    });
   }, []);
 
   // Import state
