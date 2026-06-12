@@ -1,17 +1,67 @@
 import { auth } from "@clerk/nextjs/server";
-import { AccessToken } from "livekit-server-sdk";
+import { AccessToken, RoomServiceClient } from "livekit-server-sdk";
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { eq } from "drizzle-orm";
 import { env } from "@/env";
+import { db } from "@/db/drizzle";
+import { users } from "@/db/schema";
+import { VALID_CHARACTER_IDS, DEFAULT_CHARACTER, type CharacterId } from "@/lib/characters";
 
-export async function POST() {
+// RoomServiceClient needs HTTP(S)
+const livekitHttpUrl = env.LIVEKIT_URL.replace(/^wss:\/\//, "https://").replace(
+  /^ws:\/\//,
+  "http://",
+);
+
+const roomService = new RoomServiceClient(
+  livekitHttpUrl,
+  env.LIVEKIT_API_KEY,
+  env.LIVEKIT_API_SECRET,
+);
+
+export async function POST(req: NextRequest) {
   const { userId } = await auth();
 
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const body = (await req.json()) as { speaker?: string };
+  const speaker: CharacterId = VALID_CHARACTER_IDS.includes(
+    body.speaker as CharacterId,
+  )
+    ? (body.speaker as CharacterId)
+    : DEFAULT_CHARACTER;
+
+  // Fetch user data for room metadata
+  const user = await db
+    .select({
+      firstName: users.firstName,
+      nickname: users.nickname,
+      miraSummary: users.miraSummary,
+    })
+    .from(users)
+    .where(eq(users.clerkId, userId))
+    .then((rows) => rows[0]);
+
   const roomName = `mira-${userId}-${Date.now()}`;
   const participantIdentity = userId;
+
+  // Build room metadata for the agent
+  const roomMetadata = JSON.stringify({
+    speaker,
+    user_name: user?.nickname ?? user?.firstName ?? undefined,
+    user_life_journey: user?.miraSummary ?? undefined,
+  });
+
+  // Create room with metadata BEFORE the participant joins
+  const room = await roomService.createRoom({
+    name: roomName,
+    metadata: roomMetadata,
+    emptyTimeout: 60,
+  });
+  console.log("[LIVEKIT] Room created:", room.name, "metadata:", room.metadata);
 
   const token = new AccessToken(env.LIVEKIT_API_KEY, env.LIVEKIT_API_SECRET, {
     identity: participantIdentity,

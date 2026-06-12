@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   LiveKitRoom,
   RoomAudioRenderer,
@@ -10,6 +10,12 @@ import {
   DisconnectButton,
 } from "@livekit/components-react";
 import "@livekit/components-styles";
+import {
+  CHARACTERS,
+  DEFAULT_CHARACTER,
+  type CharacterId,
+} from "@/lib/characters";
+import { api } from "@/trpc/react";
 
 type ConnectionDetails = {
   token: string;
@@ -27,10 +33,28 @@ export default function VoiceAgent() {
   const [durationInterval, setDurationInterval] =
     useState<ReturnType<typeof setInterval> | null>(null);
 
+  const { data: userStatus } = api.onboarding.getOnboardingStatus.useQuery();
+  const [selectedSpeaker, setSelectedSpeaker] = useState<CharacterId>(
+    DEFAULT_CHARACTER,
+  );
+
+  useEffect(() => {
+    if (userStatus?.preferredSpeaker) {
+      setSelectedSpeaker(userStatus.preferredSpeaker as CharacterId);
+    }
+  }, [userStatus?.preferredSpeaker]);
+
+  const activeCharacter = CHARACTERS.find((c) => c.id === selectedSpeaker)!;
+  const activeSpeakerName = activeCharacter.name;
+
   const startCall = useCallback(async () => {
     setCallState("connecting");
     try {
-      const res = await fetch("/api/livekit/token", { method: "POST" });
+      const res = await fetch("/api/livekit/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ speaker: selectedSpeaker }),
+      });
       if (!res.ok) throw new Error("Failed to get token");
       const details = (await res.json()) as ConnectionDetails;
       setConnectionDetails(details);
@@ -44,7 +68,7 @@ export default function VoiceAgent() {
     } catch {
       setCallState("idle");
     }
-  }, []);
+  }, [selectedSpeaker]);
 
   const endCall = useCallback(() => {
     setConnectionDetails(null);
@@ -78,7 +102,7 @@ export default function VoiceAgent() {
             } bg-paper transition-all duration-500`}
           >
             <span className="font-disp text-[3.2rem] leading-none text-ink">
-              M
+              {activeSpeakerName[0]}
             </span>
           </div>
           {/* Pulse rings for active call */}
@@ -94,7 +118,7 @@ export default function VoiceAgent() {
 
         {/* Name */}
         <h2 className="mb-1 font-disp text-[1.8rem] leading-none text-ink">
-          Mira
+          {activeSpeakerName}
         </h2>
 
         {/* Status text */}
@@ -117,8 +141,34 @@ export default function VoiceAgent() {
             style={{ background: "transparent" }}
           >
             <RoomAudioRenderer />
-            <ActiveCallUI onEndCall={endCall} />
+            <ActiveCallUI onEndCall={endCall} speakerName={activeSpeakerName} />
           </LiveKitRoom>
+        )}
+
+        {/* Character subtitle */}
+        {callState === "idle" && (
+          <p className="mb-6 -mt-1 font-body text-[0.78rem] italic text-ink-3">
+            {activeCharacter.title}
+          </p>
+        )}
+
+        {/* Character picker */}
+        {callState === "idle" && (
+          <div className="mb-6 flex flex-wrap justify-center gap-2">
+            {CHARACTERS.map((c) => (
+              <button
+                key={c.id}
+                onClick={() => setSelectedSpeaker(c.id)}
+                className={`rounded-full border px-3 py-1 font-body text-[0.78rem] transition-colors ${
+                  selectedSpeaker === c.id
+                    ? "border-ink bg-ink text-paper"
+                    : "border-rule text-ink-3 hover:border-ink-3"
+                }`}
+              >
+                {c.name}
+              </button>
+            ))}
+          </div>
         )}
 
         {/* Controls when not connected */}
@@ -150,7 +200,13 @@ export default function VoiceAgent() {
   );
 }
 
-function ActiveCallUI({ onEndCall }: { onEndCall: () => void }) {
+function ActiveCallUI({
+  onEndCall,
+  speakerName,
+}: {
+  onEndCall: () => void;
+  speakerName: string;
+}) {
   const { state, audioTrack } = useVoiceAssistant();
   const room = useRoomContext();
   const [muted, setMuted] = useState(false);
@@ -170,13 +226,13 @@ function ActiveCallUI({ onEndCall }: { onEndCall: () => void }) {
       {/* Agent state label */}
       <p className="font-body text-[0.75rem] uppercase tracking-[0.14em] text-ink-3">
         {state === "listening"
-          ? "Mira is listening"
+          ? `${speakerName} is listening`
           : state === "thinking"
-            ? "Mira is thinking…"
+            ? `${speakerName} is thinking…`
             : state === "speaking"
-              ? "Mira is speaking"
+              ? `${speakerName} is speaking`
               : state === "connecting"
-                ? "Connecting to Mira…"
+                ? `Connecting to ${speakerName}…`
                 : "Connected"}
       </p>
 

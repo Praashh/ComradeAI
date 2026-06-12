@@ -1,4 +1,4 @@
-import { integer, pgTable, serial, text, timestamp, pgEnum } from "drizzle-orm/pg-core";
+import { boolean, date, integer, pgTable, serial, text, timestamp, pgEnum } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
     id: serial("id").primaryKey(),
@@ -10,6 +10,12 @@ export const users = pgTable("users", {
     profileImageUrl: text("profile_image_url"),
 
     bio: text("bio"),
+
+    isOnboarded: boolean("is_onboarded").default(false).notNull(),
+    nickname: text("nickname"),
+    pronouns: text("pronouns"),
+    dob: date("dob", { mode: "string" }),
+    preferredSpeaker: text("preferred_speaker"),
 
     miraSummary: text("mira_summary"),
     miraSummaryUpdatedAt: timestamp("mira_summary_updated_at"),

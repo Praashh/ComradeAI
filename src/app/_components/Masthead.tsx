@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import Link from "next/link";
-import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+import { Show, UserButton } from "@clerk/nextjs";
 
 export default function Masthead() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -32,16 +32,18 @@ export default function Masthead() {
           </Link>
           <nav className="flex items-center gap-[26px] max-tablet:hidden">
             <Show when="signed-out">
-              <SignInButton mode="modal">
-                <button className="bg-transparent border-0 cursor-pointer p-0 font-body text-[0.82rem] tracking-[0.14em] uppercase text-ink-2 transition-colors duration-200 hover:text-ink">
-                  Sign in
-                </button>
-              </SignInButton>
-              <SignUpButton mode="modal">
-                <button className="nav-btn-start bg-transparent border-0 cursor-pointer p-0 font-body text-[0.82rem] tracking-[0.14em] uppercase text-red relative pb-[3px]">
-                  Start writing
-                </button>
-              </SignUpButton>
+              <Link
+                href="/sign-in"
+                className="font-body text-[0.82rem] tracking-[0.14em] uppercase text-ink-2 transition-colors duration-200 hover:text-ink"
+              >
+                Sign in
+              </Link>
+              <Link
+                href="/sign-up"
+                className="nav-btn-start font-body text-[0.82rem] tracking-[0.14em] uppercase text-red relative pb-[3px]"
+              >
+                Start writing
+              </Link>
             </Show>
 
             <Show when="signed-in">
@@ -117,22 +119,20 @@ export default function Masthead() {
         </Link>
 
         <Show when="signed-out">
-          <SignInButton mode="modal">
-            <button
-              onClick={closeMenu}
-              className="bg-transparent border-0 cursor-pointer text-left font-disp text-[2.2rem] py-[16px] border-b border-rule-soft text-ink w-full hover:text-red transition-colors"
-            >
-              Sign in
-            </button>
-          </SignInButton>
-          <SignUpButton mode="modal">
-            <button
-              onClick={closeMenu}
-              className="bg-transparent border-0 cursor-pointer text-left font-disp text-[2.2rem] py-[16px] border-b border-rule-soft text-red w-full"
-            >
-              Start writing →
-            </button>
-          </SignUpButton>
+          <Link
+            href="/sign-in"
+            onClick={closeMenu}
+            className="font-disp text-[2.2rem] py-[16px] border-b border-rule-soft text-ink hover:text-red transition-colors"
+          >
+            Sign in
+          </Link>
+          <Link
+            href="/sign-up"
+            onClick={closeMenu}
+            className="font-disp text-[2.2rem] py-[16px] border-b border-rule-soft text-red"
+          >
+            Start writing →
+          </Link>
         </Show>
 
         <Show when="signed-in">
