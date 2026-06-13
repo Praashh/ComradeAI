@@ -29,7 +29,7 @@ export const mindRouter = createTRPCRouter({
             limit: input.limit,
             sort: "createdAt",
             order: "desc",
-            filters: { containerTags: [userId] },
+            containerTags: [userId],
           }),
         },
       );

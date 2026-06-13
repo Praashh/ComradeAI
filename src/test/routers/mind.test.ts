@@ -99,9 +99,9 @@ describe("mind router", () => {
         limit: number;
         sort: string;
         order: string;
-        filters: { containerTags: string[] };
+        containerTags: string[];
       };
-      expect(body.filters.containerTags).toEqual(["user_test_123"]);
+      expect(body.containerTags).toEqual(["user_test_123"]);
       expect(body.page).toBe(1);
       expect(body.limit).toBe(10);
     });
