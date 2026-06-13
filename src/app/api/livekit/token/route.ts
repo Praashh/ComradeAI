@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm";
 import { env } from "@/env";
 import { db } from "@/db/drizzle";
 import { users } from "@/db/schema";
-import { VALID_CHARACTER_IDS, DEFAULT_CHARACTER, type CharacterId } from "@/lib/characters";
+import { CHARACTERS, VALID_CHARACTER_IDS, DEFAULT_CHARACTER, type CharacterId } from "@/lib/characters";
 
 // RoomServiceClient needs HTTP(S)
 const livekitHttpUrl = env.LIVEKIT_URL.replace(/^wss:\/\//, "https://").replace(
@@ -48,9 +48,12 @@ export async function POST(req: NextRequest) {
   const roomName = `mira-${userId}-${Date.now()}`;
   const participantIdentity = userId;
 
+  // Resolve the Sarvam TTS voice name from the character
+  const character = CHARACTERS.find((c) => c.id === speaker)!;
+
   // Build room metadata for the agent
   const roomMetadata = JSON.stringify({
-    speaker,
+    speaker: character.voice,
     user_name: user?.nickname ?? user?.firstName ?? undefined,
     user_life_journey: user?.miraSummary ?? undefined,
   });
