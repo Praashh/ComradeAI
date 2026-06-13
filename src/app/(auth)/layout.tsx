@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Sign Up - Mira",
+  description:
+    "Create your Mira account and start journaling with your AI companion.",
+};
 
 export default function AuthLayout({
   children,

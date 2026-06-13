@@ -130,6 +130,7 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
             placeholder="Journal Name"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            aria-label="Journal name"
             className="w-full bg-transparent border-b-[1.5px] border-[var(--rule-soft)] focus:border-[var(--rule)] px-2 py-3 text-center text-[var(--ink)] placeholder-[var(--ink-3)] font-disp text-2xl font-normal transition-colors focus:outline-none"
           />
 
@@ -140,6 +141,7 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
               placeholder="How are you feeling today?"
               value={mood}
               onChange={(e) => setMood(e.target.value)}
+              aria-label="Current mood"
               className="w-full bg-transparent border-b border-[var(--rule-soft)] focus:border-[var(--rule)] px-2 py-2 text-center text-[var(--ink)] placeholder-[var(--ink-3)] font-body text-sm italic transition-colors focus:outline-none"
             />
             {/* Quick Mood Shortcuts */}

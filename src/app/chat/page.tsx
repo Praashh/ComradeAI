@@ -194,6 +194,7 @@ export default function ChatPage() {
                 Start a conversation with Mira.
               </p>
               <button
+                type="button"
                 onClick={() => createConversation.mutate({})}
                 disabled={createConversation.isPending}
                 className="sidebar-action-btn inline-flex !w-auto"

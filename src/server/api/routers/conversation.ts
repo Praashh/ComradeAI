@@ -120,14 +120,15 @@ export const conversationRouter = createTRPCRouter({
 
       if (recallResult.status === "fulfilled" && recallResult.value?.results?.length) {
         memoryContext = recallResult.value.results
-          .map((r: { chunks?: Array<{ content: string }>; content?: string | null }) => {
+          .flatMap((r: { chunks?: Array<{ content: string }>; content?: string | null }) => {
             // chunks contain the actual matching content; content is only present with includeFullDocs
             if (r.chunks?.length) {
-              return r.chunks.map((c) => c.content).join("\n");
+              const joined = r.chunks.map((c) => c.content).join("\n");
+              return joined ? [joined] : [];
             }
-            return r.content ?? "";
+            const text = r.content ?? "";
+            return text ? [text] : [];
           })
-          .filter(Boolean)
           .join("\n\n");
         console.log(`[CHAT]: Memory context retrieved, length=${memoryContext.length}`);
       } else {

@@ -7,7 +7,6 @@ import {
   useState,
   useCallback,
   useRef,
-  useEffect,
   type FormEvent,
   type KeyboardEvent,
   type ClipboardEvent,
@@ -73,15 +72,8 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
 
   // OTP
-  const [otp, setOtp] = useState<string[]>(Array.from({ length: OTP_LENGTH }, () => ""));
+  const [otp, setOtp] = useState<string[]>(() => Array.from({ length: OTP_LENGTH }, () => ""));
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
-
-  // Focus first OTP input when entering verify step
-  useEffect(() => {
-    if (step === "verify") {
-      otpRefs.current[0]?.focus();
-    }
-  }, [step]);
 
   /* ─── Sign-up form submit ─── */
   const handleSubmit = useCallback(
@@ -104,6 +96,10 @@ export default function SignUpPage() {
         });
 
         setStep("verify");
+        // Focus first OTP input after the verify step renders
+        requestAnimationFrame(() => {
+          otpRefs.current[0]?.focus();
+        });
       } catch (err: unknown) {
         const clerkError = err as { errors?: Array<{ longMessage?: string; message?: string }> };
         const message =
@@ -231,11 +227,11 @@ export default function SignUpPage() {
           <div className="auth-otp-group">
             {otp.map((digit, i) => (
               <input
-                key={i}
+                key={`otp-digit-${i}`}
                 ref={(el) => { otpRefs.current[i] = el; }}
                 type="text"
                 inputMode="numeric"
-                maxLength={1}
+                maxLength={i}
                 className="auth-otp-input"
                 value={digit}
                 onChange={(e) => handleOtpChange(i, e.target.value)}

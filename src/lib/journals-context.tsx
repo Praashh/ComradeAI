@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext } from "react";
+import { createContext, use, useMemo } from "react";
 import { api } from "@/trpc/react";
 
 type Journal = {
@@ -32,15 +32,17 @@ export function JournalsProvider({ children }: { children: React.ReactNode }) {
     { staleTime: Infinity },
   );
 
+  const value = useMemo(
+    () => ({
+      journals: data?.journals ?? [],
+      isLoading,
+      refetch,
+    }),
+    [data?.journals, isLoading, refetch],
+  );
+
   return (
-    <JournalsContext.Provider
-      value={{
-        journals: data?.journals ?? [],
-        isLoading,
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        refetch,
-      }}
-    >
+    <JournalsContext.Provider value={value}>
       {children}
     </JournalsContext.Provider>
   );
@@ -53,6 +55,6 @@ const fallback: JournalsContextValue = {
 };
 
 export function useJournals() {
-  const context = useContext(JournalsContext);
+  const context = use(JournalsContext);
   return context ?? fallback;
 }

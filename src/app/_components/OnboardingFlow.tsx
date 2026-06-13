@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, startTransition } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
@@ -66,6 +66,22 @@ export default function OnboardingFlow() {
   const [selectedCharacter, setSelectedCharacter] =
     useState<CharacterId>(DEFAULT_CHARACTER);
 
+  // Focus ref for nickname input (replaces autoFocus to avoid lint warning)
+  const nicknameRef = useCallback((node: HTMLInputElement | null) => {
+    if (node) {
+      node.focus();
+    }
+  }, []);
+
+  // Hydration-safe today's date for the date input max
+  const todayDate = new Date().toISOString().split("T")[0];
+
+  const changeStep = useCallback((newStep: Step) => {
+    startTransition(() => {
+      setStep(newStep);
+    });
+  }, []);
+
   // Import state
   const [importText, setImportText] = useState("");
   const [importing, setImporting] = useState(false);
@@ -76,7 +92,7 @@ export default function OnboardingFlow() {
 
   const completeOnboarding = api.onboarding.completeOnboarding.useMutation({
     onSuccess: () => router.push("/write"),
-    onError: () => setStep("character"),
+    onError: () => changeStep("character"),
   });
 
   const importMemory = api.onboarding.importMemory.useMutation();
@@ -90,23 +106,23 @@ export default function OnboardingFlow() {
       });
       setImportResult(result);
       // Auto-advance after a brief pause
-      setTimeout(() => setStep("nickname"), 1500);
+      setTimeout(() => changeStep("nickname"), 1500);
     } catch {
       // Allow user to retry or skip
       setImporting(false);
     }
-  }, [importText, importMemory]);
+  }, [importText, importMemory, changeStep]);
 
   const handleComplete = useCallback(() => {
     if (!nickname.trim() || !pronouns || !dob) return;
-    setStep("completing");
+    changeStep("completing");
     completeOnboarding.mutate({
       nickname: nickname.trim(),
       pronouns,
       dob,
       preferredSpeaker: selectedCharacter,
     });
-  }, [nickname, pronouns, dob, selectedCharacter, completeOnboarding]);
+  }, [nickname, pronouns, dob, selectedCharacter, completeOnboarding, changeStep]);
 
   const canGoNext = () => {
     switch (step) {
@@ -127,7 +143,7 @@ export default function OnboardingFlow() {
     const flow: Step[] = ["nickname", "pronouns", "dob", "character"];
     const currentIndex = flow.indexOf(step);
     if (currentIndex < flow.length - 1) {
-      setStep(flow[currentIndex + 1]!);
+      changeStep(flow[currentIndex + 1]!);
     } else if (step === "character") {
       handleComplete();
     }
@@ -137,9 +153,9 @@ export default function OnboardingFlow() {
     const flow: Step[] = ["choose-path", "nickname", "pronouns", "dob", "character"];
     const currentIndex = flow.indexOf(step);
     if (step === "import") {
-      setStep("choose-path");
+      changeStep("choose-path");
     } else if (currentIndex > 0) {
-      setStep(flow[currentIndex - 1]!);
+      changeStep(flow[currentIndex - 1]!);
     }
   };
 
@@ -148,6 +164,7 @@ export default function OnboardingFlow() {
       {/* Back button */}
       {step !== "choose-path" && step !== "completing" && (
         <button
+          type="button"
           onClick={handleBack}
           className="mb-6 flex items-center gap-1 font-body text-[0.82rem] text-ink-3 transition-colors hover:text-ink"
         >
@@ -181,7 +198,8 @@ export default function OnboardingFlow() {
 
           <div className="flex w-full flex-col gap-4">
             <button
-              onClick={() => setStep("import")}
+              type="button"
+              onClick={() => changeStep("import")}
               className="w-full rounded-[6px] border border-rule-soft bg-paper-2 px-6 py-5 text-left transition-all hover:border-rule hover:shadow-[0_4px_20px_rgba(33,28,22,0.08)]"
             >
               <span className="mb-1 block font-disp text-[1.2rem] text-ink">
@@ -194,7 +212,8 @@ export default function OnboardingFlow() {
             </button>
 
             <button
-              onClick={() => setStep("nickname")}
+              type="button"
+              onClick={() => changeStep("nickname")}
               className="w-full rounded-[6px] border border-rule-soft bg-paper-2 px-6 py-5 text-left transition-all hover:border-rule hover:shadow-[0_4px_20px_rgba(33,28,22,0.08)]"
             >
               <span className="mb-1 block font-disp text-[1.2rem] text-ink">
@@ -226,6 +245,7 @@ export default function OnboardingFlow() {
                 Prompt to copy
               </span>
               <button
+                type="button"
                 onClick={() => {
                   void navigator.clipboard.writeText(IMPORT_PROMPT);
                   toast.success("Prompt copied to clipboard");
@@ -242,6 +262,7 @@ export default function OnboardingFlow() {
 
           {/* Paste area */}
           <textarea
+            aria-label="Paste imported memories here"
             value={importText}
             onChange={(e) => setImportText(e.target.value)}
             placeholder="Paste the response here..."
@@ -258,6 +279,7 @@ export default function OnboardingFlow() {
 
           <div className="flex gap-3">
             <button
+              type="button"
               onClick={handleImport}
               disabled={!importText.trim() || importing}
               className="flex-1 rounded-[4px] bg-ink px-6 py-3 font-body text-[0.85rem] tracking-[0.04em] text-paper transition-colors hover:bg-ink-2 disabled:cursor-not-allowed disabled:opacity-40"
@@ -265,7 +287,8 @@ export default function OnboardingFlow() {
               {importing ? "Importing..." : "Import & Continue"}
             </button>
             <button
-              onClick={() => setStep("nickname")}
+              type="button"
+              onClick={() => changeStep("nickname")}
               className="rounded-[4px] border border-rule-soft px-6 py-3 font-body text-[0.85rem] text-ink-3 transition-colors hover:border-rule hover:text-ink"
             >
               Skip
@@ -284,6 +307,8 @@ export default function OnboardingFlow() {
             A name, nickname, whatever feels right.
           </p>
           <input
+            ref={nicknameRef}
+            aria-label="Your name or nickname"
             type="text"
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
@@ -291,11 +316,11 @@ export default function OnboardingFlow() {
               if (e.key === "Enter" && canGoNext()) handleNext();
             }}
             placeholder="Your name"
-            autoFocus
             maxLength={50}
             className="mb-8 w-full max-w-[320px] border-b-[1.5px] border-rule-soft bg-transparent px-0 py-3 text-center font-disp text-[1.6rem] text-ink placeholder:text-ink-3 focus:border-rule focus:outline-none"
           />
           <button
+            type="button"
             onClick={handleNext}
             disabled={!canGoNext()}
             className="rounded-[4px] bg-ink px-8 py-3 font-body text-[0.85rem] tracking-[0.04em] text-paper transition-colors hover:bg-ink-2 disabled:cursor-not-allowed disabled:opacity-40"
@@ -317,19 +342,20 @@ export default function OnboardingFlow() {
           <div className="mb-8 flex gap-3">
             {(["he/him", "she/her", "they/them"] as const).map((p) => (
               <button
+                type="button"
                 key={p}
                 onClick={() => setPronouns(p)}
-                className={`rounded-full border px-5 py-2.5 font-body text-[0.88rem] transition-colors ${
-                  pronouns === p
+                className={`rounded-full border px-5 py-2.5 font-body text-[0.88rem] transition-colors ${pronouns === p
                     ? "border-ink bg-ink text-paper"
                     : "border-rule text-ink-3 hover:border-ink-3"
-                }`}
+                  }`}
               >
                 {p}
               </button>
             ))}
           </div>
           <button
+            type="button"
             onClick={handleNext}
             disabled={!canGoNext()}
             className="rounded-[4px] bg-ink px-8 py-3 font-body text-[0.85rem] tracking-[0.04em] text-paper transition-colors hover:bg-ink-2 disabled:cursor-not-allowed disabled:opacity-40"
@@ -349,16 +375,18 @@ export default function OnboardingFlow() {
             So we can celebrate with you.
           </p>
           <input
+            aria-label="Date of birth"
             type="date"
             value={dob}
             onChange={(e) => setDob(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter" && canGoNext()) handleNext();
             }}
-            max={new Date().toISOString().split("T")[0]}
+            max={todayDate}
             className="mb-8 w-full max-w-[280px] rounded-[4px] border border-rule-soft bg-paper-2 px-4 py-3 font-body text-[0.95rem] text-ink focus:border-rule focus:outline-none"
           />
           <button
+            type="button"
             onClick={handleNext}
             disabled={!canGoNext()}
             className="rounded-[4px] bg-ink px-8 py-3 font-body text-[0.85rem] tracking-[0.04em] text-paper transition-colors hover:bg-ink-2 disabled:cursor-not-allowed disabled:opacity-40"
@@ -381,21 +409,20 @@ export default function OnboardingFlow() {
           <div className="mb-8 grid w-full grid-cols-2 gap-3">
             {CHARACTERS.map((c) => (
               <button
+                type="button"
                 key={c.id}
                 onClick={() => setSelectedCharacter(c.id)}
-                className={`flex flex-col items-start rounded-[6px] border p-4 text-left transition-all ${
-                  selectedCharacter === c.id
+                className={`flex flex-col items-start rounded-[6px] border p-4 text-left transition-all ${selectedCharacter === c.id
                     ? "border-red bg-paper-2 shadow-[0_4px_20px_rgba(203,58,40,0.1)]"
                     : "border-rule-soft bg-paper-2 hover:border-rule"
-                }`}
+                  }`}
               >
                 <div className="mb-2 flex items-center gap-2.5">
                   <div
-                    className={`flex h-9 w-9 items-center justify-center rounded-full border ${
-                      selectedCharacter === c.id
+                    className={`flex h-9 w-9 items-center justify-center rounded-full border ${selectedCharacter === c.id
                         ? "border-red bg-red text-paper"
                         : "border-rule bg-paper text-ink"
-                    } font-disp text-[1.1rem] leading-none transition-colors`}
+                      } font-disp text-[1.1rem] leading-none transition-colors`}
                   >
                     {c.name[0]}
                   </div>
@@ -416,6 +443,7 @@ export default function OnboardingFlow() {
           </div>
 
           <button
+            type="button"
             onClick={handleComplete}
             disabled={completeOnboarding.isPending}
             className="rounded-[4px] bg-red px-8 py-3 font-body text-[0.85rem] tracking-[0.04em] text-paper transition-colors hover:bg-red-d disabled:cursor-not-allowed disabled:opacity-60"
