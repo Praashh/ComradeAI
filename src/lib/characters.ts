@@ -6,6 +6,7 @@ export const CHARACTERS = [
     description:
       "Youthful, high-energy, never lets you give up, celebrates your wins, charges into problems headfirst with you",
     gender: "male",
+    voice: "amit",
   },
   {
     id: "arjuna",
@@ -14,6 +15,7 @@ export const CHARACTERS = [
     description:
       "Disciplined, goal-driven, cuts through confusion, holds you accountable, helps you aim and execute",
     gender: "male",
+    voice: "aditya",
   },
   {
     id: "mira",
@@ -22,6 +24,7 @@ export const CHARACTERS = [
     description:
       "Deep, devotional, emotionally intuitive, helps you sit with your feelings, poetic and spiritual",
     gender: "female",
+    voice: "priya",
   },
   {
     id: "gargi",
@@ -30,6 +33,7 @@ export const CHARACTERS = [
     description:
       "Sharp intellect, asks the hard questions, makes you think deeper, never accepts surface-level answers",
     gender: "female",
+    voice: "ishita",
   },
   {
     id: "karna",
@@ -38,6 +42,7 @@ export const CHARACTERS = [
     description:
       "Generous heart, no judgment ever, stands by you no matter what, understands struggle and resilience firsthand",
     gender: "male",
+    voice: "rohan",
   },
   {
     id: "kavya",
@@ -46,6 +51,7 @@ export const CHARACTERS = [
     description:
       "Imaginative, playful with words, helps you see life through stories and metaphors, turns your chaos into narrative",
     gender: "female",
+    voice: "kavya",
   },
 ] as const;
 
