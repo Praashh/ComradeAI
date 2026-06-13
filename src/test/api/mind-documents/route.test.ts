@@ -82,11 +82,11 @@ describe("POST /api/mind/documents", () => {
     const fetchBody = JSON.parse(fetchArgs[1]!.body as string) as {
       page: number;
       limit: number;
-      filters: { containerTags: string[] };
+      containerTags: string[];
     };
     expect(fetchBody.page).toBe(1);
     expect(fetchBody.limit).toBe(10);
-    expect(fetchBody.filters.containerTags).toEqual(["user_test_123"]);
+    expect(fetchBody.containerTags).toEqual(["user_test_123"]);
   });
 
   it("uses default page and limit when not provided", async () => {

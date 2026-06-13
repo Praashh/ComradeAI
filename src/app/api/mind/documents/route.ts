@@ -23,7 +23,7 @@ export async function POST(req: Request) {
         limit: body.limit ?? 100,
         sort: "createdAt",
         order: "desc",
-        filters: { containerTags: [session.userId] },
+        containerTags: [session.userId],
       }),
     },
   );
