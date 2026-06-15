@@ -2,13 +2,10 @@ import RevealOnScroll from "./RevealOnScroll";
 
 export default function Transcript() {
   return (
-    <RevealOnScroll className="border-t-2 border-ink pt-[14px] relative">
+    <RevealOnScroll className="relative">
       <div className="flex justify-between items-baseline mb-[18px]">
         <span className="[font-family:var(--body)] text-[0.72rem] font-medium tracking-[0.22em] uppercase text-red">
           A conversation with Mira
-        </span>
-        <span className="[font-family:var(--body)] text-[0.72rem] font-medium tracking-[0.22em] uppercase text-ink-2">
-          Fig. 1
         </span>
       </div>
 
