@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import { type Metadata } from "next";
 import { Instrument_Serif, Newsreader, JetBrains_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Analytics } from "@vercel/analytics/next";
 
 import { Toaster } from "sonner";
 import { TRPCReactProvider } from "@/trpc/react";
@@ -78,6 +79,7 @@ export default function RootLayout({
               },
             }}
           />
+          <Analytics />
         </body>
       </html>
     </ClerkProvider>
