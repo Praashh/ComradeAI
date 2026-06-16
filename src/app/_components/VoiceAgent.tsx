@@ -16,6 +16,7 @@ import {
   type CharacterId,
 } from "@/lib/characters";
 import { api } from "@/trpc/react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type ConnectionDetails = {
   token: string;
@@ -39,7 +40,7 @@ export default function VoiceAgent() {
   const durationIntervalRef =
     useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const { data: userStatus } = api.onboarding.getOnboardingStatus.useQuery();
+  const { data: userStatus, isPending: isuserStatusPending } = api.onboarding.getOnboardingStatus.useQuery();
   const [selectedSpeaker, setSelectedSpeaker] = useState<CharacterId>(
     DEFAULT_CHARACTER,
   );
@@ -90,93 +91,104 @@ export default function VoiceAgent() {
     <div className="flex w-full max-w-[420px] flex-col items-center px-[var(--pad)]">
       {/* Call card */}
       <div className="call-card flex w-full flex-col items-center rounded-[6px] border border-rule-soft bg-paper-2 px-8 py-12 shadow-[0_8px_40px_rgba(33,28,22,0.08)]">
-        {/* Avatar / Pulse ring */}
-        <div className="relative mb-8">
-          <div
-            className={`flex h-[120px] w-[120px] items-center justify-center rounded-full border-2 ${
-              callState === "active"
-                ? "border-red"
-                : callState === "connecting"
-                  ? "border-ink-3"
-                  : "border-rule"
-            } bg-paper transition-all duration-500`}
-          >
-            <span className="font-disp text-[3.2rem] leading-none text-ink">
-              {activeSpeakerName[0]}
-            </span>
+        {isuserStatusPending ? (
+          <div className="flex w-full flex-col items-center">
+            <Skeleton className="mb-8 h-[120px] w-[120px] rounded-full bg-rule-soft" />
+            <Skeleton className="mb-2 h-7 w-32 rounded-md bg-rule-soft" />
+            <Skeleton className="mb-8 h-4 w-24 rounded-md bg-rule-soft" />
+            <Skeleton className="mb-6 h-3 w-40 rounded-md bg-rule-soft" />
+            <Skeleton className="h-[56px] w-[56px] rounded-full bg-rule-soft" />
           </div>
-          {/* Pulse rings for active call */}
-          {callState === "active" && (
-            <>
-              <span className="call-pulse call-pulse-1" />
-              <span className="call-pulse call-pulse-2" />
-            </>
-          )}
-          {/* Connecting spinner */}
-          {callState === "connecting" && <span className="call-spinner" />}
-        </div>
+        ) : (
+          <>
+            {/* Avatar / Pulse ring */}
+            <div className="relative mb-8">
+              <div
+                className={`flex h-[120px] w-[120px] items-center justify-center rounded-full border-2 ${
+                  callState === "active"
+                    ? "border-red"
+                    : callState === "connecting"
+                      ? "border-ink-3"
+                      : "border-rule"
+                } bg-paper transition-all duration-500`}
+              >
+                <span className="font-disp text-[3.2rem] leading-none text-ink">
+                  {activeSpeakerName[0]}
+                </span>
+              </div>
+              {/* Pulse rings for active call */}
+              {callState === "active" && (
+                <>
+                  <span className="call-pulse call-pulse-1" />
+                  <span className="call-pulse call-pulse-2" />
+                </>
+              )}
+              {/* Connecting spinner */}
+              {callState === "connecting" && <span className="call-spinner" />}
+            </div>
 
-        {/* Name */}
-        <h2 className="mb-1 font-disp text-[1.8rem] leading-none text-ink">
-          {activeSpeakerName}
-        </h2>
+            {/* Name */}
+            <h2 className="mb-1 font-disp text-[1.8rem] leading-none text-ink">
+              {activeSpeakerName}
+            </h2>
 
-        {/* Status text */}
-        <p className="mb-8 font-body text-[0.88rem] tracking-[0.08em] text-ink-3">
-          {callState === "idle" && "Ready to talk"}
-          {callState === "connecting" && "Connecting…"}
-          {callState === "active" && formatDuration(callDuration)}
-          {callState === "ended" && "Call ended"}
-        </p>
-
-        {/* Visualizer (only when connected) */}
-        {connectionDetails && callState === "active" && (
-          <LiveKitRoom
-            serverUrl={connectionDetails.url}
-            token={connectionDetails.token}
-            connect={true}
-            audio={true}
-            onDisconnected={endCall}
-            className="w-full"
-            style={{ background: "transparent" }}
-          >
-            <RoomAudioRenderer />
-            <ActiveCallUI onEndCall={endCall} speakerName={activeSpeakerName} />
-          </LiveKitRoom>
-        )}
-
-        {/* Character subtitle */}
-        {callState === "idle" && (
-          <p className="mb-6 -mt-1 font-body text-[0.78rem] italic text-ink-3">
-            {activeCharacter.title}
-          </p>
-        )}
-
-
-        {/* Controls when not connected */}
-        {callState === "idle" && (
-          <button
-            type="button"
-            onClick={startCall}
-            className="call-btn call-btn-start group"
-            aria-label="Start call"
-          >
-            <PhoneIcon />
-          </button>
-        )}
-
-        {callState === "connecting" && (
-          <button type="button" disabled className="call-btn call-btn-connecting">
-            <PhoneIcon />
-          </button>
-        )}
-
-        {callState === "ended" && (
-          <div className="flex h-[64px] items-center">
-            <p className="font-body text-[0.82rem] italic text-ink-3">
-              Talk again anytime
+            {/* Status text */}
+            <p className="mb-8 font-body text-[0.88rem] tracking-[0.08em] text-ink-3">
+              {callState === "idle" && "Ready to talk"}
+              {callState === "connecting" && "Connecting…"}
+              {callState === "active" && formatDuration(callDuration)}
+              {callState === "ended" && "Call ended"}
             </p>
-          </div>
+
+            {/* Visualizer (only when connected) */}
+            {connectionDetails && callState === "active" && (
+              <LiveKitRoom
+                serverUrl={connectionDetails.url}
+                token={connectionDetails.token}
+                connect={true}
+                audio={true}
+                onDisconnected={endCall}
+                className="w-full"
+                style={{ background: "transparent" }}
+              >
+                <RoomAudioRenderer />
+                <ActiveCallUI onEndCall={endCall} speakerName={activeSpeakerName} />
+              </LiveKitRoom>
+            )}
+
+            {/* Character subtitle */}
+            {callState === "idle" && (
+              <p className="mb-6 -mt-1 font-body text-[0.78rem] italic text-ink-3">
+                {activeCharacter.title}
+              </p>
+            )}
+
+            {/* Controls when not connected */}
+            {callState === "idle" && (
+              <button
+                type="button"
+                onClick={startCall}
+                className="call-btn call-btn-start group"
+                aria-label="Start call"
+              >
+                <PhoneIcon />
+              </button>
+            )}
+
+            {callState === "connecting" && (
+              <button type="button" disabled className="call-btn call-btn-connecting">
+                <PhoneIcon />
+              </button>
+            )}
+
+            {callState === "ended" && (
+              <div className="flex h-[64px] items-center">
+                <p className="font-body text-[0.82rem] italic text-ink-3">
+                  Talk again anytime
+                </p>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
