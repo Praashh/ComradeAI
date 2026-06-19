@@ -31,9 +31,10 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/og.png",
-        width: 1672,
-        height: 941,
+        width: 1200,
+        height: 630,
         alt: "Comrade AI - Your AI friend",
+        type: "image/png",
       },
     ],
   },
@@ -42,7 +43,14 @@ export const metadata: Metadata = {
     title: "Comrade AI - A thinking, consoling and understanding AI friend.",
     description:
       "Comrade AI stores your journal, learns about you, and helps you with understanding, consolation, and decision making.",
-    images: ["/og.png"],
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "Comrade AI - Your AI friend",
+      },
+    ],
   },
 };
 
