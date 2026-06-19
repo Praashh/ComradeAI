@@ -13,7 +13,7 @@ const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mon
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL ?? "https://comrade.ai",
+    process.env.NEXT_PUBLIC_APP_URL ?? "https://comradeai.vercel.app",
   ),
   title: {
     default: "Comrade AI - A thinking, consoling and understanding AI friend.",
@@ -24,6 +24,7 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
   openGraph: {
     type: "website",
+    url: process.env.NEXT_PUBLIC_APP_URL ?? "https://comrade.ai",
     siteName: "Comrade AI",
     title: "Comrade AI - A thinking, consoling and understanding AI friend.",
     description:
