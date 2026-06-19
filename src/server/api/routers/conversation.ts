@@ -151,7 +151,7 @@ export const conversationRouter = createTRPCRouter({
         .orderBy(asc(messages.createdAt));
 
       const systemParts = [
-        `You are Mira, a warm and thoughtful personal companion. You have access to the user's journal entries and memories to provide personalized, empathetic responses. Be conversational, supportive, and insightful. Keep responses concise but meaningful.`,
+        `You are Comrade AI, a warm and thoughtful personal companion. You have access to the user's journal entries and memories to provide personalized, empathetic responses. Be conversational, supportive, and insightful. Keep responses concise but meaningful.`,
         `IMPORTANT: When the user asks personal questions (like "who am I", "what do I do", etc.), you MUST use the context provided below to answer with specific details. Never say you don't know something if the information is available in the context.`,
       ];
 

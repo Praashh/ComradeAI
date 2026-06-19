@@ -344,7 +344,7 @@ describe("conversation router", () => {
       };
       const systemMsg = callArgs.messages[0]!;
       expect(systemMsg.role).toBe("system");
-      expect(systemMsg.content).toContain("Mira");
+      expect(systemMsg.content).toContain("Comrade AI");
       expect(systemMsg.content).toContain("Past memory");
       expect(systemMsg.content).toContain("User is a developer");
     });

@@ -39,13 +39,13 @@ export async function POST(req: NextRequest) {
     .select({
       firstName: users.firstName,
       nickname: users.nickname,
-      miraSummary: users.miraSummary,
+      comradeSummary: users.comradeSummary,
     })
     .from(users)
     .where(eq(users.clerkId, userId))
     .then((rows) => rows[0]);
 
-  const roomName = `mira-${userId}-${Date.now()}`;
+  const roomName = `comrade-${userId}-${Date.now()}`;
   const participantIdentity = userId;
 
   // Resolve the Sarvam TTS voice name from the character
@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
   const roomMetadata = JSON.stringify({
     speaker: character.voice,
     user_name: user?.nickname ?? user?.firstName ?? undefined,
-    user_life_journey: user?.miraSummary ?? undefined,
+    user_life_journey: user?.comradeSummary ?? undefined,
   });
 
   // Create room with metadata BEFORE the participant joins

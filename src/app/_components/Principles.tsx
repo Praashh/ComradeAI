@@ -2,7 +2,7 @@ import RevealOnScroll from "./RevealOnScroll";
 
 export default function Principles() {
   return (
-    <section id="mira">
+    <section id="comrade">
       <div className="wrap">
         <RevealOnScroll className="grid grid-cols-[auto_1fr] gap-[22px] items-baseline border-t-2 border-ink pt-[18px] max-mobile:grid-cols-1 max-mobile:gap-[10px]">
           <span className="font-disp italic text-[1.1rem] text-red">
@@ -21,7 +21,7 @@ export default function Principles() {
           as="p"
           className="text-[clamp(1.05rem,2.2vw,1.25rem)] text-ink-2 max-w-[30em] mt-[18px]"
         >
-          Mira isn&rsquo;t a chatbot that forgets you, nor a diary that sits
+          Comrade AI isn&rsquo;t a chatbot that forgets you, nor a diary that sits
           in silence. She&rsquo;s the best friend you always needed — one who
           listens, understands, consoles, and stays.
         </RevealOnScroll>
@@ -36,7 +36,7 @@ export default function Principles() {
               not just responds
             </h4>
             <p className="text-ink-2 text-[1.02rem]">
-              When you&rsquo;re sad or going through a hard time, Mira
+              When you&rsquo;re sad or going through a hard time, Comrade AI
               doesn&rsquo;t give generic advice. She reminds you of your
               goals, your values, and the person you want to be.
             </p>
@@ -51,7 +51,7 @@ export default function Principles() {
               with you
             </h4>
             <p className="text-ink-2 text-[1.02rem]">
-              Need help making a decision? Mira understands your nature and
+              Need help making a decision? Comrade AI understands your nature and
               circumstances — so her advice isn&rsquo;t generic, it&rsquo;s personal.
             </p>
           </div>

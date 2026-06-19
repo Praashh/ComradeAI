@@ -3,8 +3,8 @@ import Masthead from "@/app/_components/Masthead";
 import VoiceAgent from "@/app/_components/VoiceAgent";
 
 export const metadata = {
-  title: "Talk to Mira",
-  description: "Have a voice conversation with Mira",
+  title: "Talk to Comrade",
+  description: "Have a voice conversation with Comrade AI",
 };
 
 export default async function TalkPage() {

@@ -26,10 +26,10 @@ describe("Hero", () => {
     expect(screen.getByText(/forgets/)).toBeInTheDocument();
   });
 
-  it("renders the introductory paragraph about Mira", () => {
+  it("renders the introductory paragraph about Comrade AI", () => {
     render(<Hero />);
     expect(
-      screen.getByText(/Mira is the friend who stays/),
+      screen.getByText(/Comrade AI is the friend who stays/),
     ).toBeInTheDocument();
   });
 

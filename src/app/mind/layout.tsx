@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { requireOnboarded } from "@/lib/check-onboarding";
 
 export const metadata: Metadata = {
-  title: "Mind - Mira",
+  title: "Mind - Comrade AI",
   description:
     "Explore your mind graph and see how your memories and journal entries connect.",
 };

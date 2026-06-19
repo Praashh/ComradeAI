@@ -9,7 +9,7 @@ export default function Method() {
             § 03
           </span>
           <h2 className="[font-family:var(--disp)] font-normal text-[clamp(2rem,5.5vw,3.6rem)] leading-[1.02] tracking-[-0.01em]">
-            How Mira <span className="it r">becomes your friend.</span>
+            How Comrade AI <span className="it r">becomes your friend.</span>
           </h2>
         </RevealOnScroll>
         <div className="mt-[30px] border-t border-rule">
@@ -40,7 +40,7 @@ export default function Method() {
                 She learns who you are
               </h3>
               <p className="text-ink-2 text-[1.05rem] max-w-[34em] mt-[6px]">
-                Mira reads your journals and understands your nature, your
+                Comrade AI reads your journals and understands your nature, your
                 values, your struggles — and remembers it all, like a
                 friend who&rsquo;s been listening for years.
               </p>
@@ -58,13 +58,13 @@ export default function Method() {
                 Ask her anything
               </h3>
               <p className="text-ink-2 text-[1.05rem] max-w-[34em] mt-[6px]">
-                Need help deciding? Feeling low? Ask Mira. She&rsquo;ll
+                Need help deciding? Feeling low? Ask Comrade. She&rsquo;ll
                 console you, help you think through decisions, and plan
                 ahead — based on who you actually are, not generic advice.
               </p>
             </div>
             <span className="text-[0.72rem] tracking-[0.16em] uppercase text-ink-3 whitespace-nowrap max-mobile:hidden">
-              AskMira
+              AskComrade
             </span>
           </RevealOnScroll>
         </div>

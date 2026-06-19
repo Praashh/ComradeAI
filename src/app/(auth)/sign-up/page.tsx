@@ -294,7 +294,7 @@ export default function SignUpPage() {
           />
         </svg>
       </h1>
-      <p className="auth-subheading">Start your journey with Mira</p>
+      <p className="auth-subheading">Start your journey with Comrade AI</p>
 
       {/* Google OAuth */}
       <button

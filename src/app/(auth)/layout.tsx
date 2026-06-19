@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Sign Up - Mira",
+  title: "Sign Up - Comrade AI",
   description:
-    "Create your Mira account and start journaling with your AI companion.",
+    "Create your Comrade AI account and start journaling with your AI companion.",
 };
 
 export default function AuthLayout({
@@ -13,7 +13,7 @@ export default function AuthLayout({
   return (
     <div className="auth-page">
       <Link href="/" className="auth-logo">
-        Mira<span className="dot">.</span>
+        Comrade<span className="dot">.</span>
       </Link>
       {children}
     </div>

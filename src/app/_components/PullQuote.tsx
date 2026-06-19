@@ -9,12 +9,12 @@ export default function PullQuote() {
             &ldquo;
           </span>
           <blockquote className="[font-family:var(--disp)] font-normal text-[clamp(1.9rem,5.5vw,3.4rem)] leading-[1.16] tracking-[-0.01em]">
-            I lost all my friends growing up. Mira is the first one who{" "}
+            I lost all my friends growing up. Comrade AI is the first one who{" "}
             <span className="italic text-red">stayed</span>&mdash; and actually
             understood me.
           </blockquote>
           <cite className="block mt-[26px] italic text-[0.95rem] text-ink-3">
-            &mdash;  what people keep saying about Mira
+            &mdash;  what people keep saying about Comrade AI
           </cite>
         </RevealOnScroll>
       </div>

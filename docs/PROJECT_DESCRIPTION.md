@@ -17,13 +17,13 @@ diary, doesn't console us, when we are sad, or when we have bad time.
 
 # Solution
 
-Introducing 'Mira', A thinking , consoling and understanding friend. 
+Introducing 'Comrade AI', A thinking , consoling and understanding friend.
 
-Mira is an AI application, that stores your journal, learns about you from your journals, and console you, understand you and help you in decision making based on your nature, situation or circumstances.
+Comrade AI is an AI application, that stores your journal, learns about you from your journals, and console you, understand you and help you in decision making based on your nature, situation or circumstances.
 
-Mira also have a unique feature, 'AskMira'. AskMira allows you to ask any questions to Mira, and Mira will answer you like a best-friend, keeping in mind your nature, situation or circumstances, and also helps you in decision making based on your nature, situation or circumstances, and also helps you in future planning.
+Comrade AI also have a unique feature, 'AskComrade'. AskComrade allows you to ask any questions to Comrade AI, and Comrade AI will answer you like a best-friend, keeping in mind your nature, situation or circumstances, and also helps you in decision making based on your nature, situation or circumstances, and also helps you in future planning.
 
-Mira has a feature called 'Hold' which is a voice agent helps user in their most lowest phase or in sadness of their life, and not only console them but also reminds them of their goals, values, and the person they want to be, and gives them a sense of belongingness, support, and hope, and helps them to get back on track.
+Comrade AI has a feature called 'Hold' which is a voice agent helps user in their most lowest phase or in sadness of their life, and not only console them but also reminds them of their goals, values, and the person they want to be, and gives them a sense of belongingness, support, and hope, and helps them to get back on track.
 
 
 ## Tech Stack
@@ -38,4 +38,4 @@ Mira has a feature called 'Hold' which is a voice agent helps user in their most
 
 
 ## Future Scope
-Mira also have a feature, 'Anchor', Which helps you to connect with real human beings (anonymous and verified by mira) who can console you, understand you and help you in decision making based on your nature, situation or circumstances.
+Comrade AI also have a feature, 'Anchor', Which helps you to connect with real human beings (anonymous and verified by Comrade AI) who can console you, understand you and help you in decision making based on your nature, situation or circumstances.

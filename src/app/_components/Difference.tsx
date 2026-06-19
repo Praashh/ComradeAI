@@ -20,7 +20,7 @@ export default function Difference() {
           className="text-[clamp(1.05rem,2.2vw,1.25rem)] text-ink-2 max-w-[30em] mt-[18px]"
         >
           Your diary never talked back. Chatbots never remembered you.
-          Mira does both — she listens like a diary and responds like a
+          Comrade AI does both — she listens like a diary and responds like a
           best friend who&rsquo;s read every page.
         </RevealOnScroll>
 
@@ -42,7 +42,7 @@ export default function Difference() {
           </div>
           <div className="p-[clamp(26px,3.5vw,40px)] border-l border-rule bg-paper-2 max-tablet:border-l-0 max-tablet:border-t">
             <p className="text-[0.72rem] tracking-[0.2em] uppercase text-red mb-[20px]">
-              With Mira
+              With Comrade AI
             </p>
             <h3 className="font-disp text-[1.7rem] font-normal mb-[14px] leading-[1.1]">
               A friend who reads between the lines

@@ -28,7 +28,7 @@ export default function Masthead() {
             href="/"
             className="font-disp text-[1.9rem] leading-none tracking-[-0.01em]"
           >
-            Mira<span className="text-red">.</span>
+            Comrade<span className="text-red">.</span>
           </Link>
           <nav className="flex items-center gap-[26px] max-tablet:hidden">
             <Show when="signed-out">
@@ -57,19 +57,19 @@ export default function Masthead() {
                 href="/chat"
                 className="font-body text-[0.82rem] tracking-[0.14em] uppercase text-ink-2 transition-colors duration-200 hover:text-ink"
               >
-                AskMira
+                AskComrade
               </Link>
               <Link
                 href="/talk"
                 className="font-body text-[0.82rem] tracking-[0.14em] uppercase text-ink-2 transition-colors duration-200 hover:text-red-d"
               >
-                Call Mira
+                Call Comrade
               </Link>
               <Link
                 href="/mind"
                 className="font-body text-[0.82rem] tracking-[0.14em] uppercase text-ink-2 transition-colors duration-200 hover:text-ink"
               >
-                MiraMind
+                ComradeMind
               </Link>
               <UserButton
                 appearance={{
@@ -112,11 +112,11 @@ export default function Masthead() {
           Method
         </Link>
         <Link
-          href="#mira"
+          href="#comrade"
           onClick={closeMenu}
           className="font-disp text-[2.2rem] py-[16px] border-b border-rule-soft text-ink hover:text-red transition-colors"
         >
-          Mira
+          Comrade
         </Link>
 
         <Show when="signed-out">
@@ -149,21 +149,21 @@ export default function Masthead() {
             onClick={closeMenu}
             className="font-disp text-[2.2rem] py-[16px] border-b border-rule-soft text-ink hover:text-red transition-colors"
           >
-            AskMira
+            AskComrade
           </Link>
           <Link
             href="/talk"
             onClick={closeMenu}
             className="font-disp text-[2.2rem] py-[16px] border-b border-rule-soft text-red hover:text-red-d transition-colors"
           >
-            TalkToMira
+            TalkToComrade
           </Link>
           <Link
             href="/mind"
             onClick={closeMenu}
             className="font-disp text-[2.2rem] py-[16px] border-b border-rule-soft text-ink hover:text-red transition-colors"
           >
-            MiraMind
+            ComradeMind
           </Link>
           <div className="flex items-center justify-between py-[20px] border-b border-rule-soft">
             <span className="font-disp text-[1.8rem] text-ink-2">

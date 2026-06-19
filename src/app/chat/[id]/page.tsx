@@ -359,7 +359,7 @@ function ChatView({ conversationId }: { conversationId: number }) {
                       className="mx-auto mb-3 text-[var(--ink-3)]"
                     />
                     <p className="text-sm text-[var(--ink-3)] italic">
-                      Ask Mira anything about your journals and thoughts.
+                      Ask Comrade anything about your journals and thoughts.
                     </p>
                   </div>
                 )}
@@ -385,7 +385,7 @@ function ChatView({ conversationId }: { conversationId: number }) {
                         className="animate-spin text-[var(--ink-3)]"
                       />
                       <span className="text-sm text-[var(--ink-3)] italic">
-                        Mira is thinking...
+                        Comrade is thinking...
                       </span>
                     </div>
                   </div>

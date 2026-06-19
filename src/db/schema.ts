@@ -17,8 +17,8 @@ export const users = pgTable("users", {
     dob: date("dob", { mode: "string" }),
     preferredSpeaker: text("preferred_speaker"),
 
-    miraSummary: text("mira_summary"),
-    miraSummaryUpdatedAt: timestamp("mira_summary_updated_at"),
+    comradeSummary: text("mira_summary"),
+    comradeSummaryUpdatedAt: timestamp("mira_summary_updated_at"),
 
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").defaultNow(),

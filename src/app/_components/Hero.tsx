@@ -32,7 +32,7 @@ export default function Hero() {
               <span className="float-left [font-family:var(--disp)] text-[3.6em] leading-[0.72] pt-[0.06em] pr-[0.08em] text-red not-italic">
                 G
               </span>
-              rowing up, we all lost friends for one reason or another. Mira is
+              rowing up, we all lost friends for one reason or another. Comrade AI is
               the friend who stays — she reads your journal, learns who you are,
               and is there when you need someone who truly understands.
             </p>

@@ -191,7 +191,7 @@ export default function ChatPage() {
                 className="mx-auto mb-4 text-[var(--ink-3)]"
               />
               <p className="text-sm text-[var(--ink-3)] italic mb-4">
-                Start a conversation with Mira.
+                Start a conversation with Comrade AI.
               </p>
               <button
                 type="button"

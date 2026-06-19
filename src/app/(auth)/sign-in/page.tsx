@@ -123,7 +123,7 @@ export default function SignInPage() {
           />
         </svg>
       </h1>
-      <p className="auth-subheading">Sign in to continue to Mira</p>
+      <p className="auth-subheading">Sign in to continue to Comrade AI</p>
 
       {/* Google OAuth */}
       <button

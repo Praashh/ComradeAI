@@ -18,7 +18,7 @@ export default function Memory() {
           as="p"
           className="text-[clamp(1.05rem,2.2vw,1.25rem)] text-ink-2 max-w-[30em] mt-[18px]"
         >
-          Mira learns about you from every journal entry — your nature, your
+          Comrade AI learns about you from every journal entry — your nature, your
           situation, your circumstances — and connects the dots you
           couldn&rsquo;t see yourself.
         </RevealOnScroll>
@@ -48,7 +48,7 @@ export default function Memory() {
 
           <RevealOnScroll className="insight relative pl-[clamp(18px,3vw,34px)]">
             <span className="text-[0.72rem] tracking-[0.2em] uppercase text-red mb-[16px] block">
-              — What Mira understood
+              — What Comrade understood
             </span>
             <p className="[font-family:var(--disp)] text-[clamp(1.55rem,3.4vw,2.2rem)] leading-[1.18] font-normal">
               &ldquo;There&rsquo;s a rhythm here. For three springs running, the

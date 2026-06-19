@@ -13,35 +13,35 @@ const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mon
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL ?? "https://mira.app",
+    process.env.NEXT_PUBLIC_APP_URL ?? "https://comrade.ai",
   ),
   title: {
-    default: "Mira - A thinking, consoling and understanding AI friend.",
-    template: "%s | Mira",
+    default: "Comrade AI - A thinking, consoling and understanding AI friend.",
+    template: "%s | Comrade AI",
   },
   description:
-    "Mira is an AI application, that stores your journal, learns about you from your journals, and console you, understand you and help you in decision making based on your nature, situation or circumstances.",
+    "Comrade AI is an AI application, that stores your journal, learns about you from your journals, and console you, understand you and help you in decision making based on your nature, situation or circumstances.",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
   openGraph: {
     type: "website",
-    siteName: "Mira",
-    title: "Mira - A thinking, consoling and understanding AI friend.",
+    siteName: "Comrade AI",
+    title: "Comrade AI - A thinking, consoling and understanding AI friend.",
     description:
-      "Mira stores your journal, learns about you, and helps you with understanding, consolation, and decision making.",
+      "Comrade AI stores your journal, learns about you, and helps you with understanding, consolation, and decision making.",
     images: [
       {
         url: "/og.png",
         width: 1672,
         height: 941,
-        alt: "Mira - Your AI friend",
+        alt: "Comrade AI - Your AI friend",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mira - A thinking, consoling and understanding AI friend.",
+    title: "Comrade AI - A thinking, consoling and understanding AI friend.",
     description:
-      "Mira stores your journal, learns about you, and helps you with understanding, consolation, and decision making.",
+      "Comrade AI stores your journal, learns about you, and helps you with understanding, consolation, and decision making.",
     images: ["/og.png"],
   },
 };

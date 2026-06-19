@@ -10,9 +10,9 @@ import CTA from "@/app/_components/CTA";
 import Footer from "@/app/_components/Footer";
 
 export const metadata: Metadata = {
-  title: "Mira - A thinking, consoling and understanding AI friend",
+  title: "Comrade AI - A thinking, consoling and understanding AI friend",
   description:
-    "Mira is your AI journaling companion that learns from your writing, understands you deeply, and helps you reflect, grow, and make better decisions.",
+    "Comrade AI is your AI journaling companion that learns from your writing, understands you deeply, and helps you reflect, grow, and make better decisions.",
 };
 
 export default function Home() {

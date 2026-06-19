@@ -10,7 +10,7 @@ import {
   type CharacterId,
 } from "@/lib/characters";
 
-const IMPORT_PROMPT = `I'm moving to a new AI companion called Mira and I'd like to bring my memories with me. Can you go through everything we've talked about and create a structured summary of what you know about me?
+const IMPORT_PROMPT = `I'm moving to a new AI companion called Comrade AI and I'd like to bring my memories with me. Can you go through everything we've talked about and create a structured summary of what you know about me?
 
 Write it in markdown with ## section headers. Use these sections (skip any that don't apply):
 
@@ -189,7 +189,7 @@ export default function OnboardingFlow() {
       {step === "choose-path" && (
         <div className="flex flex-col items-center text-center">
           <h1 className="mb-3 font-disp text-[2.4rem] leading-[1.1] text-ink">
-            Welcome to <span className="italic">Mira</span>
+            Welcome to <span className="italic">Comrade AI</span>
             <span className="text-red">.</span>
           </h1>
           <p className="mb-10 font-body text-[0.95rem] text-ink-3">

@@ -3,9 +3,9 @@ import { requireOnboarded } from "@/lib/check-onboarding";
 import { JournalsProvider } from "@/lib/journals-context";
 
 export const metadata: Metadata = {
-  title: "Write - Mira",
+  title: "Write - Comrade AI",
   description:
-    "Write and manage your journal entries with Mira, your AI journaling companion.",
+    "Write and manage your journal entries with Comrade AI, your AI journaling companion.",
 };
 
 export default async function WriteLayout({

@@ -1,4 +1,4 @@
-I'm moving to a new AI companion called Mira and I'd like to bring my memories with me. Can you go through everything we've talked about and create a structured summary of what you know about me?
+I'm moving to a new AI companion called Comrade AI and I'd like to bring my memories with me. Can you go through everything we've talked about and create a structured summary of what you know about me?
 
 Write it in markdown with ## section headers. Use these sections (skip any that don't apply):
 
