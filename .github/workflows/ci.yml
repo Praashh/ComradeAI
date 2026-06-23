@@ -21,6 +21,7 @@ jobs:
       LIVEKIT_API_KEY: dummy_livekit_key
       LIVEKIT_API_SECRET: dummy_livekit_secret
       LIVEKIT_URL: dummy_livekit_url
+      FEEDBACK_WEBHOOK_URL: dummy_feedback_webhook_url
 
     steps:
       - name: Checkout
