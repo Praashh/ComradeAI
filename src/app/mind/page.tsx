@@ -93,7 +93,7 @@ export default function MindPage() {
   }, [page, limit, isLoadingMore, documents]);
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-[var(--paper)]">
+    <div className="chat-workspace flex flex-col h-screen overflow-hidden">
       <div className="shrink-0">
         <Masthead />
       </div>

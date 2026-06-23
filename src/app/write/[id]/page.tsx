@@ -175,10 +175,14 @@ function JournalEditor({ journalId }: { journalId: number }) {
 
   if (isLoading) {
     return (
-      <div className="chat-workspace">
-        <Masthead />
-        <div className="flex-1 flex items-center justify-center min-h-screen">
-          <span className="text-[var(--ink-2)] text-sm italic">Loading journal...</span>
+      <div className="chat-workspace flex flex-col h-screen overflow-hidden">
+        <div className="shrink-0">
+          <Masthead />
+        </div>
+        <div className="flex-1 flex items-center justify-center min-h-0">
+          <span className="text-[var(--ink-2)] text-sm italic">
+            Loading journal...
+          </span>
         </div>
       </div>
     );

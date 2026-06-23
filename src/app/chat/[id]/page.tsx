@@ -232,7 +232,7 @@ function ChatView({ conversationId }: { conversationId: number }) {
   const [optimisticMessage, setOptimisticMessage] = useState<string | null>(
     null,
   );
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const router = useRouter();
 
@@ -273,7 +273,12 @@ function ChatView({ conversationId }: { conversationId: number }) {
   });
 
   const scrollToBottom = useCallback(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -349,7 +354,10 @@ function ChatView({ conversationId }: { conversationId: number }) {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto px-6 py-6">
+            <div
+              ref={messagesContainerRef}
+              className="flex-1 overflow-y-auto px-6 py-6"
+            >
               <div className="mx-auto max-w-2xl">
                 {data?.messages.length === 0 && !optimisticMessage && (
                   <div className="text-center py-12">
@@ -391,7 +399,7 @@ function ChatView({ conversationId }: { conversationId: number }) {
                   </div>
                 )}
 
-                <div ref={messagesEndRef} />
+                {/* Scroll Anchor */}
               </div>
             </div>
 

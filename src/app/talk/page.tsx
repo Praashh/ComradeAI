@@ -10,11 +10,13 @@ export const metadata = {
 export default async function TalkPage() {
   await requireOnboarded();
   return (
-    <>
-      <Masthead />
-      <main className="flex min-h-[calc(100vh-60px)] items-center justify-center">
+    <div className="chat-workspace flex flex-col h-screen overflow-hidden">
+      <div className="shrink-0">
+        <Masthead />
+      </div>
+      <main className="flex-1 min-h-0 flex items-center justify-center overflow-y-auto">
         <VoiceAgent />
       </main>
-    </>
+    </div>
   );
 }

@@ -360,7 +360,12 @@ body.menu-open .mobile-menu {
   font-size: clamp(2.5rem, 6vw, 4.2rem);
 }
 
-/* ========== CHAT WORKSPACE LIGHT-PAPER LAYOUT ========== */
+html:has(.chat-workspace),
+body:has(.chat-workspace) {
+  overflow: hidden !important;
+  height: 100% !important;
+}
+
 .chat-workspace {
   --sidebar: var(--paper-2) !important;
   --sidebar-foreground: var(--ink) !important;
@@ -371,10 +376,15 @@ body.menu-open .mobile-menu {
 
   background-color: var(--paper) !important;
   color: var(--ink) !important;
+  height: 100vh !important;
+  height: 100dvh !important;
   min-height: 100vh !important;
+  min-height: 100dvh !important;
+  overflow: hidden !important;
   display: flex !important;
   flex-direction: column !important;
 }
+
 
 .chat-workspace [data-slot="sidebar"],
 .chat-workspace [data-slot="sidebar-inner"],
