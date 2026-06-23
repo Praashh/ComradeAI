@@ -17,6 +17,7 @@ export const env = createEnv({
     LIVEKIT_URL: z.string(),
     LIVEKIT_API_KEY: z.string(),
     LIVEKIT_API_SECRET: z.string(),
+    FEEDBACK_WEBHOOK_URL: z.string(),
   },
 
   /**
@@ -54,7 +55,8 @@ export const env = createEnv({
     CRON_SECRET: process.env.CRON_SECRET,
     LIVEKIT_URL: process.env.LIVEKIT_URL,
     LIVEKIT_API_KEY: process.env.LIVEKIT_API_KEY,
-    LIVEKIT_API_SECRET: process.env.LIVEKIT_API_SECRET
+    LIVEKIT_API_SECRET: process.env.LIVEKIT_API_SECRET,
+    FEEDBACK_WEBHOOK_URL: process.env.FEEDBACK_WEBHOOK_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

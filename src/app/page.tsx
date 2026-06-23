@@ -7,6 +7,7 @@ import Method from "@/app/_components/Method";
 import Principles from "@/app/_components/Principles";
 import PullQuote from "@/app/_components/PullQuote";
 import CTA from "@/app/_components/CTA";
+import Feedback from "@/app/_components/Feedback";
 import Footer from "@/app/_components/Footer";
 
 export const metadata: Metadata = {
@@ -27,6 +28,7 @@ export default function Home() {
         <Principles />
         <PullQuote />
         <CTA />
+        <Feedback />
       </main>
       <Footer />
     </>
