@@ -17,6 +17,8 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/app/_components/AppSidebar";
 
 function ConversationList({ activeId }: { activeId?: number }) {
   const { conversations, isLoading, refetch } = useConversations();
@@ -147,83 +149,43 @@ export default function ChatPage() {
   }, []);
 
   return (
-    <div className="landing-theme layout-locked flex flex-col h-screen overflow-hidden bg-background text-on-background">
-      {/* Top Shell Navigation */}
-      <header className="w-full shrink-0 z-50 bg-surface/70 backdrop-blur-xl border-b border-black/5 flex justify-between items-center px-md py-sm shadow-sm">
-        <div className="flex items-center gap-base">
-          <Link href="/" className="font-display-md text-display-md font-semibold text-primary">
-            Comrade AI
-          </Link>
-        </div>
-        <div className="flex items-center gap-md">
-          <div className="hidden tablet:flex gap-md items-center">
-            <Link href="/write" className="text-secondary hover:text-primary transition-colors font-body-md">
-              Journal
-            </Link>
-            <Link href="/chat" className="text-primary border-b-2 border-primary font-body-md">
-              Chat
-            </Link>
-            <Link href="/talk" className="text-secondary hover:text-primary transition-colors font-body-md">
-              Voice
+    <SidebarProvider className="landing-theme layout-locked h-dvh overflow-hidden bg-background text-on-background">
+      <AppSidebar />
+      <SidebarInset className="!h-dvh !max-h-dvh flex flex-col overflow-hidden">
+        {/* Top Shell Navigation */}
+        <header className="w-full shrink-0 z-50 bg-surface/70 backdrop-blur-xl border-b border-black/5 flex justify-between items-center px-md py-sm shadow-sm">
+          <div className="flex items-center gap-2">
+            <SidebarTrigger />
+            <Link href="/" className="font-display-md text-display-md font-semibold text-primary tablet:hidden">
+              Comrade AI
             </Link>
           </div>
-          <div className="flex items-center">
-            <UserButton
-              appearance={{
-                elements: {
-                  userButtonAvatarBox: "w-[32px] h-[32px] border border-black/5",
-                },
-              }}
-            />
-          </div>
-        </div>
-      </header>
-
-      {/* Main Workspace Frame */}
-      <div className="flex flex-1 min-h-0">
-        {/* Leftmost Sidebar Navigation */}
-        <aside className="hidden tablet:flex flex-col h-full w-[256px] shrink-0 bg-surface-container-low/80 backdrop-blur-md border-r border-black/5 p-md gap-base">
-          <nav className="flex flex-col gap-xs flex-1">
-            <Link
-              href="/write"
-              className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-[16px] py-[8px] flex items-center gap-[12px] transition-all"
-            >
-              <span className="material-symbols-outlined">book_5</span>
-              <span className="font-body-lg">Journal</span>
-            </Link>
-            <Link
-              href="/chat"
-              className="bg-primary text-on-primary rounded-full px-[16px] py-[8px] flex items-center gap-[12px] transition-transform active:scale-95"
-            >
-              <span className="material-symbols-outlined">chat_bubble</span>
-              <span className="font-body-lg text-on-primary">Chat</span>
-            </Link>
-            <Link
-              href="/talk"
-              className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-[16px] py-[8px] flex items-center gap-[12px] transition-all"
-            >
-              <span className="material-symbols-outlined">mic</span>
-              <span className="font-body-lg">Voice</span>
-            </Link>
-          </nav>
-          <div className="mt-auto space-y-4">
-            <Link href="/talk" className="w-full bg-primary text-on-primary font-semibold py-[12px] rounded-full flex items-center justify-center gap-[8px] hover:opacity-90 transition-all cursor-pointer">
-              <span className="material-symbols-outlined">mic</span>
-              Hold to Speak
-            </Link>
-            <div className="pt-[16px] border-t border-outline-variant/30 flex justify-between px-2">
-              <Link href="/onboarding" className="text-secondary hover:text-primary transition-colors text-label-md">
-                Help
+          <div className="flex items-center gap-md">
+            <div className="hidden tablet:flex gap-md items-center">
+              <Link href="/write" className="text-secondary hover:text-primary transition-colors font-body-md">
+                Journal
               </Link>
-              <Link href="/onboarding" className="text-secondary hover:text-primary transition-colors text-label-md">
-                Privacy
+              <Link href="/chat" className="text-primary border-b-2 border-primary font-body-md">
+                Chat
+              </Link>
+              <Link href="/talk" className="text-secondary hover:text-primary transition-colors font-body-md">
+                Voice
               </Link>
             </div>
+            <div className="flex items-center">
+              <UserButton
+                appearance={{
+                  elements: {
+                    userButtonAvatarBox: "w-[32px] h-[32px] border border-black/5",
+                  },
+                }}
+              />
+            </div>
           </div>
-        </aside>
+        </header>
 
-        {/* Center Section Area */}
-        <main className="flex-1 flex overflow-hidden bg-background">
+        {/* Main Workspace Frame */}
+        <div className="flex flex-1 min-h-0 overflow-hidden bg-background">
           {/* Chats Archive entries list column */}
           <section className="w-full tablet:w-[320px] lg:w-[384px] shrink-0 border-r border-black/5 flex flex-col overflow-hidden">
             <div className="p-md bg-surface/30">
@@ -240,7 +202,7 @@ export default function ChatPage() {
                 </button>
               </div>
             </div>
-            
+
             <div className="flex-1 overflow-y-auto px-sm pb-[40px]">
               <ConversationList />
             </div>
@@ -271,8 +233,8 @@ export default function ChatPage() {
               </button>
             </div>
           </section>
-        </main>
-      </div>
-    </div>
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

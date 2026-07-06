@@ -12,6 +12,8 @@ import {
   PaperPlaneRight,
   CircleNotch,
 } from "@phosphor-icons/react";
+import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/app/_components/AppSidebar";
 
 type Message = {
   id: number;
@@ -26,11 +28,9 @@ function MessageBubble({ message }: { message: Message }) {
 
   return (
     <div className={`flex flex-col ${isUser ? "items-end" : "items-start"} mb-6`}>
-      {/* Label */}
       <span className={`text-[10px] font-bold tracking-widest uppercase mb-1.5 ${isUser ? "text-secondary" : "text-primary"}`}>
         {isUser ? "YOU" : "COMRADE AI"}
       </span>
-      {/* Bubble */}
       <div
         className={`max-w-[70%] rounded-[24px] px-6 py-4 text-[0.95rem] leading-relaxed shadow-[0_2px_8px_rgba(0,0,0,0.02)] ${isUser
           ? "bg-surface-container-high text-on-surface rounded-br-none border border-black/5"
@@ -46,12 +46,9 @@ function MessageBubble({ message }: { message: Message }) {
 function ChatSkeleton() {
   return (
     <div className="flex-1 min-h-0 flex flex-col">
-      {/* Chat header skeleton */}
       <div className="shrink-0 px-6 py-4 border-b border-black/5 bg-background">
         <div className="h-6 w-48 bg-surface-container rounded animate-pulse" />
       </div>
-
-      {/* Messages skeleton */}
       <div className="flex-1 overflow-y-auto px-6 py-6 bg-surface-container-lowest/50">
         <div className="mx-auto max-w-2xl space-y-6">
           <div className="flex flex-col items-end">
@@ -64,8 +61,6 @@ function ChatSkeleton() {
           </div>
         </div>
       </div>
-
-      {/* Input skeleton */}
       <div className="shrink-0 border-t border-black/5 px-6 py-4 bg-background">
         <div className="mx-auto max-w-2xl h-[46px] bg-surface-container rounded-full animate-pulse" />
       </div>
@@ -81,19 +76,14 @@ const SUGGESTIONS = [
 
 function ChatView({ conversationId }: { conversationId: number }) {
   const [input, setInput] = useState("");
-  const [optimisticMessage, setOptimisticMessage] = useState<string | null>(
-    null,
-  );
+  const [optimisticMessage, setOptimisticMessage] = useState<string | null>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const router = useRouter();
 
   const { refetch: refetchConversations } = useConversations();
 
-  const { data, isLoading } = api.conversation.get.useQuery({
-    id: conversationId,
-  });
-
+  const { data, isLoading } = api.conversation.get.useQuery({ id: conversationId });
   const { data: journalsData } = api.journal.getAllJournals.useQuery();
   const latestJournal = journalsData?.journals?.[0];
 
@@ -105,18 +95,12 @@ function ChatView({ conversationId }: { conversationId: number }) {
         if (!old) return old;
         return {
           ...old,
-          messages: [
-            ...old.messages,
-            result.userMessage,
-            result.assistantMessage,
-          ],
+          messages: [...old.messages, result.userMessage, result.assistantMessage],
         };
       });
       refetchConversations();
     },
-    onError: () => {
-      setOptimisticMessage(null);
-    },
+    onError: () => setOptimisticMessage(null),
   });
 
   const scrollToBottom = useCallback(() => {
@@ -128,9 +112,7 @@ function ChatView({ conversationId }: { conversationId: number }) {
     }
   }, []);
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [data?.messages, optimisticMessage, scrollToBottom]);
+  useEffect(() => { scrollToBottom(); }, [data?.messages, optimisticMessage, scrollToBottom]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -145,117 +127,54 @@ function ChatView({ conversationId }: { conversationId: number }) {
   const handleSend = useCallback(() => {
     const trimmed = input.trim();
     if (!trimmed || sendMessage.isPending) return;
-
     setOptimisticMessage(trimmed);
     setInput("");
-    sendMessage.mutate({
-      conversationId,
-      content: trimmed,
-    });
+    sendMessage.mutate({ conversationId, content: trimmed });
   }, [input, conversationId, sendMessage]);
 
   const handleSuggestionClick = (text: string) => {
     if (sendMessage.isPending) return;
     setOptimisticMessage(text);
-    sendMessage.mutate({
-      conversationId,
-      content: text,
-    });
+    sendMessage.mutate({ conversationId, content: text });
   };
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        handleSend();
-      }
+      if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); }
     },
     [handleSend],
   );
 
   return (
-    <div className="landing-theme layout-locked flex flex-col h-screen overflow-hidden bg-background text-on-background">
-      {/* Top Shell Navigation */}
-      <header className="w-full shrink-0 z-50 bg-surface/70 backdrop-blur-xl border-b border-black/5 flex justify-between items-center px-md py-sm shadow-sm">
-        <div className="flex items-center gap-base">
-          <Link href="/" className="font-display-md text-display-md font-semibold text-primary">
-            Comrade AI
-          </Link>
-        </div>
-        <div className="flex items-center gap-md">
-          <div className="hidden tablet:flex gap-md items-center">
-            <Link href="/write" className="text-secondary hover:text-primary transition-colors font-body-md">
-              Journal
-            </Link>
-            <Link href="/chat" className="text-primary border-b-2 border-primary font-body-md">
-              Chat
-            </Link>
-            <Link href="/talk" className="text-secondary hover:text-primary transition-colors font-body-md">
-              Voice
+    <SidebarProvider className="landing-theme layout-locked h-dvh overflow-hidden bg-background text-on-background">
+      <AppSidebar />
+      <SidebarInset className="!h-dvh !max-h-dvh flex flex-col overflow-hidden">
+        {/* Top Shell Navigation */}
+        <header className="w-full shrink-0 z-50 bg-surface/70 backdrop-blur-xl border-b border-black/5 flex justify-between items-center px-md py-sm shadow-sm">
+          <div className="flex items-center gap-2">
+            <SidebarTrigger />
+            <Link href="/" className="font-display-md text-display-md font-semibold text-primary tablet:hidden">
+              Comrade AI
             </Link>
           </div>
-          <div className="flex items-center">
-            <UserButton
-              appearance={{
-                elements: {
-                  userButtonAvatarBox: "w-[32px] h-[32px] border border-black/5",
-                },
-              }}
-            />
-          </div>
-        </div>
-      </header>
-
-      {/* Main Workspace Frame */}
-      <div className="flex flex-1 min-h-0">
-        {/* Leftmost Sidebar Navigation */}
-        <aside className="hidden tablet:flex flex-col h-full w-[256px] shrink-0 bg-surface-container-low/80 backdrop-blur-md border-r border-black/5 p-md gap-base">
-          <nav className="flex flex-col gap-xs flex-1">
-            <Link
-              href="/write"
-              className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-[16px] py-[8px] flex items-center gap-[12px] transition-all"
-            >
-              <span className="material-symbols-outlined">book_5</span>
-              <span className="font-body-lg">Journal</span>
-            </Link>
-            <Link
-              href="/chat"
-              className="bg-primary text-on-primary rounded-full px-[16px] py-[8px] flex items-center gap-[12px] transition-transform active:scale-95"
-            >
-              <span className="material-symbols-outlined">chat_bubble</span>
-              <span className="font-body-lg text-on-primary">Chat</span>
-            </Link>
-            <Link
-              href="/talk"
-              className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-[16px] py-[8px] flex items-center gap-[12px] transition-all"
-            >
-              <span className="material-symbols-outlined">mic</span>
-              <span className="font-body-lg">Voice</span>
-            </Link>
-          </nav>
-          <div className="mt-auto space-y-4">
-            <Link href="/talk" className="w-full bg-primary text-on-primary font-semibold py-[12px] rounded-full flex items-center justify-center gap-[8px] hover:opacity-90 transition-all cursor-pointer">
-              <span className="material-symbols-outlined">mic</span>
-              Hold to Speak
-            </Link>
-            <div className="pt-[16px] border-t border-outline-variant/30 flex justify-between px-2">
-              <Link href="/onboarding" className="text-secondary hover:text-primary transition-colors text-label-md">
-                Help
-              </Link>
-              <Link href="/onboarding" className="text-secondary hover:text-primary transition-colors text-label-md">
-                Privacy
-              </Link>
+          <div className="flex items-center gap-md">
+            <div className="hidden tablet:flex gap-md items-center">
+              <Link href="/write" className="text-secondary hover:text-primary transition-colors font-body-md">Journal</Link>
+              <Link href="/chat" className="text-primary border-b-2 border-primary font-body-md">Chat</Link>
+              <Link href="/talk" className="text-secondary hover:text-primary transition-colors font-body-md">Voice</Link>
+            </div>
+            <div className="flex items-center">
+              <UserButton appearance={{ elements: { userButtonAvatarBox: "w-[32px] h-[32px] border border-black/5" } }} />
             </div>
           </div>
-        </aside>
+        </header>
 
-        {/* Center Section Area */}
-        <main className="flex-1 flex overflow-hidden bg-background">
+        {/* Main Content */}
+        <div className="flex flex-1 min-h-0 overflow-hidden bg-background">
           {isLoading ? (
             <ChatSkeleton />
           ) : (
-            <section className="flex-1 min-w-0 flex flex-col bg-surface-container-lowest/50 relative overflow-hidden">
-              {/* Background blur decoration */}
+            <section className="flex-1 min-w-0 min-h-0 flex flex-col bg-surface-container-lowest/50 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-[256px] h-[256px] bg-primary/5 rounded-full blur-3xl -mr-[128px] -mt-[128px] pointer-events-none"></div>
 
               {/* Chat header */}
@@ -273,51 +192,33 @@ function ChatView({ conversationId }: { conversationId: number }) {
               </div>
 
               {/* Messages Container */}
-              <div
-                ref={messagesContainerRef}
-                className="flex-1 overflow-y-auto px-6 py-8 z-10"
-              >
+              <div ref={messagesContainerRef} className="flex-1 overflow-y-auto px-6 py-8 z-10">
                 <div className="mx-auto max-w-2xl">
-                  {/* Referenced Context badge at the top */}
                   {latestJournal && (
                     <div className="flex justify-center mb-8">
                       <div className="inline-flex items-center gap-2 border border-black/5 bg-surface-container-low/80 backdrop-blur-md rounded-full px-4 py-2 text-xs">
-                        <span className="material-symbols-outlined text-sm text-secondary">
-                          link
-                        </span>
+                        <span className="material-symbols-outlined text-sm text-secondary">link</span>
                         <span className="text-secondary font-medium">
                           Referenced Context: <strong className="text-on-surface font-semibold">&ldquo;{latestJournal.title ?? "Untitled Entry"}&rdquo;</strong>
                         </span>
                         <span className="text-black/10 mx-1">|</span>
-                        <Link href={`/write/${latestJournal.id}`} className="text-primary font-bold hover:underline">
-                          View Journal
-                        </Link>
+                        <Link href={`/write/${latestJournal.id}`} className="text-primary font-bold hover:underline">View Journal</Link>
                       </div>
                     </div>
                   )}
 
                   {data?.messages.length === 0 && !optimisticMessage && (
                     <div className="text-center py-12">
-                      <ChatCircleDots
-                        size={40}
-                        weight="duotone"
-                        className="mx-auto mb-3 text-primary/40"
-                      />
-                      <p className="text-sm text-secondary italic">
-                        Ask Comrade anything about your journals and thoughts.
-                      </p>
+                      <ChatCircleDots size={40} weight="duotone" className="mx-auto mb-3 text-primary/40" />
+                      <p className="text-sm text-secondary italic">Ask Comrade anything about your journals and thoughts.</p>
                     </div>
                   )}
 
-                  {data?.messages.map((msg) => (
-                    <MessageBubble key={msg.id} message={msg} />
-                  ))}
+                  {data?.messages.map((msg) => <MessageBubble key={msg.id} message={msg} />)}
 
                   {optimisticMessage && (
                     <div className="flex flex-col items-end mb-6">
-                      <span className="text-[10px] font-bold tracking-widest uppercase mb-1.5 text-secondary">
-                        YOU
-                      </span>
+                      <span className="text-[10px] font-bold tracking-widest uppercase mb-1.5 text-secondary">YOU</span>
                       <div className="max-w-[70%] rounded-[24px] rounded-br-none px-6 py-4 text-[0.95rem] leading-relaxed shadow-[0_2px_8px_rgba(0,0,0,0.02)] bg-surface-container-high text-on-surface border border-black/5">
                         <p className="whitespace-pre-wrap">{optimisticMessage}</p>
                       </div>
@@ -326,18 +227,10 @@ function ChatView({ conversationId }: { conversationId: number }) {
 
                   {sendMessage.isPending && (
                     <div className="flex flex-col items-start mb-6">
-                      <span className="text-[10px] font-bold tracking-widest uppercase mb-1.5 text-primary">
-                        COMRADE AI
-                      </span>
+                      <span className="text-[10px] font-bold tracking-widest uppercase mb-1.5 text-primary">COMRADE AI</span>
                       <div className="bg-primary/10 border border-primary/5 rounded-[24px] rounded-bl-none px-6 py-4 flex items-center gap-2">
-                        <CircleNotch
-                          size={16}
-                          weight="bold"
-                          className="animate-spin text-primary"
-                        />
-                        <span className="text-sm text-primary italic">
-                          Comrade is thinking...
-                        </span>
+                        <CircleNotch size={16} weight="bold" className="animate-spin text-primary" />
+                        <span className="text-sm text-primary italic">Comrade is thinking...</span>
                       </div>
                     </div>
                   )}
@@ -346,7 +239,7 @@ function ChatView({ conversationId }: { conversationId: number }) {
 
               {/* Quick Suggestions */}
               {data?.messages && data.messages.length > 0 && !sendMessage.isPending && (
-                <div className="shrink-0 flex flex-wrap gap-2 justify-center px-6 mb-2 z-10">
+                <div className="shrink-0 flex flex-wrap gap-2 justify-center px-6 m-2 z-10">
                   {SUGGESTIONS.map((sug, idx) => (
                     <button
                       key={idx}
@@ -362,16 +255,9 @@ function ChatView({ conversationId }: { conversationId: number }) {
               {/* Input area */}
               <div className="shrink-0 border-t border-black/5 px-6 py-4 bg-background z-10">
                 <div className="mx-auto max-w-2xl flex items-center gap-2 bg-surface-container rounded-full px-4 py-2 shadow-sm border border-black/5">
-                  {/* Plus button */}
-                  <button
-                    type="button"
-                    className="w-8 h-8 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container-high transition-colors cursor-pointer"
-                    title="Add files"
-                  >
+                  <button type="button" className="w-8 h-8 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container-high transition-colors cursor-pointer" title="Add files">
                     <Plus size={20} weight="bold" />
                   </button>
-
-                  {/* Textarea */}
                   <textarea
                     ref={inputRef}
                     value={input}
@@ -388,18 +274,9 @@ function ChatView({ conversationId }: { conversationId: number }) {
                       target.style.height = `${Math.min(target.scrollHeight, 120)}px`;
                     }}
                   />
-
-                  {/* Mic button */}
-                  <button
-                    type="button"
-                    onClick={() => router.push("/talk")}
-                    className="w-8 h-8 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container-high transition-colors cursor-pointer"
-                    title="Voice Call"
-                  >
+                  <button type="button" onClick={() => router.push("/talk")} className="w-8 h-8 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container-high transition-colors cursor-pointer" title="Voice Call">
                     <span className="material-symbols-outlined text-[20px]">mic</span>
                   </button>
-
-                  {/* Send button */}
                   <button
                     type="button"
                     onClick={handleSend}
@@ -413,9 +290,9 @@ function ChatView({ conversationId }: { conversationId: number }) {
               </div>
             </section>
           )}
-        </main>
-      </div>
-    </div>
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
 
@@ -426,6 +303,5 @@ export default function ChatConversationPage({
 }) {
   const { id } = use(params);
   const conversationId = Number(id);
-
   return <ChatView conversationId={conversationId} />;
 }

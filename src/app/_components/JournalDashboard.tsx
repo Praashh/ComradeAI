@@ -9,6 +9,8 @@ import { useJournals } from "@/lib/journals-context";
 import NewJournalDialog from "@/app/_components/NewJournalDialog";
 import { MilkdownEditorClient } from "@/app/_components/MilkdownEditorClient";
 import type { MilkdownEditorHandle } from "@/app/_components/MilkdownEditor";
+import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/app/_components/AppSidebar";
 
 // Helper to format date
 function getFormattedDate(dateObj?: Date | null) {
@@ -232,353 +234,321 @@ export default function JournalDashboard({ activeJournalId }: JournalDashboardPr
   }, []);
 
   return (
-    <div className="landing-theme layout-locked flex flex-col h-screen overflow-hidden bg-background text-on-background">
-      {/* Top Shell Navigation */}
-      <header className="w-full shrink-0 z-50 bg-surface/70 backdrop-blur-xl border-b border-black/5 flex justify-between items-center px-md py-sm shadow-sm">
-        <div className="flex items-center gap-base">
-          <Link href="/" className="font-display-md text-display-md font-semibold text-primary">
-            Comrade AI
-          </Link>
-        </div>
-        <div className="flex items-center gap-md">
-          <div className="hidden tablet:flex gap-md items-center">
-            <Link href="/write" className="text-primary border-b-2 border-primary font-body-md">
-              Journal
-            </Link>
-            <Link href="/chat" className="text-secondary hover:text-primary transition-colors font-body-md">
-              Chat
-            </Link>
-            <Link href="/talk" className="text-secondary hover:text-primary transition-colors font-body-md">
-              Voice
+    <SidebarProvider className="landing-theme layout-locked h-dvh overflow-hidden bg-background text-on-background">
+      <AppSidebar />
+      <SidebarInset className="!h-dvh !max-h-dvh flex flex-col overflow-hidden">
+        {/* Top Shell Navigation */}
+        <header className="w-full shrink-0 z-50 bg-surface/70 backdrop-blur-xl border-b border-black/5 flex justify-between items-center px-md py-sm shadow-sm">
+          <div className="flex items-center gap-2">
+            <SidebarTrigger />
+            <Link href="/" className="font-display-md text-display-md font-semibold text-primary tablet:hidden">
+              Comrade AI
             </Link>
           </div>
-          <div className="flex items-center gap-sm">
-            <div className="flex items-center">
-              <UserButton
-                appearance={{
-                  elements: {
-                    userButtonAvatarBox: "w-[32px] h-[32px] border border-black/5",
-                  },
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Workspace Frame */}
-      <div className="flex flex-1 min-h-0">
-        {/* Leftmost Sidebar Navigation */}
-        <aside className="hidden tablet:flex flex-col h-full w-[256px] shrink-0 bg-surface-container-low/80 backdrop-blur-md border-r border-black/5 p-md gap-base">
-          <nav className="flex flex-col gap-xs flex-1">
-            <Link href="/write" className="bg-primary text-on-primary rounded-full px-[16px] py-[8px] flex items-center gap-[12px] transition-transform active:scale-95">
-              <span className="material-symbols-outlined">book_5</span>
-              <span className="font-body-lg text-on-primary">Journal</span>
-            </Link>
-            <Link href="/chat" className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-[16px] py-[8px] flex items-center gap-[12px] transition-all">
-              <span className="material-symbols-outlined">chat_bubble</span>
-              <span className="font-body-lg">Chat</span>
-            </Link>
-            <Link href="/talk" className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-[16px] py-[8px] flex items-center gap-[12px] transition-all">
-              <span className="material-symbols-outlined">mic</span>
-              <span className="font-body-lg">Voice</span>
-            </Link>
-          </nav>
-          <div className="mt-auto space-y-4">
-            <NewJournalDialog>
-              <button className="w-full bg-primary-container text-on-primary-container font-semibold py-[12px] rounded-full flex items-center justify-center gap-[8px] hover:opacity-90 transition-all cursor-pointer">
-                <span className="material-symbols-outlined">add</span>
-                New Entry
-              </button>
-            </NewJournalDialog>
-            <div className="pt-[16px] border-t border-outline-variant/30 flex flex-col gap-xs">
-              <Link href="/onboarding" className="text-secondary hover:bg-surface-container-high p-[8px] rounded-lg flex items-center gap-[12px]">
-                <span className="material-symbols-outlined">help</span>
-                <span className="text-label-md">Help</span>
+          <div className="flex items-center gap-md">
+            <div className="hidden tablet:flex gap-md items-center">
+              <Link href="/write" className="text-primary border-b-2 border-primary font-body-md">
+                Journal
               </Link>
-              <Link href="/onboarding" className="text-secondary hover:bg-surface-container-high p-[8px] rounded-lg flex items-center gap-[12px]">
-                <span className="material-symbols-outlined">security</span>
-                <span className="text-label-md">Privacy</span>
+              <Link href="/chat" className="text-secondary hover:text-primary transition-colors font-body-md">
+                Chat
+              </Link>
+              <Link href="/talk" className="text-secondary hover:text-primary transition-colors font-body-md">
+                Voice
               </Link>
             </div>
-          </div>
-        </aside>
-
-        {/* Center Section Area */}
-        <main className="flex-1 flex flex-col tablet:flex-row overflow-hidden bg-background">
-          {/* Archive entries list column */}
-          <section className={`w-full tablet:w-[320px] lg:w-[384px] shrink-0 border-r border-black/5 flex flex-col overflow-hidden ${activeJournalId ? "hidden" : "flex"}`}>
-            <div className="p-md bg-surface/30">
-              <h2 className="font-headline-lg text-headline-lg mb-sm">Archive</h2>
-              <div className="relative">
-                <span className="material-symbols-outlined absolute left-[12px] top-1/2 -translate-y-1/2 text-secondary text-sm">
-                  search
-                </span>
-                <input
-                  className="w-full bg-surface-container-high/50 border-none rounded-full py-[8px] pl-[40px] pr-[16px] text-body-md focus:ring-1 focus:ring-primary focus:outline-none"
-                  placeholder="Search entries..."
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+            <div className="flex items-center gap-sm">
+              <div className="flex items-center">
+                <UserButton
+                  appearance={{
+                    elements: {
+                      userButtonAvatarBox: "w-[32px] h-[32px] border border-black/5",
+                    },
+                  }}
                 />
               </div>
             </div>
+          </div>
+        </header>
 
-            <div className="flex-1 overflow-y-auto px-sm pb-[40px] space-y-[8px]">
-              {journalsLoading ? (
-                <div className="p-[16px] text-center text-sm text-secondary italic">Loading archive...</div>
-              ) : filteredJournals.length === 0 ? (
-                <div className="p-[16px] text-center text-sm text-secondary italic">No entries found.</div>
-              ) : (
-                filteredJournals.map((entry) => {
-                  const isActive = entry.id === activeJournalId;
-                  const moodBadge = entry.mood ?? "Neutral";
-                  const badgeColorClass =
-                    moodBadge.toLowerCase() === "reflective" ? "bg-primary/10 text-primary" :
-                      moodBadge.toLowerCase() === "tired" ? "bg-secondary-container text-on-secondary-container" :
-                        moodBadge.toLowerCase() === "inspired" ? "bg-primary/10 text-primary" :
-                          moodBadge.toLowerCase() === "happy" ? "bg-primary/10 text-primary" :
-                            moodBadge.toLowerCase() === "anxious" ? "bg-error/10 text-error" :
-                              "bg-surface-container-highest/60 text-secondary";
-
-                  return (
-                    <div
-                      key={entry.id}
-                      onClick={() => router.push(`/write/${entry.id}`)}
-                      className={`p-md rounded-2xl transition-all cursor-pointer border ${isActive
-                        ? "bg-surface-container-lowest border-black/5 card-shadow"
-                        : "bg-surface hover:bg-surface-container border-transparent"
-                        }`}
-                    >
-                      <div className="flex justify-between items-start mb-[8px]">
-                        <span className="text-label-md text-secondary">
-                          {formatCardDate(entry.createdAt)}
-                        </span>
-                        <span className={`px-[8px] py-[2px] rounded-full text-[10px] font-bold uppercase tracking-wider ${badgeColorClass}`}>
-                          {moodBadge}
-                        </span>
-                      </div>
-                      <h3 className={`font-title-md text-title-md mb-[4px] transition-colors ${isActive ? "text-primary font-semibold" : ""}`}>
-                        {entry.title ?? "Untitled Entry"}
-                      </h3>
-                      <p className="text-body-md text-secondary line-clamp-2">
-                        {entry.content ?? "Empty entry thoughts..."}
-                      </p>
-                    </div>
-                  );
-                })
-              )}
-            </div>
-          </section>
-
-          {/* Active entry editor workspace */}
-          {activeJournalId ? (
-            activeLoading ? (
-              <section className="flex-grow flex items-center justify-center bg-surface-container-lowest/50">
-                <span className="text-secondary text-sm italic">Loading writing canvas...</span>
-              </section>
-            ) : (
-              <section className="flex-1 min-w-0 flex flex-col items-center bg-surface-container-lowest/50 relative overflow-hidden">
-                {/* Background blur decoration */}
-                <div className="absolute top-0 right-0 w-[256px] h-[256px] bg-primary/5 rounded-full blur-3xl -mr-[128px] -mt-[128px] pointer-events-none"></div>
-
-                {/* Toolbar */}
-                <div className="p-md flex justify-between items-center z-10 border-b border-black/5 w-full max-w-3xl">
-                  <div className="flex gap-sm items-center">
-                    <button
-                      onClick={() => router.push("/write")}
-                      className="material-symbols-outlined p-[8px] hover:bg-surface-container rounded-full text-secondary transition-colors cursor-pointer"
-                      title="Back to Archive"
-                    >
-                      arrow_back
-                    </button>
-                    <div className="w-px h-[20px] bg-black/10 mx-[4px]"></div>
-                    <button className="material-symbols-outlined p-[8px] hover:bg-surface-container rounded-full text-secondary transition-colors cursor-pointer" title="Format Bold">
-                      format_bold
-                    </button>
-                    <button className="material-symbols-outlined p-[8px] hover:bg-surface-container rounded-full text-secondary transition-colors cursor-pointer" title="Format Italic">
-                      format_italic
-                    </button>
-                    <button className="material-symbols-outlined p-[8px] hover:bg-surface-container rounded-full text-secondary transition-colors cursor-pointer" title="Bulleted List">
-                      format_list_bulleted
-                    </button>
-                    <button className="material-symbols-outlined p-[8px] hover:bg-surface-container rounded-full text-secondary transition-colors cursor-pointer" title="Insert Image">
-                      image
-                    </button>
-                  </div>
-                  <button
-                    onClick={handleSave}
-                    disabled={saveStatus === "saving"}
-                    className="bg-primary text-on-primary font-semibold px-[24px] py-[10px] rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all transform active:scale-95 cursor-pointer disabled:opacity-50 flex items-center gap-[6px] min-w-[120px] justify-center"
-                  >
-                    {saveStatus === "saving" ? (
-                      <>
-                        <span className="material-symbols-outlined animate-spin text-sm">sync</span>
-                        Saving...
-                      </>
-                    ) : saveStatus === "saved" ? (
-                      "Saved"
-                    ) : (
-                      "Save Entry"
-                    )}
-                  </button>
-                </div>
-
-                {/* Canvas Area */}
-                <div className="flex-1 overflow-y-auto px-md tablet:px-xl py-lg w-full max-w-3xl z-10">
-                  <div className="mb-md">
-                    <span className="text-xs uppercase tracking-widest text-secondary font-mono">
-                      {getFormattedDate(journal?.createdAt)}
-                    </span>
-                  </div>
-
+        {/* Main Workspace Frame */}
+        <div className="flex flex-1 min-h-0 overflow-hidden bg-background">
+          {/* Center Section Area */}
+          <main className="flex-1 flex flex-col tablet:flex-row overflow-hidden bg-background">
+            {/* Archive entries list column */}
+            <section className={`w-full tablet:w-[320px] lg:w-[384px] shrink-0 border-r border-black/5 flex flex-col overflow-hidden ${activeJournalId ? "hidden" : "flex"}`}>
+              <div className="p-md bg-surface/30">
+                <h2 className="font-headline-lg text-headline-lg mb-sm">Archive</h2>
+                <div className="relative">
+                  <span className="material-symbols-outlined absolute left-[12px] top-1/2 -translate-y-1/2 text-secondary text-sm">
+                    search
+                  </span>
                   <input
-                    className="w-full bg-transparent border-none font-display-md text-display-md placeholder:text-outline/40 mb-lg focus:ring-0 focus:outline-none text-on-surface"
-                    placeholder="Entry Title"
+                    className="w-full bg-surface-container-high/50 border-none rounded-full py-[8px] pl-[40px] pr-[16px] text-body-md focus:ring-1 focus:ring-primary focus:outline-none"
+                    placeholder="Search entries..."
                     type="text"
-                    value={title}
-                    onChange={(e) => {
-                      setLocalTitle(e.target.value);
-                      autoSave();
-                    }}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                   />
-
-                  {/* Crepe Editor */}
-                  <div className="writing-area mt-[16px] min-h-[500px]">
-                    <MilkdownEditorClient
-                      ref={editorRef}
-                      defaultValue={journal?.content ?? ""}
-                      onChange={autoSave}
-                    />
-                  </div>
                 </div>
-              </section>
-            )
-          ) : (
-            /* Welcome / Empty state editor */
-            <section className="flex-1 min-w-0 flex flex-col items-center justify-center bg-surface-container-lowest/50 p-lg text-center relative">
-              <div className="absolute top-0 right-0 w-[256px] h-[256px] bg-primary/5 rounded-full blur-3xl -mr-[128px] -mt-[128px] pointer-events-none"></div>
-              <div className="max-w-md z-10">
-                <span className="material-symbols-outlined text-[64px] text-primary/40 mb-md">
-                  edit_note
-                </span>
-                <h3 className="font-display-md text-display-md text-on-background mb-sm">
-                  Start Your Reflection
-                </h3>
-                <p className="font-body-lg text-secondary mb-lg">
-                  Select an entry from the archive column or click &quot;New Entry&quot; in the sidebar to start your thoughts.
-                </p>
-                <NewJournalDialog>
-                  <button className="bg-primary text-on-primary font-semibold px-[24px] py-[12px] rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-95 cursor-pointer">
-                    Create First Entry
-                  </button>
-                </NewJournalDialog>
+              </div>
+
+              <div className="flex-1 overflow-y-auto px-sm pb-[40px] space-y-[8px]">
+                {journalsLoading ? (
+                  <div className="p-[16px] text-center text-sm text-secondary italic">Loading archive...</div>
+                ) : filteredJournals.length === 0 ? (
+                  <div className="p-[16px] text-center text-sm text-secondary italic">No entries found.</div>
+                ) : (
+                  filteredJournals.map((entry) => {
+                    const isActive = entry.id === activeJournalId;
+                    const moodBadge = entry.mood ?? "Neutral";
+                    const badgeColorClass =
+                      moodBadge.toLowerCase() === "reflective" ? "bg-primary/10 text-primary" :
+                        moodBadge.toLowerCase() === "tired" ? "bg-secondary-container text-on-secondary-container" :
+                          moodBadge.toLowerCase() === "inspired" ? "bg-primary/10 text-primary" :
+                            moodBadge.toLowerCase() === "happy" ? "bg-primary/10 text-primary" :
+                              moodBadge.toLowerCase() === "anxious" ? "bg-error/10 text-error" :
+                                "bg-surface-container-highest/60 text-secondary";
+
+                    return (
+                      <div
+                        key={entry.id}
+                        onClick={() => router.push(`/write/${entry.id}`)}
+                        className={`p-md rounded-2xl transition-all cursor-pointer border ${isActive
+                          ? "bg-surface-container-lowest border-black/5 card-shadow"
+                          : "bg-surface hover:bg-surface-container border-transparent"
+                          }`}
+                      >
+                        <div className="flex justify-between items-start mb-[8px]">
+                          <span className="text-label-md text-secondary">
+                            {formatCardDate(entry.createdAt)}
+                          </span>
+                          <span className={`px-[8px] py-[2px] rounded-full text-[10px] font-bold uppercase tracking-wider ${badgeColorClass}`}>
+                            {moodBadge}
+                          </span>
+                        </div>
+                        <h3 className={`font-title-md text-title-md mb-[4px] transition-colors ${isActive ? "text-primary font-semibold" : ""}`}>
+                          {entry.title ?? "Untitled Entry"}
+                        </h3>
+                        <p className="text-body-md text-secondary line-clamp-2">
+                          {entry.content ?? "Empty entry thoughts..."}
+                        </p>
+                      </div>
+                    );
+                  })
+                )}
               </div>
             </section>
-          )}
 
-          {/* Comrade Insights Column (Rightmost sidebar) */}
-          <section className="hidden lg:flex w-full lg:w-[320px] xl:w-[384px] shrink-0 glass-panel bg-white/40 p-md flex-col gap-md overflow-y-auto">
-            <div className="flex items-center gap-base mb-[8px]">
-              <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>
-                auto_awesome
-              </span>
-              <h2 className="font-headline-lg text-headline-lg">Comrade Insights</h2>
-            </div>
+            {/* Active entry editor workspace */}
+            {activeJournalId ? (
+              activeLoading ? (
+                <section className="flex-grow flex items-center justify-center bg-surface-container-lowest/50">
+                  <span className="text-secondary text-sm italic">Loading writing canvas...</span>
+                </section>
+              ) : (
+                <section className="flex-1 min-w-0 flex flex-col items-center bg-surface-container-lowest/50 relative overflow-hidden">
+                  {/* Background blur decoration */}
+                  <div className="absolute top-0 right-0 w-[256px] h-[256px] bg-primary/5 rounded-full blur-3xl -mr-[128px] -mt-[128px] pointer-events-none"></div>
 
-            {activeJournalId && journal ? (
-              <>
-                {/* Emotional Pulse Card */}
-                <div className="bg-surface-container-highest/30 backdrop-blur-md rounded-2xl p-md border border-white/40 shadow-sm">
-                  <div className="flex justify-between items-center mb-md">
-                    <h3 className="font-title-md text-title-md">Emotional Pulse</h3>
-                    <span className="material-symbols-outlined text-secondary text-sm cursor-help" title="Insights gathered from your entry content and mood tag">
-                      info
-                    </span>
+                  {/* Toolbar */}
+                  <div className="p-md flex justify-between items-center z-10 border-b border-black/5 w-full max-w-3xl">
+                    <div className="flex gap-sm items-center">
+                      <button
+                        onClick={() => router.push("/write")}
+                        className="material-symbols-outlined p-[8px] hover:bg-surface-container rounded-full text-secondary transition-colors cursor-pointer"
+                        title="Back to Archive"
+                      >
+                        arrow_back
+                      </button>
+                      <div className="w-px h-[20px] bg-black/10 mx-[4px]"></div>
+                      <button className="material-symbols-outlined p-[8px] hover:bg-surface-container rounded-full text-secondary transition-colors cursor-pointer" title="Format Bold">
+                        format_bold
+                      </button>
+                      <button className="material-symbols-outlined p-[8px] hover:bg-surface-container rounded-full text-secondary transition-colors cursor-pointer" title="Format Italic">
+                        format_italic
+                      </button>
+                      <button className="material-symbols-outlined p-[8px] hover:bg-surface-container rounded-full text-secondary transition-colors cursor-pointer" title="Bulleted List">
+                        format_list_bulleted
+                      </button>
+                      <button className="material-symbols-outlined p-[8px] hover:bg-surface-container rounded-full text-secondary transition-colors cursor-pointer" title="Insert Image">
+                        image
+                      </button>
+                    </div>
+                    <button
+                      onClick={handleSave}
+                      disabled={saveStatus === "saving"}
+                      className="bg-primary text-on-primary font-semibold px-[24px] py-[10px] rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all transform active:scale-95 cursor-pointer disabled:opacity-50 flex items-center gap-[6px] min-w-[120px] justify-center"
+                    >
+                      {saveStatus === "saving" ? (
+                        <>
+                          <span className="material-symbols-outlined animate-spin text-sm">sync</span>
+                          Saving...
+                        </>
+                      ) : saveStatus === "saved" ? (
+                        "Saved"
+                      ) : (
+                        "Save Entry"
+                      )}
+                    </button>
                   </div>
-                  <div className="space-y-[16px]">
-                    <div className="flex justify-between items-center">
-                      <span className="text-body-md text-secondary">Clarity</span>
-                      <div className="w-[128px] h-[6px] bg-surface-container rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-primary rounded-full transition-all duration-500"
-                          style={{ width: `${pulseMetrics.clarity}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-body-md text-secondary">Stability</span>
-                      <div className="w-[128px] h-[6px] bg-surface-container rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-primary rounded-full transition-all duration-500"
-                          style={{ width: `${pulseMetrics.stability}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-body-md text-secondary">Anxiety</span>
-                      <div className="w-[128px] h-[6px] bg-surface-container rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-primary-container rounded-full transition-all duration-500"
-                          style={{ width: `${pulseMetrics.anxiety}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
 
-                {/* AI Prompt / Deep Dive Card */}
-                <div className="bg-primary/5 rounded-2xl p-md border border-primary/10">
-                  <div className="flex items-start gap-[12px]">
-                    <div className="bg-primary p-[8px] rounded-xl text-on-primary shrink-0">
-                      <span className="material-symbols-outlined text-base">psychology</span>
+                  {/* Canvas Area */}
+                  <div className="flex-1 overflow-y-auto px-md tablet:px-xl py-lg w-full max-w-3xl z-10">
+                    <div className="mb-md">
+                      <span className="text-xs uppercase tracking-widest text-secondary font-mono">
+                        {getFormattedDate(journal?.createdAt)}
+                      </span>
                     </div>
-                    <div>
-                      <h3 className="font-title-md text-primary mb-[4px]">Deep Dive</h3>
-                      <p className="text-body-md text-on-surface-variant italic">
-                        {deepDivePrompt}
-                      </p>
-                      <Link href="/chat">
-                        <button className="mt-md text-label-md text-primary font-bold flex items-center gap-[4px] hover:underline cursor-pointer">
-                          Answer Comrade
-                          <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
-                        </button>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
 
-                {/* Visual Mood Card */}
-                <div className="flex-1 min-h-[160px] rounded-2xl overflow-hidden relative group">
-                  <img
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    alt="Visual mood representation"
-                    src={visualDetails.image}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-md">
-                    <p className="text-white font-label-md uppercase tracking-widest opacity-80 mb-1">
-                      {visualDetails.tagline}
-                    </p>
-                    <h4 className="text-white font-display-md text-lg">
-                      {visualDetails.title}
-                    </h4>
+                    <input
+                      className="w-full bg-transparent border-none font-display-md text-display-md placeholder:text-outline/40 mb-lg focus:ring-0 focus:outline-none text-on-surface"
+                      placeholder="Entry Title"
+                      type="text"
+                      value={title}
+                      onChange={(e) => {
+                        setLocalTitle(e.target.value);
+                        autoSave();
+                      }}
+                    />
+
+                    {/* Crepe Editor */}
+                    <div className="writing-area mt-[16px] min-h-[500px]">
+                      <MilkdownEditorClient
+                        ref={editorRef}
+                        defaultValue={journal?.content ?? ""}
+                        onChange={autoSave}
+                      />
+                    </div>
                   </div>
-                </div>
-              </>
+                </section>
+              )
             ) : (
-              /* Welcoming state for insights */
-              <div className="flex flex-col items-center justify-center flex-grow p-[16px] text-center border border-dashed border-black/10 rounded-2xl text-secondary">
-                <span className="material-symbols-outlined text-3xl mb-sm opacity-40">
-                  wb_sunny
-                </span>
-                <p className="text-sm italic">
-                  Select a journal entry from the archive to load your emotional insights and deep dives here.
-                </p>
-              </div>
+              /* Welcome / Empty state editor */
+              <section className="flex-1 min-w-0 flex flex-col items-center justify-center bg-surface-container-lowest/50 p-lg text-center relative">
+                <div className="absolute top-0 right-0 w-[256px] h-[256px] bg-primary/5 rounded-full blur-3xl -mr-[128px] -mt-[128px] pointer-events-none"></div>
+                <div className="max-w-md z-10">
+                  <span className="material-symbols-outlined text-[64px] text-primary/40 mb-md">
+                    edit_note
+                  </span>
+                  <h3 className="font-display-md text-display-md text-on-background mb-sm">
+                    Start Your Reflection
+                  </h3>
+                  <p className="font-body-lg text-secondary mb-lg">
+                    Select an entry from the archive column or click &quot;New Entry&quot; in the sidebar to start your thoughts.
+                  </p>
+                  <NewJournalDialog>
+                    <button className="bg-primary text-on-primary font-semibold px-[24px] py-[12px] rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-95 cursor-pointer">
+                      Create First Entry
+                    </button>
+                  </NewJournalDialog>
+                </div>
+              </section>
             )}
-          </section>
-        </main>
-      </div>
+
+            {/* Comrade Insights Column (Rightmost sidebar) */}
+            <section className="hidden lg:flex w-full lg:w-[320px] xl:w-[384px] shrink-0 glass-panel bg-white/40 p-md flex-col gap-md overflow-y-auto">
+              <div className="flex items-center gap-base mb-[8px]">
+                <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>
+                  auto_awesome
+                </span>
+                <h2 className="font-headline-lg text-headline-lg">Comrade Insights</h2>
+              </div>
+
+              {activeJournalId && journal ? (
+                <>
+                  {/* Emotional Pulse Card */}
+                  <div className="bg-surface-container-highest/30 backdrop-blur-md rounded-2xl p-md border border-white/40 shadow-sm">
+                    <div className="flex justify-between items-center mb-md">
+                      <h3 className="font-title-md text-title-md">Emotional Pulse</h3>
+                      <span className="material-symbols-outlined text-secondary text-sm cursor-help" title="Insights gathered from your entry content and mood tag">
+                        info
+                      </span>
+                    </div>
+                    <div className="space-y-[16px]">
+                      <div className="flex justify-between items-center">
+                        <span className="text-body-md text-secondary">Clarity</span>
+                        <div className="w-[128px] h-[6px] bg-surface-container rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-primary rounded-full transition-all duration-500"
+                            style={{ width: `${pulseMetrics.clarity}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-body-md text-secondary">Stability</span>
+                        <div className="w-[128px] h-[6px] bg-surface-container rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-primary rounded-full transition-all duration-500"
+                            style={{ width: `${pulseMetrics.stability}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-body-md text-secondary">Anxiety</span>
+                        <div className="w-[128px] h-[6px] bg-surface-container rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-primary-container rounded-full transition-all duration-500"
+                            style={{ width: `${pulseMetrics.anxiety}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* AI Prompt / Deep Dive Card */}
+                  <div className="bg-primary/5 rounded-2xl p-md border border-primary/10">
+                    <div className="flex items-start gap-[12px]">
+                      <div className="bg-primary p-[8px] rounded-xl text-on-primary shrink-0">
+                        <span className="material-symbols-outlined text-base">psychology</span>
+                      </div>
+                      <div>
+                        <h3 className="font-title-md text-primary mb-[4px]">Deep Dive</h3>
+                        <p className="text-body-md text-on-surface-variant italic">
+                          {deepDivePrompt}
+                        </p>
+                        <Link href="/chat">
+                          <button className="mt-md text-label-md text-primary font-bold flex items-center gap-[4px] hover:underline cursor-pointer">
+                            Answer Comrade
+                            <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+                          </button>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Visual Mood Card */}
+                  <div className="flex-1 min-h-[160px] rounded-2xl overflow-hidden relative group">
+                    <img
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      alt="Visual mood representation"
+                      src={visualDetails.image}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-md">
+                      <p className="text-white font-label-md uppercase tracking-widest opacity-80 mb-1">
+                        {visualDetails.tagline}
+                      </p>
+                      <h4 className="text-white font-display-md text-lg">
+                        {visualDetails.title}
+                      </h4>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                /* Welcoming state for insights */
+                <div className="flex flex-col items-center justify-center flex-grow p-[16px] text-center border border-dashed border-black/10 rounded-2xl text-secondary">
+                  <span className="material-symbols-outlined text-3xl mb-sm opacity-40">
+                    wb_sunny
+                  </span>
+                  <p className="text-sm italic">
+                    Select a journal entry from the archive to load your emotional insights and deep dives here.
+                  </p>
+                </div>
+              )}
+            </section>
+          </main>
+        </div>
+      </SidebarInset>
 
       {/* Mobile Bottom Navigation Bar (Shell navigation on narrow screens) */}
       <nav className="tablet:hidden fixed bottom-0 left-0 right-0 bg-surface/80 backdrop-blur-xl border-t border-black/5 px-[24px] py-[12px] flex justify-around items-center z-50">
@@ -606,6 +576,6 @@ export default function JournalDashboard({ activeJournalId }: JournalDashboardPr
           <span className="material-symbols-outlined text-2xl">add</span>
         </button>
       </NewJournalDialog>
-    </div>
+    </SidebarProvider>
   );
 }
