@@ -1,25 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Masthead from "@/app/_components/Masthead";
+import { UserButton } from "@clerk/nextjs";
 import { useConversations } from "@/lib/conversations-context";
 import { api } from "@/trpc/react";
 import { ChatCircleDots, Plus, Trash } from "@phosphor-icons/react";
-import {
-  SidebarProvider,
-  Sidebar,
-  SidebarContent,
-  SidebarHeader,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-} from "@/components/ui/sidebar";
 import {
   Dialog,
   DialogContent,
@@ -31,8 +18,9 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
-function ConversationList() {
+function ConversationList({ activeId }: { activeId?: number }) {
   const { conversations, isLoading, refetch } = useConversations();
+  const router = useRouter();
   const [deleteTarget, setDeleteTarget] = useState<{
     id: number;
     title: string;
@@ -42,28 +30,21 @@ function ConversationList() {
     onSuccess: () => {
       refetch();
       setDeleteTarget(null);
+      router.push("/chat");
     },
   });
 
   if (isLoading) {
     return (
-      <SidebarMenu>
-        {Array.from({ length: 3 }).map((_, i) => (
-          <SidebarMenuItem key={i}>
-            <SidebarMenuButton disabled>
-              <span className="text-[var(--ink-3)] text-xs italic">
-                Loading...
-              </span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        ))}
-      </SidebarMenu>
+      <div className="p-4 text-center text-sm text-secondary italic">
+        Loading chats...
+      </div>
     );
   }
 
   if (!conversations.length) {
     return (
-      <p className="text-xs text-[var(--ink-3)] italic px-2 py-1">
+      <p className="text-sm text-secondary italic px-md py-sm">
         No conversations yet.
       </p>
     );
@@ -71,36 +52,43 @@ function ConversationList() {
 
   return (
     <>
-      <SidebarMenu>
-        {conversations.map((conv) => (
-          <SidebarMenuItem key={conv.id}>
-            <SidebarMenuButton
-              render={<Link href={`/chat/${conv.id}`} />}
-              className="group"
+      <div className="space-y-[8px]">
+        {conversations.map((conv) => {
+          const isActive = conv.id === activeId;
+          return (
+            <div
+              key={conv.id}
+              onClick={() => router.push(`/chat/${conv.id}`)}
+              className={`p-md rounded-2xl transition-all cursor-pointer border ${
+                isActive
+                  ? "bg-surface-container-lowest border-black/5 card-shadow"
+                  : "bg-surface hover:bg-surface-container border-transparent"
+              }`}
             >
-              <ChatCircleDots size={16} weight="duotone" />
-              <span className="flex-1 truncate">
-                {conv.title ?? "New conversation"}
-              </span>
-              <button
-                type="button"
-                className="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-[var(--paper-3)] text-[var(--ink-3)] hover:text-[var(--red)] transition-all cursor-pointer"
-                title="Delete"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setDeleteTarget({
-                    id: conv.id,
-                    title: conv.title ?? "New conversation",
-                  });
-                }}
-              >
-                <Trash size={14} weight="bold" />
-              </button>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        ))}
-      </SidebarMenu>
+              <div className="flex justify-between items-center mb-[4px]">
+                <h3 className={`font-title-md text-title-md truncate flex-1 transition-colors ${isActive ? "text-primary font-semibold" : ""}`}>
+                  {conv.title ?? "New conversation"}
+                </h3>
+                <button
+                  type="button"
+                  className="p-1 rounded hover:bg-surface-container text-secondary hover:text-primary transition-all cursor-pointer shrink-0 ml-2"
+                  title="Delete"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setDeleteTarget({
+                      id: conv.id,
+                      title: conv.title ?? "New conversation",
+                    });
+                  }}
+                >
+                  <Trash size={14} weight="bold" />
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
 
       <Dialog
         open={!!deleteTarget}
@@ -148,64 +136,143 @@ export default function ChatPage() {
     },
   });
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.body.classList.add("layout-locked");
+    document.documentElement.classList.add("layout-locked");
+    return () => {
+      document.body.classList.remove("layout-locked");
+      document.documentElement.classList.remove("layout-locked");
+    };
+  }, []);
+
   return (
-    <div className="chat-workspace flex flex-col h-screen overflow-hidden">
-      <div className="shrink-0">
-        <Masthead />
-      </div>
-      <SidebarProvider className="flex-1 min-h-0">
-        <div className="flex flex-1 w-full relative overflow-hidden">
-          <Sidebar side="left" collapsible="offcanvas">
-            <SidebarHeader className="p-4 border-b border-[var(--rule-soft)]">
-              <div className="flex items-center justify-between">
-                <span className="font-serif italic text-lg text-[var(--ink)] tracking-wide">
-                  Chats
-                </span>
+    <div className="landing-theme layout-locked flex flex-col h-screen overflow-hidden bg-background text-on-background">
+      {/* Top Shell Navigation */}
+      <header className="w-full shrink-0 z-50 bg-surface/70 backdrop-blur-xl border-b border-black/5 flex justify-between items-center px-md py-sm shadow-sm">
+        <div className="flex items-center gap-base">
+          <Link href="/" className="font-display-md text-display-md font-semibold text-primary">
+            Comrade AI
+          </Link>
+        </div>
+        <div className="flex items-center gap-md">
+          <div className="hidden tablet:flex gap-md items-center">
+            <Link href="/write" className="text-secondary hover:text-primary transition-colors font-body-md">
+              Journal
+            </Link>
+            <Link href="/chat" className="text-primary border-b-2 border-primary font-body-md">
+              Chat
+            </Link>
+            <Link href="/talk" className="text-secondary hover:text-primary transition-colors font-body-md">
+              Voice
+            </Link>
+          </div>
+          <div className="flex items-center">
+            <UserButton
+              appearance={{
+                elements: {
+                  userButtonAvatarBox: "w-[32px] h-[32px] border border-black/5",
+                },
+              }}
+            />
+          </div>
+        </div>
+      </header>
+
+      {/* Main Workspace Frame */}
+      <div className="flex flex-1 min-h-0">
+        {/* Leftmost Sidebar Navigation */}
+        <aside className="hidden tablet:flex flex-col h-full w-[256px] shrink-0 bg-surface-container-low/80 backdrop-blur-md border-r border-black/5 p-md gap-base">
+          <nav className="flex flex-col gap-xs flex-1">
+            <Link
+              href="/write"
+              className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-[16px] py-[8px] flex items-center gap-[12px] transition-all"
+            >
+              <span className="material-symbols-outlined">book_5</span>
+              <span className="font-body-lg">Journal</span>
+            </Link>
+            <Link
+              href="/chat"
+              className="bg-primary text-on-primary rounded-full px-[16px] py-[8px] flex items-center gap-[12px] transition-transform active:scale-95"
+            >
+              <span className="material-symbols-outlined">chat_bubble</span>
+              <span className="font-body-lg text-on-primary">Chat</span>
+            </Link>
+            <Link
+              href="/talk"
+              className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-[16px] py-[8px] flex items-center gap-[12px] transition-all"
+            >
+              <span className="material-symbols-outlined">mic</span>
+              <span className="font-body-lg">Voice</span>
+            </Link>
+          </nav>
+          <div className="mt-auto space-y-4">
+            <Link href="/talk" className="w-full bg-primary text-on-primary font-semibold py-[12px] rounded-full flex items-center justify-center gap-[8px] hover:opacity-90 transition-all cursor-pointer">
+              <span className="material-symbols-outlined">mic</span>
+              Hold to Speak
+            </Link>
+            <div className="pt-[16px] border-t border-outline-variant/30 flex justify-between px-2">
+              <Link href="/onboarding" className="text-secondary hover:text-primary transition-colors text-label-md">
+                Help
+              </Link>
+              <Link href="/onboarding" className="text-secondary hover:text-primary transition-colors text-label-md">
+                Privacy
+              </Link>
+            </div>
+          </div>
+        </aside>
+
+        {/* Center Section Area */}
+        <main className="flex-1 flex overflow-hidden bg-background">
+          {/* Chats Archive entries list column */}
+          <section className="w-full tablet:w-[320px] lg:w-[384px] shrink-0 border-r border-black/5 flex flex-col overflow-hidden">
+            <div className="p-md bg-surface/30">
+              <div className="flex justify-between items-center mb-sm">
+                <h2 className="font-headline-lg text-headline-lg">Chats</h2>
                 <button
                   type="button"
-                  className="p-0.5 rounded hover:bg-[var(--paper-3)] text-[var(--ink-3)] hover:text-[var(--ink)] transition-colors cursor-pointer"
+                  className="p-1 rounded hover:bg-surface-container text-secondary hover:text-primary transition-colors cursor-pointer"
                   title="New Chat"
                   onClick={() => createConversation.mutate({})}
                   disabled={createConversation.isPending}
                 >
-                  <Plus size={16} weight="bold" />
+                  <Plus size={20} weight="bold" />
                 </button>
               </div>
-            </SidebarHeader>
-            <SidebarContent className="p-2 gap-4">
-              <SidebarGroup>
-                <SidebarGroupLabel>Your Conversations</SidebarGroupLabel>
-                <SidebarGroupContent>
-                  <ConversationList />
-                </SidebarGroupContent>
-              </SidebarGroup>
-            </SidebarContent>
-            <SidebarFooter className="p-4 border-t border-[var(--rule-soft)]" />
-          </Sidebar>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto px-sm pb-[40px]">
+              <ConversationList />
+            </div>
+          </section>
 
-          <main className="flex-1 min-h-0 px-6 py-12 overflow-y-auto flex items-center justify-center">
-            <div className="text-center">
+          {/* Empty state chat view */}
+          <section className="flex-1 min-w-0 flex flex-col items-center justify-center bg-surface-container-lowest/50 p-lg text-center relative">
+            <div className="absolute top-0 right-0 w-[256px] h-[256px] bg-primary/5 rounded-full blur-3xl -mr-[128px] -mt-[128px] pointer-events-none"></div>
+            <div className="max-w-md z-10">
               <ChatCircleDots
-                size={48}
+                size={64}
+                className="mx-auto mb-md text-primary/40"
                 weight="duotone"
-                className="mx-auto mb-4 text-[var(--ink-3)]"
               />
-              <p className="text-sm text-[var(--ink-3)] italic mb-4">
-                Start a conversation with Comrade AI.
+              <h3 className="font-display-md text-display-md text-on-background mb-sm">
+                Ask Comrade
+              </h3>
+              <p className="font-body-lg text-secondary mb-lg">
+                Select a conversation from the sidebar or start a new chat with Comrade AI.
               </p>
               <button
                 type="button"
                 onClick={() => createConversation.mutate({})}
                 disabled={createConversation.isPending}
-                className="sidebar-action-btn inline-flex !w-auto"
+                className="bg-primary text-on-primary font-semibold px-[24px] py-[12px] rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-95 cursor-pointer"
               >
-                <Plus size={16} weight="bold" />
-                <span>New Chat</span>
+                New Chat
               </button>
             </div>
-          </main>
-        </div>
-      </SidebarProvider>
+          </section>
+        </main>
+      </div>
     </div>
   );
 }

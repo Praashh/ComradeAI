@@ -1,39 +1,43 @@
+"use client";
+
 import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="py-[clamp(44px,6vw,64px)]">
-      <div className="wrap">
-        <div className="grid grid-cols-[1.4fr_1fr_1fr] gap-[clamp(28px,4vw,56px)] max-tablet:grid-cols-[1fr_1fr] max-mobile:grid-cols-1">
-          <div className="text-[0.92rem] text-ink-2 max-w-[26em] leading-[1.6] max-tablet:col-span-full">
-            <div className="[font-family:var(--disp)] text-[1.5rem] leading-none tracking-[-0.01em] mb-3">
-              Comrade<span className="text-red">.</span>
-            </div>
-            Your AI best friend — she journals with you, consoles you, and
-            helps you make decisions based on who you truly are.
-          </div>
-          <div>
-            <h5 className="text-[0.7rem] tracking-[0.18em] uppercase text-ink-3 mb-[14px]">
-              Read on
-            </h5>
-            <Link href="#memory" className="block text-ink-2 mb-2 text-[1rem] transition-colors duration-200 hover:text-red">Memory</Link>
-            <Link href="#how" className="block text-ink-2 mb-2 text-[1rem] transition-colors duration-200 hover:text-red">The method</Link>
-            <Link href="#comrade" className="block text-ink-2 mb-2 text-[1rem] transition-colors duration-200 hover:text-red">Meet Comrade</Link>
-            <Link href="#start" className="block text-ink-2 mb-2 text-[1rem] transition-colors duration-200 hover:text-red">Pricing</Link>
-          </div>
-          <div>
-            <h5 className="text-[0.7rem] tracking-[0.18em] uppercase text-ink-3 mb-[14px]">
-              Write to Comrade
-            </h5>
-            <Link href="#" className="block text-ink-2 mb-2 text-[1rem] transition-colors duration-200 hover:text-red">On the web</Link>
-            <Link href="#" className="block text-ink-2 mb-2 text-[1rem] transition-colors duration-200 hover:text-red">Privacy</Link>
-            <Link href="#" className="block text-ink-2 mb-2 text-[1rem] transition-colors duration-200 hover:text-red">The manifesto</Link>
-          </div>
+    <footer className="w-full py-xl bg-surface border-t border-outline-variant/30">
+      <div className="flex flex-col items-center justify-center gap-md px-margin-mobile tablet:px-margin-desktop max-w-[1440px] mx-auto">
+        <div className="font-display-lg text-display-lg text-primary">Comrade AI</div>
+        
+        <div className="flex gap-lg flex-wrap justify-center">
+          <Link href="#" className="text-secondary hover:text-primary transition-all font-label-md">
+            About
+          </Link>
+          <Link href="#" className="text-secondary hover:text-primary transition-all font-label-md">
+            Terms
+          </Link>
+          <Link href="#" className="text-secondary hover:text-primary transition-all font-label-md">
+            Journaling Guide
+          </Link>
         </div>
-        <div className="border-t border-rule mt-9 pt-[18px] flex justify-between gap-[14px] flex-wrap text-[0.82rem] text-ink-3 italic">
-          <span>© 2026 Comrade AI — for everyone who needs a friend.</span>
-          <span>* she&rsquo;ll always be honest with you, like a real friend.</span>
+        
+        <div className="flex gap-md my-sm">
+          <Link
+            href="#"
+            className="w-10 h-10 rounded-full border border-outline-variant/30 flex items-center justify-center text-secondary hover:text-primary transition-colors"
+          >
+            <span className="material-symbols-outlined">alternate_email</span>
+          </Link>
+          <Link
+            href="#"
+            className="w-10 h-10 rounded-full border border-outline-variant/30 flex items-center justify-center text-secondary hover:text-primary transition-colors"
+          >
+            <span className="material-symbols-outlined">public</span>
+          </Link>
         </div>
+        
+        <p className="font-label-md text-label-md text-on-secondary-container">
+          © 2026 Comrade AI. Built for Digital Well-being.
+        </p>
       </div>
     </footer>
   );

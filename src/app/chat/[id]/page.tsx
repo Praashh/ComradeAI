@@ -3,149 +3,15 @@
 import { useState, useRef, useEffect, useCallback, use } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Masthead from "@/app/_components/Masthead";
+import { UserButton } from "@clerk/nextjs";
 import { useConversations } from "@/lib/conversations-context";
 import { api } from "@/trpc/react";
 import {
   ChatCircleDots,
   Plus,
-  Trash,
   PaperPlaneRight,
   CircleNotch,
 } from "@phosphor-icons/react";
-import {
-  SidebarProvider,
-  Sidebar,
-  SidebarContent,
-  SidebarHeader,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-} from "@/components/ui/sidebar";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  DialogClose,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-
-function ConversationList({ activeId }: { activeId: number }) {
-  const { conversations, isLoading, refetch } = useConversations();
-  const router = useRouter();
-  const [deleteTarget, setDeleteTarget] = useState<{
-    id: number;
-    title: string;
-  } | null>(null);
-
-  const deleteConversation = api.conversation.delete.useMutation({
-    onSuccess: () => {
-      refetch();
-      setDeleteTarget(null);
-      router.push("/chat");
-    },
-  });
-
-  if (isLoading) {
-    return (
-      <SidebarMenu>
-        {Array.from({ length: 3 }).map((_, i) => (
-          <SidebarMenuItem key={i}>
-            <SidebarMenuButton disabled>
-              <span className="text-[var(--ink-3)] text-xs italic">
-                Loading...
-              </span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        ))}
-      </SidebarMenu>
-    );
-  }
-
-  if (!conversations.length) {
-    return (
-      <p className="text-xs text-[var(--ink-3)] italic px-2 py-1">
-        No conversations yet.
-      </p>
-    );
-  }
-
-  return (
-    <>
-      <SidebarMenu>
-        {conversations.map((conv) => (
-          <SidebarMenuItem key={conv.id}>
-            <SidebarMenuButton
-              isActive={conv.id === activeId}
-              render={<Link href={`/chat/${conv.id}`} />}
-              className="group"
-            >
-              <ChatCircleDots size={16} weight="duotone" />
-              <span className="flex-1 truncate">
-                {conv.title ?? "New conversation"}
-              </span>
-              <button
-                type="button"
-                className="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-[var(--paper-3)] text-[var(--ink-3)] hover:text-[var(--red)] transition-all cursor-pointer"
-                title="Delete"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setDeleteTarget({
-                    id: conv.id,
-                    title: conv.title ?? "New conversation",
-                  });
-                }}
-              >
-                <Trash size={14} weight="bold" />
-              </button>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        ))}
-      </SidebarMenu>
-
-      <Dialog
-        open={!!deleteTarget}
-        onOpenChange={(open) => {
-          if (!open) setDeleteTarget(null);
-        }}
-      >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Delete conversation</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete &ldquo;{deleteTarget?.title}
-              &rdquo;? This action cannot be undone.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <DialogClose render={<Button variant="outline" />}>
-              Cancel
-            </DialogClose>
-            <Button
-              variant="destructive"
-              disabled={deleteConversation.isPending}
-              onClick={() => {
-                if (deleteTarget) {
-                  deleteConversation.mutate({ id: deleteTarget.id });
-                }
-              }}
-            >
-              {deleteConversation.isPending ? "Deleting..." : "Delete"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
-}
 
 type Message = {
   id: number;
@@ -159,15 +25,17 @@ function MessageBubble({ message }: { message: Message }) {
   const isUser = message.role === "user";
 
   return (
-    <div
-      className={`flex ${isUser ? "justify-end" : "justify-start"} mb-4`}
-    >
+    <div className={`flex flex-col ${isUser ? "items-end" : "items-start"} mb-6`}>
+      {/* Label */}
+      <span className={`text-[10px] font-bold tracking-widest uppercase mb-1.5 ${isUser ? "text-secondary" : "text-primary"}`}>
+        {isUser ? "YOU" : "COMRADE AI"}
+      </span>
+      {/* Bubble */}
       <div
-        className={`max-w-[75%] rounded-lg px-4 py-3 text-[0.95rem] leading-relaxed ${
-          isUser
-            ? "bg-[var(--red)] text-[var(--paper)]"
-            : "bg-[var(--paper-2)] text-[var(--ink)] border border-[var(--rule-soft)]"
-        }`}
+        className={`max-w-[70%] rounded-[24px] px-6 py-4 text-[0.95rem] leading-relaxed shadow-[0_2px_8px_rgba(0,0,0,0.02)] ${isUser
+          ? "bg-surface-container-high text-on-surface rounded-br-none border border-black/5"
+          : "bg-primary-container text-on-primary-container rounded-bl-none border border-black/5"
+          }`}
       >
         <p className="whitespace-pre-wrap">{message.content}</p>
       </div>
@@ -179,53 +47,37 @@ function ChatSkeleton() {
   return (
     <div className="flex-1 min-h-0 flex flex-col">
       {/* Chat header skeleton */}
-      <div className="shrink-0 px-6 py-3 border-b border-[var(--rule-soft)]">
-        <div className="h-6 w-48 bg-[var(--paper-2)] rounded animate-pulse" />
+      <div className="shrink-0 px-6 py-4 border-b border-black/5 bg-background">
+        <div className="h-6 w-48 bg-surface-container rounded animate-pulse" />
       </div>
 
       {/* Messages skeleton */}
-      <div className="flex-1 overflow-y-auto px-6 py-6">
-        <div className="mx-auto max-w-2xl space-y-4">
-          {/* User message skeleton */}
-          <div className="flex justify-end">
-            <div className="max-w-[75%] rounded-lg px-4 py-3 bg-[var(--red)]/20 animate-pulse">
-              <div className="h-4 w-40 rounded" />
-            </div>
+      <div className="flex-1 overflow-y-auto px-6 py-6 bg-surface-container-lowest/50">
+        <div className="mx-auto max-w-2xl space-y-6">
+          <div className="flex flex-col items-end">
+            <div className="h-3 w-10 bg-surface-container rounded animate-pulse mb-1.5" />
+            <div className="max-w-[75%] rounded-[24px] rounded-br-none px-6 py-4 bg-surface-container-high animate-pulse w-48 h-12" />
           </div>
-          {/* Assistant message skeleton */}
-          <div className="flex justify-start">
-            <div className="max-w-[75%] rounded-lg px-4 py-3 bg-[var(--paper-2)] border border-[var(--rule-soft)] animate-pulse space-y-2">
-              <div className="h-4 w-64 bg-[var(--paper-3)] rounded" />
-              <div className="h-4 w-48 bg-[var(--paper-3)] rounded" />
-            </div>
-          </div>
-          {/* User message skeleton */}
-          <div className="flex justify-end">
-            <div className="max-w-[75%] rounded-lg px-4 py-3 bg-[var(--red)]/20 animate-pulse">
-              <div className="h-4 w-32 rounded" />
-            </div>
-          </div>
-          {/* Assistant message skeleton */}
-          <div className="flex justify-start">
-            <div className="max-w-[75%] rounded-lg px-4 py-3 bg-[var(--paper-2)] border border-[var(--rule-soft)] animate-pulse space-y-2">
-              <div className="h-4 w-56 bg-[var(--paper-3)] rounded" />
-              <div className="h-4 w-72 bg-[var(--paper-3)] rounded" />
-              <div className="h-4 w-40 bg-[var(--paper-3)] rounded" />
-            </div>
+          <div className="flex flex-col items-start">
+            <div className="h-3 w-20 bg-surface-container rounded animate-pulse mb-1.5" />
+            <div className="max-w-[75%] rounded-[24px] rounded-bl-none px-6 py-4 bg-primary/20 animate-pulse w-72 h-16" />
           </div>
         </div>
       </div>
 
       {/* Input skeleton */}
-      <div className="shrink-0 border-t border-[var(--rule-soft)] px-6 py-4">
-        <div className="mx-auto max-w-2xl flex gap-3 items-end">
-          <div className="flex-1 h-[46px] bg-[var(--paper-2)] border border-[var(--rule-soft)] rounded-lg animate-pulse" />
-          <div className="shrink-0 w-10 h-10 rounded-lg bg-[var(--paper-2)] animate-pulse" />
-        </div>
+      <div className="shrink-0 border-t border-black/5 px-6 py-4 bg-background">
+        <div className="mx-auto max-w-2xl h-[46px] bg-surface-container rounded-full animate-pulse" />
       </div>
     </div>
   );
 }
+
+const SUGGESTIONS = [
+  "Explore the stillness",
+  "I'm done for now",
+  "Suggest a meditation"
+];
 
 function ChatView({ conversationId }: { conversationId: number }) {
   const [input, setInput] = useState("");
@@ -242,18 +94,13 @@ function ChatView({ conversationId }: { conversationId: number }) {
     id: conversationId,
   });
 
-  const createConversation = api.conversation.create.useMutation({
-    onSuccess: (data) => {
-      refetchConversations();
-      router.push(`/chat/${data.conversation.id}`);
-    },
-  });
+  const { data: journalsData } = api.journal.getAllJournals.useQuery();
+  const latestJournal = journalsData?.journals?.[0];
 
   const utils = api.useUtils();
   const sendMessage = api.conversation.sendMessage.useMutation({
     onSuccess: (result) => {
       setOptimisticMessage(null);
-      // Append both messages into the cache instead of refetching
       utils.conversation.get.setData({ id: conversationId }, (old) => {
         if (!old) return old;
         return {
@@ -285,6 +132,16 @@ function ChatView({ conversationId }: { conversationId: number }) {
     scrollToBottom();
   }, [data?.messages, optimisticMessage, scrollToBottom]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.body.classList.add("layout-locked");
+    document.documentElement.classList.add("layout-locked");
+    return () => {
+      document.body.classList.remove("layout-locked");
+      document.documentElement.classList.remove("layout-locked");
+    };
+  }, []);
+
   const handleSend = useCallback(() => {
     const trimmed = input.trim();
     if (!trimmed || sendMessage.isPending) return;
@@ -297,6 +154,15 @@ function ChatView({ conversationId }: { conversationId: number }) {
     });
   }, [input, conversationId, sendMessage]);
 
+  const handleSuggestionClick = (text: string) => {
+    if (sendMessage.isPending) return;
+    setOptimisticMessage(text);
+    sendMessage.mutate({
+      conversationId,
+      content: text,
+    });
+  };
+
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === "Enter" && !e.shiftKey) {
@@ -308,135 +174,247 @@ function ChatView({ conversationId }: { conversationId: number }) {
   );
 
   return (
-    <div className="chat-workspace flex flex-col h-screen overflow-hidden">
-      <div className="shrink-0">
-        <Masthead />
-      </div>
-      <SidebarProvider className="flex-1 min-h-0">
-        <div className="flex flex-1 w-full relative overflow-hidden">
-          <Sidebar side="left" collapsible="offcanvas">
-            <SidebarHeader className="p-4 border-b border-[var(--rule-soft)]">
-              <div className="flex items-center justify-between">
-                <span className="font-serif italic text-lg text-[var(--ink)] tracking-wide">
-                  Chats
-                </span>
-                <button
-                  type="button"
-                  className="p-0.5 rounded hover:bg-[var(--paper-3)] text-[var(--ink-3)] hover:text-[var(--ink)] transition-colors cursor-pointer"
-                  title="New Chat"
-                  onClick={() => createConversation.mutate({})}
-                  disabled={createConversation.isPending}
-                >
-                  <Plus size={16} weight="bold" />
-                </button>
-              </div>
-            </SidebarHeader>
-            <SidebarContent className="p-2 gap-4">
-              <SidebarGroup>
-                <SidebarGroupLabel>Your Conversations</SidebarGroupLabel>
-                <SidebarGroupContent>
-                  <ConversationList activeId={conversationId} />
-                </SidebarGroupContent>
-              </SidebarGroup>
-            </SidebarContent>
-            <SidebarFooter className="p-4 border-t border-[var(--rule-soft)]" />
-          </Sidebar>
+    <div className="landing-theme layout-locked flex flex-col h-screen overflow-hidden bg-background text-on-background">
+      {/* Top Shell Navigation */}
+      <header className="w-full shrink-0 z-50 bg-surface/70 backdrop-blur-xl border-b border-black/5 flex justify-between items-center px-md py-sm shadow-sm">
+        <div className="flex items-center gap-base">
+          <Link href="/" className="font-display-md text-display-md font-semibold text-primary">
+            Comrade AI
+          </Link>
+        </div>
+        <div className="flex items-center gap-md">
+          <div className="hidden tablet:flex gap-md items-center">
+            <Link href="/write" className="text-secondary hover:text-primary transition-colors font-body-md">
+              Journal
+            </Link>
+            <Link href="/chat" className="text-primary border-b-2 border-primary font-body-md">
+              Chat
+            </Link>
+            <Link href="/talk" className="text-secondary hover:text-primary transition-colors font-body-md">
+              Voice
+            </Link>
+          </div>
+          <div className="flex items-center">
+            <UserButton
+              appearance={{
+                elements: {
+                  userButtonAvatarBox: "w-[32px] h-[32px] border border-black/5",
+                },
+              }}
+            />
+          </div>
+        </div>
+      </header>
 
+      {/* Main Workspace Frame */}
+      <div className="flex flex-1 min-h-0">
+        {/* Leftmost Sidebar Navigation */}
+        <aside className="hidden tablet:flex flex-col h-full w-[256px] shrink-0 bg-surface-container-low/80 backdrop-blur-md border-r border-black/5 p-md gap-base">
+          <nav className="flex flex-col gap-xs flex-1">
+            <Link
+              href="/write"
+              className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-[16px] py-[8px] flex items-center gap-[12px] transition-all"
+            >
+              <span className="material-symbols-outlined">book_5</span>
+              <span className="font-body-lg">Journal</span>
+            </Link>
+            <Link
+              href="/chat"
+              className="bg-primary text-on-primary rounded-full px-[16px] py-[8px] flex items-center gap-[12px] transition-transform active:scale-95"
+            >
+              <span className="material-symbols-outlined">chat_bubble</span>
+              <span className="font-body-lg text-on-primary">Chat</span>
+            </Link>
+            <Link
+              href="/talk"
+              className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-[16px] py-[8px] flex items-center gap-[12px] transition-all"
+            >
+              <span className="material-symbols-outlined">mic</span>
+              <span className="font-body-lg">Voice</span>
+            </Link>
+          </nav>
+          <div className="mt-auto space-y-4">
+            <Link href="/talk" className="w-full bg-primary text-on-primary font-semibold py-[12px] rounded-full flex items-center justify-center gap-[8px] hover:opacity-90 transition-all cursor-pointer">
+              <span className="material-symbols-outlined">mic</span>
+              Hold to Speak
+            </Link>
+            <div className="pt-[16px] border-t border-outline-variant/30 flex justify-between px-2">
+              <Link href="/onboarding" className="text-secondary hover:text-primary transition-colors text-label-md">
+                Help
+              </Link>
+              <Link href="/onboarding" className="text-secondary hover:text-primary transition-colors text-label-md">
+                Privacy
+              </Link>
+            </div>
+          </div>
+        </aside>
+
+        {/* Center Section Area */}
+        <main className="flex-1 flex overflow-hidden bg-background">
           {isLoading ? (
             <ChatSkeleton />
           ) : (
-          <main className="flex-1 min-h-0 flex flex-col">
-            {/* Chat header */}
-            <div className="shrink-0 px-6 py-3 border-b border-[var(--rule-soft)]">
-              <h1 className="font-serif italic text-lg text-[var(--ink)] truncate">
-                {data?.conversation.title ?? "New conversation"}
-              </h1>
-            </div>
+            <section className="flex-1 min-w-0 flex flex-col bg-surface-container-lowest/50 relative overflow-hidden">
+              {/* Background blur decoration */}
+              <div className="absolute top-0 right-0 w-[256px] h-[256px] bg-primary/5 rounded-full blur-3xl -mr-[128px] -mt-[128px] pointer-events-none"></div>
 
-            {/* Messages */}
-            <div
-              ref={messagesContainerRef}
-              className="flex-1 overflow-y-auto px-6 py-6"
-            >
-              <div className="mx-auto max-w-2xl">
-                {data?.messages.length === 0 && !optimisticMessage && (
-                  <div className="text-center py-12">
-                    <ChatCircleDots
-                      size={40}
-                      weight="duotone"
-                      className="mx-auto mb-3 text-[var(--ink-3)]"
-                    />
-                    <p className="text-sm text-[var(--ink-3)] italic">
-                      Ask Comrade anything about your journals and thoughts.
-                    </p>
-                  </div>
-                )}
-
-                {data?.messages.map((msg) => (
-                  <MessageBubble key={msg.id} message={msg} />
-                ))}
-
-                {optimisticMessage && (
-                  <div className="flex justify-end mb-4">
-                    <div className="max-w-[75%] rounded-lg px-4 py-3 text-[0.95rem] leading-relaxed bg-[var(--red)] text-[var(--paper)]">
-                      <p className="whitespace-pre-wrap">{optimisticMessage}</p>
-                    </div>
-                  </div>
-                )}
-
-                {sendMessage.isPending && (
-                  <div className="flex justify-start mb-4">
-                    <div className="bg-[var(--paper-2)] border border-[var(--rule-soft)] rounded-lg px-4 py-3 flex items-center gap-2">
-                      <CircleNotch
-                        size={16}
-                        weight="bold"
-                        className="animate-spin text-[var(--ink-3)]"
-                      />
-                      <span className="text-sm text-[var(--ink-3)] italic">
-                        Comrade is thinking...
-                      </span>
-                    </div>
-                  </div>
-                )}
-
-                {/* Scroll Anchor */}
-              </div>
-            </div>
-
-            {/* Input area */}
-            <div className="shrink-0 border-t border-[var(--rule-soft)] px-6 py-4">
-              <div className="mx-auto max-w-2xl flex gap-3 items-end">
-                <textarea
-                  ref={inputRef}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Type a message..."
-                  aria-label="Type a message"
-                  rows={1}
-                  className="flex-1 resize-none bg-[var(--paper-2)] border border-[var(--rule-soft)] rounded-lg px-4 py-3 text-[var(--ink)] text-[0.95rem] font-body placeholder:text-[var(--ink-3)] placeholder:italic focus:outline-none focus:border-[var(--rule)] transition-colors"
-                  style={{ maxHeight: "120px" }}
-                  onInput={(e) => {
-                    const target = e.target as HTMLTextAreaElement;
-                    target.style.height = "auto";
-                    target.style.height = `${Math.min(target.scrollHeight, 120)}px`;
-                  }}
-                />
+              {/* Chat header */}
+              <div className="shrink-0 px-6 py-4 border-b border-black/5 flex items-center gap-sm z-10">
                 <button
-                  type="button"
-                  onClick={handleSend}
-                  disabled={!input.trim() || sendMessage.isPending}
-                  className="shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-[var(--red)] text-[var(--paper)] hover:bg-[var(--red-d)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
-                  title="Send message"
+                  onClick={() => router.push("/chat")}
+                  className="material-symbols-outlined p-[8px] hover:bg-surface-container rounded-full text-secondary transition-colors cursor-pointer"
+                  title="Back to Chats"
                 >
-                  <PaperPlaneRight size={18} weight="fill" />
+                  arrow_back
                 </button>
+                <h1 className="font-display text-headline-lg font-semibold text-on-surface truncate">
+                  {data?.conversation.title ?? "New conversation"}
+                </h1>
               </div>
-            </div>
-          </main>
+
+              {/* Messages Container */}
+              <div
+                ref={messagesContainerRef}
+                className="flex-1 overflow-y-auto px-6 py-8 z-10"
+              >
+                <div className="mx-auto max-w-2xl">
+                  {/* Referenced Context badge at the top */}
+                  {latestJournal && (
+                    <div className="flex justify-center mb-8">
+                      <div className="inline-flex items-center gap-2 border border-black/5 bg-surface-container-low/80 backdrop-blur-md rounded-full px-4 py-2 text-xs">
+                        <span className="material-symbols-outlined text-sm text-secondary">
+                          link
+                        </span>
+                        <span className="text-secondary font-medium">
+                          Referenced Context: <strong className="text-on-surface font-semibold">&ldquo;{latestJournal.title ?? "Untitled Entry"}&rdquo;</strong>
+                        </span>
+                        <span className="text-black/10 mx-1">|</span>
+                        <Link href={`/write/${latestJournal.id}`} className="text-primary font-bold hover:underline">
+                          View Journal
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+
+                  {data?.messages.length === 0 && !optimisticMessage && (
+                    <div className="text-center py-12">
+                      <ChatCircleDots
+                        size={40}
+                        weight="duotone"
+                        className="mx-auto mb-3 text-primary/40"
+                      />
+                      <p className="text-sm text-secondary italic">
+                        Ask Comrade anything about your journals and thoughts.
+                      </p>
+                    </div>
+                  )}
+
+                  {data?.messages.map((msg) => (
+                    <MessageBubble key={msg.id} message={msg} />
+                  ))}
+
+                  {optimisticMessage && (
+                    <div className="flex flex-col items-end mb-6">
+                      <span className="text-[10px] font-bold tracking-widest uppercase mb-1.5 text-secondary">
+                        YOU
+                      </span>
+                      <div className="max-w-[70%] rounded-[24px] rounded-br-none px-6 py-4 text-[0.95rem] leading-relaxed shadow-[0_2px_8px_rgba(0,0,0,0.02)] bg-surface-container-high text-on-surface border border-black/5">
+                        <p className="whitespace-pre-wrap">{optimisticMessage}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {sendMessage.isPending && (
+                    <div className="flex flex-col items-start mb-6">
+                      <span className="text-[10px] font-bold tracking-widest uppercase mb-1.5 text-primary">
+                        COMRADE AI
+                      </span>
+                      <div className="bg-primary/10 border border-primary/5 rounded-[24px] rounded-bl-none px-6 py-4 flex items-center gap-2">
+                        <CircleNotch
+                          size={16}
+                          weight="bold"
+                          className="animate-spin text-primary"
+                        />
+                        <span className="text-sm text-primary italic">
+                          Comrade is thinking...
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Quick Suggestions */}
+              {data?.messages && data.messages.length > 0 && !sendMessage.isPending && (
+                <div className="shrink-0 flex flex-wrap gap-2 justify-center px-6 mb-2 z-10">
+                  {SUGGESTIONS.map((sug, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => handleSuggestionClick(sug)}
+                      className="bg-surface-container-lowest border border-black/5 hover:bg-surface-container transition-colors rounded-full px-4 py-2 text-xs font-semibold text-primary cursor-pointer shadow-sm"
+                    >
+                      {sug}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Input area */}
+              <div className="shrink-0 border-t border-black/5 px-6 py-4 bg-background z-10">
+                <div className="mx-auto max-w-2xl flex items-center gap-2 bg-surface-container rounded-full px-4 py-2 shadow-sm border border-black/5">
+                  {/* Plus button */}
+                  <button
+                    type="button"
+                    className="w-8 h-8 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container-high transition-colors cursor-pointer"
+                    title="Add files"
+                  >
+                    <Plus size={20} weight="bold" />
+                  </button>
+
+                  {/* Textarea */}
+                  <textarea
+                    ref={inputRef}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Speak your mind, I'm listening..."
+                    aria-label="Type a message"
+                    rows={1}
+                    className="flex-1 resize-none bg-transparent border-none px-2 py-1 text-on-surface text-[0.95rem] placeholder:text-secondary placeholder:italic focus:ring-0 focus:outline-none"
+                    style={{ maxHeight: "120px" }}
+                    onInput={(e) => {
+                      const target = e.target as HTMLTextAreaElement;
+                      target.style.height = "auto";
+                      target.style.height = `${Math.min(target.scrollHeight, 120)}px`;
+                    }}
+                  />
+
+                  {/* Mic button */}
+                  <button
+                    type="button"
+                    onClick={() => router.push("/talk")}
+                    className="w-8 h-8 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container-high transition-colors cursor-pointer"
+                    title="Voice Call"
+                  >
+                    <span className="material-symbols-outlined text-[20px]">mic</span>
+                  </button>
+
+                  {/* Send button */}
+                  <button
+                    type="button"
+                    onClick={handleSend}
+                    disabled={!input.trim() || sendMessage.isPending}
+                    className="w-8 h-8 flex items-center justify-center rounded-full bg-primary text-on-primary hover:bg-primary/95 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer shrink-0"
+                    title="Send message"
+                  >
+                    <PaperPlaneRight size={16} weight="fill" />
+                  </button>
+                </div>
+              </div>
+            </section>
           )}
-        </div>
-      </SidebarProvider>
+        </main>
+      </div>
     </div>
   );
 }

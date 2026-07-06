@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
 import Masthead from "@/app/_components/Masthead";
 import Hero from "@/app/_components/Hero";
-import Difference from "@/app/_components/Difference";
-import Memory from "@/app/_components/Memory";
-import Method from "@/app/_components/Method";
-import Principles from "@/app/_components/Principles";
-import PullQuote from "@/app/_components/PullQuote";
+import BentoGrid from "@/app/_components/BentoGrid";
+import Privacy from "@/app/_components/Privacy";
 import CTA from "@/app/_components/CTA";
-import Feedback from "@/app/_components/Feedback";
 import Footer from "@/app/_components/Footer";
 
 export const metadata: Metadata = {
@@ -18,19 +14,15 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <>
+    <div className="landing-theme min-h-screen flex flex-col bg-background text-on-background">
       <Masthead />
-      <main>
+      <main className="flex-grow overflow-hidden">
         <Hero />
-        <Difference />
-        <Memory />
-        <Method />
-        <Principles />
-        <PullQuote />
+        <BentoGrid />
+        <Privacy />
         <CTA />
-        <Feedback />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

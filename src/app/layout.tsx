@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
 
 import { type Metadata } from "next";
-import { Instrument_Serif, Newsreader, JetBrains_Mono } from "next/font/google";
+import { Instrument_Serif, Newsreader, JetBrains_Mono, Inter, Literata } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/next";
 
@@ -69,12 +69,31 @@ const newsreader = Newsreader({
   variable: "--font-newsreader",
 });
 
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  weight: ["400", "500", "600", "700"],
+});
+
+const literata = Literata({
+  subsets: ["latin"],
+  variable: "--font-literata",
+  weight: ["400", "600", "700"],
+  style: ["normal", "italic"],
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={cn(instrumentSerif.variable, newsreader.variable, "font-mono", jetbrainsMono.variable)}>
+      <html lang="en" className={cn(instrumentSerif.variable, newsreader.variable, inter.variable, literata.variable, "font-mono", jetbrainsMono.variable)}>
+        <head>
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+          />
+        </head>
         <body className="loaded">
           <TRPCReactProvider>{children}</TRPCReactProvider>
           <Toaster
