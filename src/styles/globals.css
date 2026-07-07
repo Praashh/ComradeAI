@@ -452,13 +452,30 @@ body.menu-open .mobile-menu {
 }
 
 .milkdown {
-  --crepe-color-background: transparent !important;
-  --crepe-color-surface: var(--paper-3) !important;
-  --crepe-color-primary: var(--red) !important;
-  --crepe-color-text: var(--ink) !important;
-  --crepe-color-border: transparent !important;
-  --crepe-color-hover: rgba(203, 58, 40, 0.1) !important;
-  --crepe-font-default: var(--body) !important;
+  --crepe-color-background: transparent;
+  --crepe-color-surface: var(--paper-2);
+  --crepe-color-surface-low: var(--paper-3);
+  --crepe-color-on-surface: var(--ink);
+  --crepe-color-on-surface-variant: var(--ink-3);
+  --crepe-color-on-background: var(--ink);
+  --crepe-color-outline: var(--ink-3);
+  --crepe-color-primary: var(--red);
+  --crepe-color-secondary: rgba(203, 58, 40, 0.12);
+  --crepe-color-on-secondary: var(--red);
+  --crepe-color-text: var(--ink);
+  --crepe-color-border: transparent;
+  --crepe-color-hover: rgba(203, 58, 40, 0.08);
+  --crepe-color-selected: rgba(203, 58, 40, 0.12);
+  --crepe-color-inline-code: var(--red);
+  --crepe-color-inline-area: var(--paper-3);
+  --crepe-color-inverse: var(--ink);
+  --crepe-color-on-inverse: var(--paper);
+  --crepe-color-error: #ba1a1a;
+  --crepe-font-default: var(--body);
+  --crepe-font-title: var(--disp);
+  --crepe-font-code: 'JetBrains Mono', 'Fira Code', Menlo, monospace;
+  --crepe-shadow-1: 0 2px 12px rgba(33, 28, 22, 0.1), 0 1px 3px rgba(33, 28, 22, 0.08);
+  --crepe-shadow-2: 0 4px 24px rgba(33, 28, 22, 0.12), 0 2px 6px rgba(33, 28, 22, 0.08);
 
   font-family: var(--body) !important;
   color: var(--ink) !important;
@@ -471,6 +488,16 @@ body.menu-open .mobile-menu {
   padding: 0 !important;
   border-style: none !important;
   outline-style: none !important;
+  caret-color: var(--red) !important;
+}
+
+.milkdown .ProseMirror {
+  caret-color: var(--red) !important;
+}
+
+.milkdown .ProseMirror:focus {
+  outline: none !important;
+  caret-color: var(--red) !important;
 }
 
 .milkdown h1,
@@ -482,19 +509,219 @@ body.menu-open .mobile-menu {
   color: var(--ink) !important;
 }
 
-.milkdown .crepe-slash-menu {
-  background-color: var(--paper-3) !important;
-  border: 1px solid var(--rule) !important;
-  box-shadow: 0 8px 30px rgba(33, 28, 22, 0.15) !important;
-  font-family: var(--body) !important;
+/* Top bar (sticky formatting toolbar) */
+.milkdown .milkdown-top-bar {
+  background: var(--paper-2) !important;
+  border-bottom: 1px solid var(--rule-soft) !important;
+  border-radius: 12px 12px 0 0 !important;
+  padding: 0 8px !important;
+  min-height: 42px !important;
 }
-.milkdown .crepe-slash-menu-item {
+
+.milkdown .milkdown-top-bar .top-bar-heading-button {
+  border-radius: 8px !important;
+}
+
+.milkdown .milkdown-top-bar .top-bar-heading-button:hover {
+  background: rgba(203, 58, 40, 0.08) !important;
+}
+
+.milkdown .milkdown-top-bar .top-bar-heading-label {
+  font-family: var(--body) !important;
   color: var(--ink) !important;
 }
-.milkdown .crepe-slash-menu-item:hover,
-.milkdown .crepe-slash-menu-item.active {
-  background-color: rgba(203, 58, 40, 0.08) !important;
+
+.milkdown .milkdown-top-bar .top-bar-heading-dropdown {
+  background: var(--paper-2) !important;
+  border: 1px solid var(--rule-soft) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 24px rgba(33, 28, 22, 0.12) !important;
+}
+
+.milkdown .milkdown-top-bar .top-bar-heading-option {
+  border-radius: 8px !important;
+  font-family: var(--body) !important;
+  color: var(--ink) !important;
+}
+
+.milkdown .milkdown-top-bar .top-bar-heading-option:hover {
+  background: rgba(203, 58, 40, 0.08) !important;
+}
+
+.milkdown .milkdown-top-bar .top-bar-heading-option.active {
   color: var(--red) !important;
+}
+
+.milkdown .milkdown-top-bar .top-bar-item {
+  border-radius: 8px !important;
+}
+
+.milkdown .milkdown-top-bar .top-bar-item:hover {
+  background: rgba(203, 58, 40, 0.08) !important;
+}
+
+.milkdown .milkdown-top-bar .top-bar-item:active {
+  background: rgba(203, 58, 40, 0.14) !important;
+}
+
+.milkdown .milkdown-top-bar .top-bar-item svg {
+  color: var(--ink-3) !important;
+  fill: var(--ink-3) !important;
+}
+
+.milkdown .milkdown-top-bar .top-bar-item.active svg {
+  color: var(--red) !important;
+  fill: var(--red) !important;
+}
+
+.milkdown .milkdown-top-bar .top-bar-divider {
+  background: var(--rule-soft) !important;
+}
+
+/* Floating toolbar (on text selection) */
+.milkdown .milkdown-toolbar {
+  background: var(--paper-2) !important;
+  border: 1px solid var(--rule-soft) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 24px rgba(33, 28, 22, 0.12) !important;
+  overflow: hidden !important;
+}
+
+.milkdown .milkdown-toolbar .toolbar-item {
+  border-radius: 8px !important;
+}
+
+.milkdown .milkdown-toolbar .toolbar-item:hover {
+  background: rgba(203, 58, 40, 0.08) !important;
+}
+
+.milkdown .milkdown-toolbar .toolbar-item:active {
+  background: rgba(203, 58, 40, 0.14) !important;
+}
+
+.milkdown .milkdown-toolbar .toolbar-item svg {
+  color: var(--ink-3) !important;
+  fill: var(--ink-3) !important;
+}
+
+.milkdown .milkdown-toolbar .toolbar-item.active svg {
+  color: var(--red) !important;
+  fill: var(--red) !important;
+}
+
+.milkdown .milkdown-toolbar .divider {
+  background: var(--rule-soft) !important;
+}
+
+/* Slash menu (block edit menu triggered by /) */
+.milkdown .milkdown-slash-menu {
+  background: #ffffff !important;
+  border: 1px solid rgba(33, 28, 22, 0.08) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), 0 2px 10px rgba(0, 0, 0, 0.02) !important;
+  font-family: var(--body) !important;
+  color: var(--ink) !important;
+  overflow: hidden !important;
+  width: 280px !important;
+}
+
+.milkdown .milkdown-slash-menu .tab-group {
+  border-bottom: 1px solid rgba(33, 28, 22, 0.08) !important;
+  padding: 8px 8px 0 8px !important;
+}
+
+.milkdown .milkdown-slash-menu .tab-group ul {
+  padding: 4px 6px !important;
+  display: flex !important;
+  gap: 4px !important;
+  flex-wrap: nowrap !important;
+}
+
+.milkdown .milkdown-slash-menu .tab-group ul li {
+  font-family: var(--body) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: var(--ink-2) !important;
+  padding: 6px 12px !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.milkdown .milkdown-slash-menu .tab-group ul li:hover {
+  background: rgba(33, 28, 22, 0.05) !important;
+  color: var(--ink) !important;
+}
+
+.milkdown .milkdown-slash-menu .tab-group ul li.selected {
+  background: #e6c5b8 !important; /* Soft terracotta background */
+  color: #5c241c !important; /* Dark reddish-brown text */
+  font-weight: 600 !important;
+}
+
+.milkdown .milkdown-slash-menu .menu-groups {
+  padding: 4px 8px 8px 8px !important;
+  max-height: 380px !important;
+}
+
+.milkdown .milkdown-slash-menu .menu-groups .menu-group h6 {
+  font-family: var(--body) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  color: var(--ink-3) !important;
+  text-transform: uppercase !important;
+  padding: 12px 10px 6px 10px !important;
+  margin: 0 !important;
+}
+
+.milkdown .milkdown-slash-menu .menu-groups .menu-group li {
+  border-radius: 10px !important;
+  font-family: var(--body) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 8px 10px !important;
+  margin-bottom: 2px !important;
+  transition: all 0.15s ease !important;
+  background: transparent !important;
+}
+
+.milkdown .milkdown-slash-menu .menu-groups .menu-group li.hover,
+.milkdown .milkdown-slash-menu .menu-groups .menu-group li.active {
+  background: #ecd4cb !important; /* Soft light terracotta hover/active background */
+}
+
+.milkdown .milkdown-slash-menu .menu-groups .menu-group li svg {
+  width: 20px !important;
+  height: 20px !important;
+  color: var(--ink-2) !important;
+  fill: var(--ink-2) !important;
+  transition: all 0.15s ease !important;
+}
+
+.milkdown .milkdown-slash-menu .menu-groups .menu-group li.hover svg,
+.milkdown .milkdown-slash-menu .menu-groups .menu-group li.active svg {
+  color: #5c241c !important;
+  fill: #5c241c !important;
+}
+
+.milkdown .milkdown-slash-menu .menu-groups .menu-group li > span {
+  font-family: var(--body) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: var(--ink) !important;
+  line-height: 1 !important;
+}
+
+.milkdown .milkdown-slash-menu .menu-groups .menu-group li.hover > span,
+.milkdown .milkdown-slash-menu .menu-groups .menu-group li.active > span {
+  color: #5c241c !important;
+}
+
+.milkdown .milkdown-slash-menu .menu-groups .menu-group + .menu-group::before {
+  background: rgba(33, 28, 22, 0.08) !important;
+  margin: 8px 10px !important;
 }
 
 .chat-title {

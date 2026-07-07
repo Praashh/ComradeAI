@@ -30,8 +30,8 @@ const COLOR_OPTIONS = [
 ];
 
 const ICON_OPTIONS = [
-  "MasksPlay", "Smiley", "SmileyWink", "SmileySad", "SmileyMeh", "Heart",
-  "Sparkles", "Star", "Crown", "Trophy", "House", "Bed",
+  "MaskHappy", "Smiley", "SmileyWink", "SmileySad", "SmileyMeh", "Heart",
+  "Sparkle", "Star", "Crown", "Trophy", "House", "Bed",
   "Tree", "Leaf", "Mountains", "Sun", "Moon", "CloudRain",
   "Flame", "Lightning", "Snowflake", "Globe", "BookOpen", "Notebook",
   "Pen", "Palette", "MusicNotes", "Camera", "Airplane", "Bicycle",
@@ -61,7 +61,7 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
   const [title, setTitle] = useState("");
   const [mood, setMood] = useState("");
   const [selectedColor, setSelectedColor] = useState("#6E56CF");
-  const [selectedIcon, setSelectedIcon] = useState("MasksPlay");
+  const [selectedIcon, setSelectedIcon] = useState("MaskHappy");
   const [errorMsg, setErrorMsg] = useState("");
 
   const createJournal = api.journal.create.useMutation({
@@ -110,7 +110,7 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
       </DialogTrigger>
       <DialogContent
         showCloseButton={false}
-        className="!bg-[var(--paper-2)] !border !border-[var(--rule-soft)] !rounded-[8px] !p-6 !shadow-[0_8px_40px_rgba(33,28,22,0.12)] !max-w-[480px] !ring-0 flex flex-col gap-6 font-body select-none"
+        className="!border !border-[var(--rule-soft)] !rounded-[8px] !p-6 !shadow-[0_8px_40px_rgba(33,28,22,0.12)] !max-w-[480px] !ring-0 flex flex-col gap-6 font-body select-none"
       >
         {/* Dynamic Icon Preview */}
         <div className="flex justify-center pt-2">
@@ -152,7 +152,7 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
                   type="button"
                   onClick={() => setMood(m.text)}
                   className={`text-[11px] px-2.5 py-1 rounded-full border transition-all cursor-pointer font-body ${mood.toLowerCase() === m.text.toLowerCase()
-                    ? "bg-[var(--red)] border-[var(--red)] text-[var(--paper)]"
+                    ? "border-[var(--red)] text-[var(--paper)]"
                     : "border-[var(--rule-soft)] text-[var(--ink-3)] hover:border-[var(--rule)] hover:text-[var(--ink-2)]"
                     }`}
                 >
@@ -191,7 +191,7 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
         {/* Icons Grid */}
         <div className="flex flex-col gap-2.5">
           <span className="text-[10px] tracking-[0.1em] uppercase text-[var(--ink-3)] font-body font-medium px-1">Select journal icon</span>
-          <div className="grid grid-cols-7 gap-2 max-h-[160px] overflow-y-auto p-1.5 bg-[var(--paper-3)] border border-[var(--rule-soft)] rounded-[6px] no-scrollbar">
+          <div className="grid grid-cols-7 gap-2 justify-items-center max-h-[200px] overflow-y-auto p-2 border border-[var(--rule-soft)] rounded-[6px] no-scrollbar">
             {ICON_OPTIONS.map((iconName) => {
               const IconComp = (Icons[iconName as keyof typeof Icons] ?? Icons.BookOpen) as React.ElementType;
               const isSelected = selectedIcon === iconName;
@@ -200,11 +200,10 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
                   key={iconName}
                   type="button"
                   onClick={() => setSelectedIcon(iconName)}
-                  className={`aspect-square rounded-full flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 ${isSelected
-                    ? "bg-[var(--red)] text-[var(--paper)] shadow-md scale-105"
-                    : "bg-[var(--paper-2)] text-[var(--ink-3)] hover:text-[var(--ink)] hover:bg-[var(--paper)]"
+                  className={`w-9 h-9 rounded-full flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 ${isSelected
+                    ? "bg-[var(--ink)] text-[var(--paper)] shadow-sm scale-105"
+                    : "text-[var(--ink-3)] hover:text-[var(--ink)] hover:bg-[var(--paper-2)]"
                     }`}
-                  style={{ padding: "8px" }}
                 >
                   <IconComp size={18} weight={isSelected ? "bold" : "regular"} />
                 </button>
@@ -224,7 +223,7 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
           <button
             type="button"
             onClick={() => handleOpenChange(false)}
-            className="px-5 py-2.5 bg-[var(--paper-3)] hover:bg-[var(--paper)] text-[var(--ink-2)] hover:text-[var(--ink)] border border-[var(--rule-soft)] hover:border-[var(--rule)] rounded-[4px] text-sm font-body font-medium transition-all cursor-pointer"
+            className="px-5 py-2.5  text-[var(--ink-2)] hover:text-[var(--ink)] border border-[var(--rule-soft)] hover:border-[var(--rule)] rounded-[4px] text-sm font-body font-medium transition-all cursor-pointer"
           >
             Cancel
           </button>

@@ -97,7 +97,7 @@ function ConversationList({ activeId }: { activeId?: number }) {
           if (!open) setDeleteTarget(null);
         }}
       >
-        <DialogContent>
+        <DialogContent className="!w-[calc(100%-2rem)] sm:!w-[400px] !max-w-[400px] !rounded-[12px] !border !border-[var(--rule-soft)] !p-6 !shadow-[0_8px_40px_rgba(33,28,22,0.12)] !ring-0 flex flex-col gap-6 font-body select-none">
           <DialogHeader>
             <DialogTitle>Delete conversation</DialogTitle>
             <DialogDescription>

@@ -131,6 +131,9 @@ export default function JournalDashboard({ activeJournalId }: JournalDashboardPr
   // Search state
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Focus mode state
+  const [focusMode, setFocusMode] = useState(false);
+
   // Save status state
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
 
@@ -161,44 +164,34 @@ export default function JournalDashboard({ activeJournalId }: JournalDashboardPr
     if (debounceTimer.current) {
       clearTimeout(debounceTimer.current);
     }
+    setSaveStatus("saving");
     debounceTimer.current = setTimeout(() => {
       const content = editorRef.current?.getMarkdown() ?? "";
-      saveJournal.mutate({
-        id: activeJournalId,
-        content
-      });
+      saveJournal.mutate(
+        {
+          id: activeJournalId,
+          title: localTitle ?? undefined,
+          content
+        },
+        {
+          onSuccess: () => {
+            refetchJournals();
+            setSaveStatus("saved");
+            setTimeout(() => setSaveStatus("idle"), 2000);
+          },
+          onError: () => {
+            setSaveStatus("idle");
+          }
+        }
+      );
     }, 1500);
-  }, [activeJournalId, saveJournal]);
+  }, [activeJournalId, saveJournal, localTitle, refetchJournals]);
 
   useEffect(() => {
     return () => {
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
     };
   }, []);
-
-  // Manual save trigger
-  const handleSave = () => {
-    if (!activeJournalId) return;
-    setSaveStatus("saving");
-    const content = editorRef.current?.getMarkdown() ?? "";
-    saveJournal.mutate(
-      {
-        id: activeJournalId,
-        title,
-        content
-      },
-      {
-        onSuccess: () => {
-          refetchJournals();
-          setSaveStatus("saved");
-          setTimeout(() => setSaveStatus("idle"), 2000);
-        },
-        onError: () => {
-          setSaveStatus("idle");
-        }
-      }
-    );
-  };
 
   // Filter journals based on search queries
   const filteredJournals = useMemo(() => {
@@ -276,7 +269,7 @@ export default function JournalDashboard({ activeJournalId }: JournalDashboardPr
           {/* Center Section Area */}
           <main className="flex-1 flex flex-col tablet:flex-row overflow-hidden bg-background">
             {/* Archive entries list column */}
-            <section className={`w-full tablet:w-[320px] lg:w-[384px] shrink-0 border-r border-black/5 flex flex-col overflow-hidden ${activeJournalId ? "hidden" : "flex"}`}>
+            <section className={`w-full tablet:w-[320px] lg:w-[384px] shrink-0 border-r border-black/5 flex flex-col overflow-hidden transition-all duration-300 ${activeJournalId || focusMode ? "hidden" : "flex"}`}>
               <div className="p-md bg-surface/30">
                 <h2 className="font-headline-lg text-headline-lg mb-sm">Archive</h2>
                 <div className="relative">
@@ -355,42 +348,44 @@ export default function JournalDashboard({ activeJournalId }: JournalDashboardPr
                   <div className="p-md flex justify-between items-center z-10 border-b border-black/5 w-full max-w-3xl">
                     <div className="flex gap-sm items-center">
                       <button
-                        onClick={() => router.push("/write")}
+                        onClick={() => {
+                          if (focusMode) setFocusMode(false);
+                          else router.push("/write");
+                        }}
                         className="material-symbols-outlined p-[8px] hover:bg-surface-container rounded-full text-secondary transition-colors cursor-pointer"
                         title="Back to Archive"
                       >
                         arrow_back
                       </button>
-                      <div className="w-px h-[20px] bg-black/10 mx-[4px]"></div>
-                      <button className="material-symbols-outlined p-[8px] hover:bg-surface-container rounded-full text-secondary transition-colors cursor-pointer" title="Format Bold">
-                        format_bold
-                      </button>
-                      <button className="material-symbols-outlined p-[8px] hover:bg-surface-container rounded-full text-secondary transition-colors cursor-pointer" title="Format Italic">
-                        format_italic
-                      </button>
-                      <button className="material-symbols-outlined p-[8px] hover:bg-surface-container rounded-full text-secondary transition-colors cursor-pointer" title="Bulleted List">
-                        format_list_bulleted
-                      </button>
-                      <button className="material-symbols-outlined p-[8px] hover:bg-surface-container rounded-full text-secondary transition-colors cursor-pointer" title="Insert Image">
-                        image
+                    </div>
+                    <div className="flex items-center gap-sm">
+                      {saveStatus !== "idle" && (
+                        <span className="text-label-md text-secondary flex items-center gap-[4px]">
+                          {saveStatus === "saving" ? (
+                            <>
+                              <span className="material-symbols-outlined animate-spin text-sm">sync</span>
+                              Saving...
+                            </>
+                          ) : (
+                            <>
+                              <span className="material-symbols-outlined text-sm text-primary">check_circle</span>
+                              Saved
+                            </>
+                          )}
+                        </span>
+                      )}
+                      <button
+                        onClick={() => setFocusMode(!focusMode)}
+                        className={`material-symbols-outlined p-[8px] rounded-full transition-colors cursor-pointer ${
+                          focusMode
+                            ? "bg-primary/10 text-primary"
+                            : "hover:bg-surface-container text-secondary"
+                        }`}
+                        title={focusMode ? "Exit Focus Mode" : "Focus Mode"}
+                      >
+                        {focusMode ? "close_fullscreen" : "open_in_full"}
                       </button>
                     </div>
-                    <button
-                      onClick={handleSave}
-                      disabled={saveStatus === "saving"}
-                      className="bg-primary text-on-primary font-semibold px-[24px] py-[10px] rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all transform active:scale-95 cursor-pointer disabled:opacity-50 flex items-center gap-[6px] min-w-[120px] justify-center"
-                    >
-                      {saveStatus === "saving" ? (
-                        <>
-                          <span className="material-symbols-outlined animate-spin text-sm">sync</span>
-                          Saving...
-                        </>
-                      ) : saveStatus === "saved" ? (
-                        "Saved"
-                      ) : (
-                        "Save Entry"
-                      )}
-                    </button>
                   </div>
 
                   {/* Canvas Area */}
@@ -447,7 +442,7 @@ export default function JournalDashboard({ activeJournalId }: JournalDashboardPr
             )}
 
             {/* Comrade Insights Column (Rightmost sidebar) */}
-            <section className="hidden lg:flex w-full lg:w-[320px] xl:w-[384px] shrink-0 glass-panel bg-white/40 p-md flex-col gap-md overflow-y-auto">
+            <section className={`w-full lg:w-[320px] xl:w-[384px] shrink-0 glass-panel bg-white/40 p-md flex-col gap-md overflow-y-auto transition-all duration-300 ${focusMode ? "hidden" : "hidden lg:flex"}`}>
               <div className="flex items-center gap-base mb-[8px]">
                 <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>
                   auto_awesome
