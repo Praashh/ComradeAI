@@ -1,25 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Masthead from "@/app/_components/Masthead";
+import { UserButton } from "@clerk/nextjs";
 import { useConversations } from "@/lib/conversations-context";
 import { api } from "@/trpc/react";
 import { ChatCircleDots, Plus, Trash } from "@phosphor-icons/react";
-import {
-  SidebarProvider,
-  Sidebar,
-  SidebarContent,
-  SidebarHeader,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-} from "@/components/ui/sidebar";
 import {
   Dialog,
   DialogContent,
@@ -29,10 +16,12 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/app/_components/AppSidebar";
 
-function ConversationList() {
+function ConversationList({ activeId }: { activeId?: number }) {
   const { conversations, isLoading, refetch } = useConversations();
+  const router = useRouter();
   const [deleteTarget, setDeleteTarget] = useState<{
     id: number;
     title: string;
@@ -42,28 +31,21 @@ function ConversationList() {
     onSuccess: () => {
       refetch();
       setDeleteTarget(null);
+      router.push("/chat");
     },
   });
 
   if (isLoading) {
     return (
-      <SidebarMenu>
-        {Array.from({ length: 3 }).map((_, i) => (
-          <SidebarMenuItem key={i}>
-            <SidebarMenuButton disabled>
-              <span className="text-[var(--ink-3)] text-xs italic">
-                Loading...
-              </span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        ))}
-      </SidebarMenu>
+      <div className="p-4 text-center text-sm text-secondary italic">
+        Loading chats...
+      </div>
     );
   }
 
   if (!conversations.length) {
     return (
-      <p className="text-xs text-[var(--ink-3)] italic px-2 py-1">
+      <p className="text-sm text-secondary italic px-md py-sm">
         No conversations yet.
       </p>
     );
@@ -71,36 +53,44 @@ function ConversationList() {
 
   return (
     <>
-      <SidebarMenu>
-        {conversations.map((conv) => (
-          <SidebarMenuItem key={conv.id}>
-            <SidebarMenuButton
-              render={<Link href={`/chat/${conv.id}`} />}
-              className="group"
+      <div className="space-y-[8px]">
+        {conversations.map((conv) => {
+          const isActive = conv.id === activeId;
+          return (
+            <div
+              key={conv.id}
+              className={`relative p-md rounded-2xl transition-all cursor-pointer border ${
+                isActive
+                  ? "bg-surface-container-lowest border-black/5 card-shadow"
+                  : "bg-surface hover:bg-surface-container border-transparent"
+              }`}
             >
-              <ChatCircleDots size={16} weight="duotone" />
-              <span className="flex-1 truncate">
-                {conv.title ?? "New conversation"}
-              </span>
-              <button
-                type="button"
-                className="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-[var(--paper-3)] text-[var(--ink-3)] hover:text-[var(--red)] transition-all cursor-pointer"
-                title="Delete"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setDeleteTarget({
-                    id: conv.id,
-                    title: conv.title ?? "New conversation",
-                  });
-                }}
-              >
-                <Trash size={14} weight="bold" />
-              </button>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        ))}
-      </SidebarMenu>
+              <Link href={`/chat/${conv.id}`} className="absolute inset-0 rounded-2xl">
+                <span className="sr-only">Open {conv.title ?? "New conversation"}</span>
+              </Link>
+              <div className="relative flex justify-between items-center mb-[4px]">
+                <h3 className={`font-title-md text-title-md truncate flex-1 transition-colors ${isActive ? "text-primary font-semibold" : ""}`}>
+                  {conv.title ?? "New conversation"}
+                </h3>
+                <button
+                  type="button"
+                  className="relative z-10 p-1 rounded hover:bg-surface-container text-secondary hover:text-primary transition-all cursor-pointer shrink-0 ml-2"
+                  title="Delete"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setDeleteTarget({
+                      id: conv.id,
+                      title: conv.title ?? "New conversation",
+                    });
+                  }}
+                >
+                  <Trash size={14} weight="bold" />
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
 
       <Dialog
         open={!!deleteTarget}
@@ -108,7 +98,7 @@ function ConversationList() {
           if (!open) setDeleteTarget(null);
         }}
       >
-        <DialogContent>
+        <DialogContent className="!w-[calc(100%-2rem)] sm:!w-[400px] !max-w-[400px] !rounded-[12px] !border !border-[var(--rule-soft)] !p-6 !shadow-[0_8px_40px_rgba(33,28,22,0.12)] !ring-0 flex flex-col gap-6 font-body select-none">
           <DialogHeader>
             <DialogTitle>Delete conversation</DialogTitle>
             <DialogDescription>
@@ -117,20 +107,23 @@ function ConversationList() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <DialogClose render={<Button variant="outline" />}>
+            <DialogClose
+              className="px-5 py-2.5 rounded-full border border-black/10 bg-surface-container text-on-surface text-sm font-medium hover:bg-surface-container-high transition-colors cursor-pointer"
+            >
               Cancel
             </DialogClose>
-            <Button
-              variant="destructive"
+            <button
+              type="button"
               disabled={deleteConversation.isPending}
               onClick={() => {
                 if (deleteTarget) {
                   deleteConversation.mutate({ id: deleteTarget.id });
                 }
               }}
+              className="px-5 py-2.5 rounded-full bg-red text-white text-sm font-semibold hover:bg-red-d transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {deleteConversation.isPending ? "Deleting..." : "Delete"}
-            </Button>
+            </button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -148,64 +141,103 @@ export default function ChatPage() {
     },
   });
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.body.classList.add("layout-locked");
+    document.documentElement.classList.add("layout-locked");
+    return () => {
+      document.body.classList.remove("layout-locked");
+      document.documentElement.classList.remove("layout-locked");
+    };
+  }, []);
+
   return (
-    <div className="chat-workspace flex flex-col h-screen overflow-hidden">
-      <div className="shrink-0">
-        <Masthead />
-      </div>
-      <SidebarProvider className="flex-1 min-h-0">
-        <div className="flex flex-1 w-full relative overflow-hidden">
-          <Sidebar side="left" collapsible="offcanvas">
-            <SidebarHeader className="p-4 border-b border-[var(--rule-soft)]">
-              <div className="flex items-center justify-between">
-                <span className="font-serif italic text-lg text-[var(--ink)] tracking-wide">
-                  Chats
-                </span>
+    <SidebarProvider className="landing-theme layout-locked h-dvh overflow-hidden bg-background text-on-background">
+      <AppSidebar />
+      <SidebarInset className="!h-dvh !max-h-dvh flex flex-col overflow-hidden">
+        {/* Top Shell Navigation */}
+        <header className="w-full shrink-0 z-50 bg-surface/70 backdrop-blur-xl border-b border-black/5 flex justify-between items-center px-md py-sm shadow-sm">
+          <div className="flex items-center gap-2">
+            <SidebarTrigger />
+            <Link href="/" className="font-display-md text-display-md font-semibold text-primary tablet:hidden">
+              Comrade AI
+            </Link>
+          </div>
+          <div className="flex items-center gap-md">
+            <div className="hidden tablet:flex gap-md items-center">
+              <Link href="/write" className="text-secondary hover:text-primary transition-colors font-body-md">
+                Journal
+              </Link>
+              <Link href="/chat" className="text-primary border-b-2 border-primary font-body-md">
+                Chat
+              </Link>
+              <Link href="/talk" className="text-secondary hover:text-primary transition-colors font-body-md">
+                Voice
+              </Link>
+            </div>
+            <div className="flex items-center">
+              <UserButton
+                appearance={{
+                  elements: {
+                    userButtonAvatarBox: "w-[32px] h-[32px] border border-black/5",
+                  },
+                }}
+              />
+            </div>
+          </div>
+        </header>
+
+        {/* Main Workspace Frame */}
+        <div className="flex flex-1 min-h-0 overflow-hidden bg-background">
+          {/* Chats Archive entries list column */}
+          <section className="w-full tablet:w-[320px] lg:w-[384px] shrink-0 border-r border-black/5 flex flex-col overflow-hidden">
+            <div className="p-md bg-surface/30">
+              <div className="flex justify-between items-center mb-sm">
+                <h2 className="font-headline-lg text-headline-lg">Chats</h2>
                 <button
                   type="button"
-                  className="p-0.5 rounded hover:bg-[var(--paper-3)] text-[var(--ink-3)] hover:text-[var(--ink)] transition-colors cursor-pointer"
+                  className="p-1 rounded hover:bg-surface-container text-secondary hover:text-primary transition-colors cursor-pointer"
                   title="New Chat"
                   onClick={() => createConversation.mutate({})}
                   disabled={createConversation.isPending}
                 >
-                  <Plus size={16} weight="bold" />
+                  <Plus size={20} weight="bold" />
                 </button>
               </div>
-            </SidebarHeader>
-            <SidebarContent className="p-2 gap-4">
-              <SidebarGroup>
-                <SidebarGroupLabel>Your Conversations</SidebarGroupLabel>
-                <SidebarGroupContent>
-                  <ConversationList />
-                </SidebarGroupContent>
-              </SidebarGroup>
-            </SidebarContent>
-            <SidebarFooter className="p-4 border-t border-[var(--rule-soft)]" />
-          </Sidebar>
+            </div>
 
-          <main className="flex-1 min-h-0 px-6 py-12 overflow-y-auto flex items-center justify-center">
-            <div className="text-center">
+            <div className="flex-1 overflow-y-auto px-sm pb-[40px]">
+              <ConversationList />
+            </div>
+          </section>
+
+          {/* Empty state chat view */}
+          <section className="flex-1 min-w-0 flex flex-col items-center justify-center bg-surface-container-lowest/50 p-lg text-center relative">
+            <div className="absolute top-0 right-0 w-[256px] h-[256px] bg-primary/5 rounded-full blur-3xl -mr-[128px] -mt-[128px] pointer-events-none"></div>
+            <div className="max-w-md z-10">
               <ChatCircleDots
-                size={48}
+                size={64}
+                className="mx-auto mb-md text-primary/40"
                 weight="duotone"
-                className="mx-auto mb-4 text-[var(--ink-3)]"
               />
-              <p className="text-sm text-[var(--ink-3)] italic mb-4">
-                Start a conversation with Comrade AI.
+              <h3 className="font-display-md text-display-md text-on-background mb-sm">
+                Ask Comrade
+              </h3>
+              <p className="font-body-lg text-secondary mb-lg">
+                Select a conversation from the sidebar or start a new chat with Comrade AI.
               </p>
               <button
                 type="button"
                 onClick={() => createConversation.mutate({})}
                 disabled={createConversation.isPending}
-                className="sidebar-action-btn inline-flex !w-auto"
+                className="bg-primary text-on-primary font-semibold px-[24px] py-[12px] rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-95 cursor-pointer"
               >
-                <Plus size={16} weight="bold" />
-                <span>New Chat</span>
+                New Chat
               </button>
             </div>
-          </main>
+          </section>
         </div>
-      </SidebarProvider>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

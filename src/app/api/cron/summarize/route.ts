@@ -21,10 +21,8 @@ export async function GET(req: Request) {
       sql`${journals.content} != '' AND (${journals.summarizedAt} IS NULL OR ${journals.summarizedAt} < ${journals.updatedAt})`,
     );
 
-  let processed = 0;
-
-  for (const journal of stale) {
-    try {
+  const results = await Promise.allSettled(
+    stale.map(async (journal) => {
       const completion = await groq.chat.completions.create({
         model: "llama-3.3-70b-versatile",
         messages: [
@@ -49,14 +47,15 @@ export async function GET(req: Request) {
           .update(journals)
           .set({ summary, summarizedAt: new Date() })
           .where(eq(journals.id, journal.id));
-        processed++;
+        return true;
       }
-    } catch (error) {
-      console.error(
-        `[CRON:SUMMARIZE] Failed for journal ${journal.id}: ${String(error)}`,
-      );
-    }
-  }
+      return false;
+    }),
+  );
+
+  const processed = results.filter(
+    (r) => r.status === "fulfilled" && r.value === true,
+  ).length;
 
   return NextResponse.json({
     success: true,

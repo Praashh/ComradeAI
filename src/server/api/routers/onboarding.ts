@@ -68,20 +68,18 @@ export const onboardingRouter = createTRPCRouter({
       const userId = ctx.session.userId!;
       const chunks = splitByMarkdownSections(input.content);
 
-      let successCount = 0;
-      for (const chunk of chunks) {
-        try {
-          await memoryInstance.saveInMemory(
+      const results = await Promise.allSettled(
+        chunks.map((chunk) =>
+          memoryInstance.saveInMemory(
             `[Imported memory] ${chunk}`,
             userId,
-          );
-          successCount++;
-        } catch (err) {
-          console.error(
-            `[ONBOARDING:IMPORT] chunk failed for user=${userId}: ${String(err)}`,
-          );
-        }
-      }
+          ),
+        ),
+      );
+
+      const successCount = results.filter(
+        (r) => r.status === "fulfilled",
+      ).length;
 
       return { imported: successCount, total: chunks.length };
     }),

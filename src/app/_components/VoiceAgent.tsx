@@ -90,7 +90,7 @@ export default function VoiceAgent() {
   return (
     <div className="flex w-full max-w-[420px] flex-col items-center px-[var(--pad)]">
       {/* Call card */}
-      <div className="call-card flex w-full flex-col items-center rounded-[6px] border border-rule-soft bg-paper-2 px-8 py-12 shadow-[0_8px_40px_rgba(33,28,22,0.08)]">
+      <div className="call-card flex w-full flex-col items-center rounded-2xl border border-black/5 bg-surface-container px-8 py-12 shadow-[0_8px_40px_rgba(0,0,0,0.04)]">
         {isuserStatusPending ? (
           <div className="flex w-full flex-col items-center">
             <Skeleton className="mb-8 h-[120px] w-[120px] rounded-full bg-rule-soft" />
@@ -106,13 +106,13 @@ export default function VoiceAgent() {
               <div
                 className={`flex h-[120px] w-[120px] items-center justify-center rounded-full border-2 ${
                   callState === "active"
-                    ? "border-red"
+                    ? "border-primary"
                     : callState === "connecting"
-                      ? "border-ink-3"
-                      : "border-rule"
-                } bg-paper transition-all duration-500`}
+                      ? "border-secondary"
+                      : "border-black/10"
+                } bg-surface transition-all duration-500`}
               >
-                <span className="font-disp text-[3.2rem] leading-none text-ink">
+                <span className="font-display-md text-[3.2rem] leading-none text-primary">
                   {activeSpeakerName[0]}
                 </span>
               </div>
@@ -128,12 +128,12 @@ export default function VoiceAgent() {
             </div>
 
             {/* Name */}
-            <h2 className="mb-1 font-disp text-[1.8rem] leading-none text-ink">
+            <h2 className="mb-[8px] font-display-md text-[2.2rem] leading-none text-primary">
               {activeSpeakerName}
             </h2>
 
             {/* Status text */}
-            <p className="mb-8 font-body text-[0.88rem] tracking-[0.08em] text-ink-3">
+            <p className="mb-8 font-body-md text-label-md uppercase tracking-[0.08em] text-secondary">
               {callState === "idle" && "Ready to talk"}
               {callState === "connecting" && "Connecting…"}
               {callState === "active" && formatDuration(callDuration)}
@@ -158,7 +158,7 @@ export default function VoiceAgent() {
 
             {/* Character subtitle */}
             {callState === "idle" && (
-              <p className="mb-6 -mt-1 font-body text-[0.78rem] italic text-ink-3">
+              <p className="mb-6 -mt-1 font-body-md text-body-md italic text-secondary text-center">
                 {activeCharacter.title}
               </p>
             )}
@@ -183,7 +183,7 @@ export default function VoiceAgent() {
 
             {callState === "ended" && (
               <div className="flex h-[64px] items-center">
-                <p className="font-body text-[0.82rem] italic text-ink-3">
+                <p className="font-body-md text-body-md italic text-secondary">
                   Talk again anytime
                 </p>
               </div>
@@ -219,7 +219,7 @@ function ActiveCallUI({
   return (
     <div className="flex w-full flex-col items-center gap-6">
       {/* Agent state label */}
-      <p className="font-body text-[0.75rem] uppercase tracking-[0.14em] text-ink-3">
+      <p className="font-body-md text-label-md uppercase tracking-[0.14em] text-secondary">
         {state === "listening"
           ? `${speakerName} is listening`
           : state === "thinking"

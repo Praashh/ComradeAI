@@ -55,8 +55,8 @@ vi.mock("@phosphor-icons/react", async (importOriginal) => {
 
   // Build stubs for all icon names used in the component
   const iconNames = [
-    "MasksPlay", "Smiley", "SmileyWink", "SmileySad", "SmileyMeh", "Heart",
-    "Sparkles", "Star", "Crown", "Trophy", "House", "Bed",
+    "MaskHappy", "Smiley", "SmileyWink", "SmileySad", "SmileyMeh", "Heart",
+    "Sparkle", "Star", "Crown", "Trophy", "House", "Bed",
     "Tree", "Leaf", "Mountains", "Sun", "Moon", "CloudRain",
     "Flame", "Lightning", "Snowflake", "Globe", "BookOpen", "Notebook",
     "Pen", "Palette", "MusicNotes", "Camera", "Airplane", "Bicycle",
@@ -139,7 +139,7 @@ describe("NewJournalDialog", () => {
     expect(mockMutate).toHaveBeenCalledWith({
       title: "My Journal",
       mood: undefined,
-      icon: "MasksPlay",
+      icon: "MaskHappy",
       color: "#6E56CF",
     });
   });

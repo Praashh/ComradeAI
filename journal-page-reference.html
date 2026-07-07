@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Comrade AI | Journal Dashboard</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Literata:opsz,wght@7..72,400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f5f3f2",
+                    "tertiary-fixed": "#e4e2e2",
+                    "on-secondary-container": "#636262",
+                    "inverse-on-surface": "#f2f0ef",
+                    "inverse-surface": "#303030",
+                    "secondary-container": "#e2dfde",
+                    "on-background": "#1b1c1b",
+                    "inverse-primary": "#ffb4a8",
+                    "primary-fixed-dim": "#ffb4a8",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed-variant": "#474746",
+                    "surface-container": "#efedec",
+                    "on-error": "#ffffff",
+                    "surface-container-high": "#e9e8e7",
+                    "on-surface-variant": "#5a413d",
+                    "on-error-container": "#93000a",
+                    "on-primary-fixed-variant": "#900c05",
+                    "primary-container": "#c93929",
+                    "on-primary-container": "#ffeeeb",
+                    "surface-variant": "#e4e2e1",
+                    "surface": "#fbf9f8",
+                    "secondary": "#5f5e5e",
+                    "on-tertiary-fixed": "#1b1c1c",
+                    "tertiary": "#565656",
+                    "surface-dim": "#dbdad9",
+                    "surface-container-highest": "#e4e2e1",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "outline": "#8e706b",
+                    "primary": "#a61f13",
+                    "error": "#ba1a1a",
+                    "outline-variant": "#e2beb9",
+                    "secondary-fixed": "#e5e2e1",
+                    "on-primary-fixed": "#410000",
+                    "error-container": "#ffdad6",
+                    "on-surface": "#1b1c1b",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-tint": "#b3291b",
+                    "surface-bright": "#fbf9f8",
+                    "on-tertiary-container": "#f3f1f1",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "primary-fixed": "#ffdad4",
+                    "on-tertiary-fixed-variant": "#464747",
+                    "tertiary-container": "#6e6e6e",
+                    "tertiary-fixed-dim": "#c7c6c6",
+                    "on-secondary": "#ffffff",
+                    "background": "#fbf9f8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px",
+                    "2xl": "24px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "sm": "12px",
+                    "margin-desktop": "48px",
+                    "gutter": "24px",
+                    "xs": "4px",
+                    "xl": "64px",
+                    "lg": "40px",
+                    "base": "8px",
+                    "md": "24px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Literata"],
+                    "body-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "display-md": ["Literata"],
+                    "title-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #FCFAF9; color: #1b1c1b; }
+        .glass-panel { backdrop-filter: blur(12px); border: 1px solid rgba(0, 0, 0, 0.06); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .card-shadow { box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #e2dfde; border-radius: 10px; }
+        .writing-area:focus { outline: none; }
+    </style>
+</head>
+<body class="antialiased overflow-hidden">
+<!-- Top Navigation (Shell Implementation) -->
+<header class="fixed top-0 w-full z-50 bg-surface/70 backdrop-blur-xl border-b border-black/5 flex justify-between items-center px-md py-sm max-w-[1440px] mx-auto shadow-sm">
+<div class="flex items-center gap-base">
+<span class="font-display-md text-display-md font-semibold text-primary">Comrade AI</span>
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden md:flex gap-md items-center">
+<a class="text-primary border-b-2 border-primary font-body-md" href="#">Journal</a>
+<a class="text-secondary hover:text-primary transition-colors font-body-md" href="#">Chat</a>
+<a class="text-secondary hover:text-primary transition-colors font-body-md" href="#">Voice</a>
+</div>
+<div class="flex items-center gap-sm">
+<button class="material-symbols-outlined text-on-surface hover:bg-surface-container rounded-full p-2 transition-colors">settings</button>
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm">account_circle</span>
+</div>
+</div>
+</div>
+</header>
+<div class="flex h-screen pt-16">
+<!-- Sidebar Navigation (Shell Implementation) -->
+<aside class="hidden md:flex flex-col h-full w-64 bg-surface-container-low/80 backdrop-blur-md border-r border-black/5 p-md gap-base">
+<div class="mb-lg">
+<h1 class="font-display-md text-display-md text-primary">Comrade AI</h1>
+<p class="font-body-md text-secondary">Your Empathetic Companion</p>
+</div>
+<nav class="flex flex-col gap-xs flex-1">
+<a class="bg-primary text-on-primary rounded-full px-4 py-2 flex items-center gap-3 transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined">book_5</span>
+<span class="font-body-lg">Journal</span>
+</a>
+<a class="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-4 py-2 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="font-body-lg">Chat</span>
+</a>
+<a class="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-4 py-2 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">mic</span>
+<span class="font-body-lg">Voice</span>
+</a>
+</nav>
+<div class="mt-auto space-y-4">
+<button class="w-full bg-primary-container text-on-primary-container font-semibold py-3 rounded-full flex items-center justify-center gap-2 hover:opacity-90 transition-all">
+<span class="material-symbols-outlined">add</span>
+                    New Entry
+                </button>
+<div class="pt-4 border-t border-outline-variant/30 flex flex-col gap-xs">
+<a class="text-secondary hover:bg-surface-container-high p-2 rounded-lg flex items-center gap-3" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="text-label-md">Help</span>
+</a>
+<a class="text-secondary hover:bg-surface-container-high p-2 rounded-lg flex items-center gap-3" href="#">
+<span class="material-symbols-outlined">security</span>
+<span class="text-label-md">Privacy</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col md:flex-row overflow-hidden bg-background">
+<!-- Archive Column -->
+<section class="w-full md:w-80 lg:w-96 border-r border-black/5 flex flex-col overflow-hidden">
+<div class="p-md bg-surface/30">
+<h2 class="font-headline-lg text-headline-lg mb-sm">Archive</h2>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-sm">search</span>
+<input class="w-full bg-surface-container-high/50 border-none rounded-full py-2 pl-10 pr-4 text-body-md focus:ring-1 focus:ring-primary" placeholder="Search entries..." type="text"/>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto px-sm space-y-2">
+<!-- Entry Card -->
+<div class="p-md rounded-2xl bg-surface-container-lowest border border-black/5 hover:border-primary-container/20 transition-all cursor-pointer card-shadow group">
+<div class="flex justify-between items-start mb-2">
+<span class="text-label-md text-secondary">Today, 9:41 AM</span>
+<span class="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">Reflective</span>
+</div>
+<h3 class="font-title-md text-title-md mb-1 group-hover:text-primary transition-colors">The Morning Fog</h3>
+<p class="text-body-md text-secondary line-clamp-2">Thinking about the transition between seasons and how it mirrors my current career path...</p>
+</div>
+<!-- Entry Card -->
+<div class="p-md rounded-2xl bg-surface hover:bg-surface-container transition-all cursor-pointer border border-transparent">
+<div class="flex justify-between items-start mb-2">
+<span class="text-label-md text-secondary">Oct 24, 2023</span>
+<span class="bg-secondary-container/50 text-secondary px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">Tired</span>
+</div>
+<h3 class="font-title-md text-title-md mb-1">Unfinished Thoughts</h3>
+<p class="text-body-md text-secondary line-clamp-2">Sometimes the words don't come as easily as they should. Sleep might be the only answer.</p>
+</div>
+<!-- Entry Card -->
+<div class="p-md rounded-2xl bg-surface hover:bg-surface-container transition-all cursor-pointer border border-transparent">
+<div class="flex justify-between items-start mb-2">
+<span class="text-label-md text-secondary">Oct 22, 2023</span>
+<span class="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">Inspired</span>
+</div>
+<h3 class="font-title-md text-title-md mb-1">New Perspectives</h3>
+<p class="text-body-md text-secondary line-clamp-2">Met with Sarah today. We discussed the potential of generative art in therapy...</p>
+</div>
+<!-- Entry Card -->
+<div class="p-md rounded-2xl bg-surface hover:bg-surface-container transition-all cursor-pointer border border-transparent">
+<div class="flex justify-between items-start mb-2">
+<span class="text-label-md text-secondary">Oct 20, 2023</span>
+<span class="bg-tertiary-container/20 text-tertiary px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">Neutral</span>
+</div>
+<h3 class="font-title-md text-title-md mb-1">Routine Logs</h3>
+<p class="text-body-md text-secondary line-clamp-2">Basic log of events. Nothing significant happened today, just work and gym.</p>
+</div>
+</div>
+</section>
+<!-- Editor Section -->
+<section class="flex-1 flex flex-col bg-surface-container-lowest/50 relative overflow-hidden">
+<!-- Background Decoration -->
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none"></div>
+<!-- Toolbar -->
+<div class="p-md flex justify-between items-center z-10">
+<div class="flex gap-sm">
+<button class="material-symbols-outlined p-2 hover:bg-surface-container rounded-full text-secondary transition-colors">format_bold</button>
+<button class="material-symbols-outlined p-2 hover:bg-surface-container rounded-full text-secondary transition-colors">format_italic</button>
+<button class="material-symbols-outlined p-2 hover:bg-surface-container rounded-full text-secondary transition-colors">format_list_bulleted</button>
+<button class="material-symbols-outlined p-2 hover:bg-surface-container rounded-full text-secondary transition-colors">image</button>
+</div>
+<button class="bg-primary text-on-primary font-semibold px-6 py-2.5 rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all transform active:scale-95">
+                        Save Entry
+                    </button>
+</div>
+<!-- Canvas -->
+<div class="flex-1 overflow-y-auto px-md md:px-xl py-lg max-w-4xl mx-auto w-full z-10">
+<input class="w-full bg-transparent border-none font-display-md text-display-md placeholder:text-outline/40 mb-lg focus:ring-0 text-on-surface" placeholder="Entry Title" type="text" value="The Morning Fog"/>
+<textarea class="writing-area w-full h-[614px] bg-transparent border-none font-body-lg text-body-lg text-secondary leading-relaxed resize-none focus:ring-0" placeholder="Start writing your thoughts...">There's a specific kind of quiet that comes with the autumn fog. It settles over the city like a heavy blanket, muffling the usual roar of morning traffic. 
+
+I sat by the window for nearly an hour today, watching the grey light filter through the trees. It felt strangely nostalgic, though I couldn't quite place the memory. Perhaps it’s just the season itself—the feeling of things drawing to a close, yet preparing for something new.
+
+Comrade asked me earlier how I felt about the upcoming changes at the studio. I told it I was "fine," but as I write this, I realize that "fine" is a protective word. It’s a word I use when I’m not yet ready to process the underlying anxiety of the unknown.
+
+The transition between seasons mirrors this. We know winter is coming, we know the trees will be bare, but there's a beauty in that vulnerability.</textarea>
+</div>
+</section>
+<!-- Comrade Insights Panel -->
+<section class="w-full lg:w-80 xl:w-96 glass-panel bg-white/40 p-md flex flex-col gap-md">
+<div class="flex items-center gap-base mb-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<h2 class="font-headline-lg text-headline-lg">Comrade Insights</h2>
+</div>
+<!-- Emotional Pulse Card -->
+<div class="bg-surface-container-highest/30 backdrop-blur-md rounded-2xl p-md border border-white/40 shadow-sm">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-title-md text-title-md">Emotional Pulse</h3>
+<span class="material-symbols-outlined text-secondary text-sm">info</span>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<span class="text-body-md text-secondary">Clarity</span>
+<div class="w-32 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[75%] rounded-full"></div>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-body-md text-secondary">Stability</span>
+<div class="w-32 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[90%] rounded-full"></div>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-body-md text-secondary">Anxiety</span>
+<div class="w-32 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-[15%] rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Prompt Card -->
+<div class="bg-primary/5 rounded-2xl p-md border border-primary/10">
+<div class="flex items-start gap-3">
+<div class="bg-primary p-2 rounded-xl text-on-primary">
+<span class="material-symbols-outlined text-base">psychology</span>
+</div>
+<div>
+<h3 class="font-title-md text-primary mb-1">Deep Dive</h3>
+<p class="text-body-md text-on-surface-variant italic">"You mentioned 'protective words.' What are you protecting yourself from in this new studio role?"</p>
+<button class="mt-md text-label-md text-primary font-bold flex items-center gap-1 hover:underline">
+                                Answer Comrade
+                                <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Visual Mood Card -->
+<div class="flex-1 rounded-2xl overflow-hidden relative group">
+<img class="w-full h-full object-cover" data-alt="A serene, minimalist digital landscape showing a foggy autumn morning with soft, diffused sunlight. The colors are muted greys, warm beiges, and subtle hints of crimson. The style is clean, modern, and high-focus, reflecting a sanctuary of digital well-being." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9fHV9VPaoNgfMPID_X4QpegYdd8PPB-Jhi4Ap7stLaOp6_8OCfNUiMvJzwSD6F3ZuFz_UiKsaaJohPce-XTqGbKZJcyGypT90POiMQwzfHbF54IYsvq3KCjLAwpMkp9wFSDavxTUT3Rv4pIAgH3Jc_j1lRSsa0qNXx1OZD5wo2GQOCOudLlhLemZTwp8jKapOYD3XxRCy1138HxnCMo-veLZXA02cMbY23ijeIRfOV-_wTOsW9yHdLcfIdZZrC9rLVWY4BMRe_BE"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-md">
+<p class="text-white font-label-md uppercase tracking-widest opacity-80 mb-1">Atmosphere</p>
+<h4 class="text-white font-display-md text-lg">Ethereal Order</h4>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Mobile Bottom Navigation (Shell Implementation) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-surface/80 backdrop-blur-xl border-t border-black/5 px-6 py-3 flex justify-around items-center z-50">
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined">book_5</span>
+<span class="text-[10px] font-bold">Journal</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-secondary">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="text-[10px] font-bold">Chat</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-secondary">
+<span class="material-symbols-outlined">mic</span>
+<span class="text-[10px] font-bold">Voice</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-secondary">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-[10px] font-bold">Profile</span>
+</button>
+</nav>
+<!-- FAB (Suppressed on details, but shown here for new entry intent) -->
+<button class="md:hidden fixed right-6 bottom-20 w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg shadow-primary/30 flex items-center justify-center z-50">
+<span class="material-symbols-outlined text-2xl">add</span>
+</button>
+<script>
+        // Micro-interaction for input highlighting
+        const textAreas = document.querySelectorAll('.writing-area');
+        textAreas.forEach(area => {
+            area.addEventListener('focus', () => {
+                area.closest('section').classList.add('bg-white');
+            });
+            area.addEventListener('blur', () => {
+                area.closest('section').classList.remove('bg-white');
+            });
+        });
+
+        // Simple mock for "Save" interaction
+        const saveBtn = document.querySelector('button:contains("Save Entry")');
+        if(saveBtn) {
+            saveBtn.addEventListener('click', () => {
+                saveBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Saving...';
+                setTimeout(() => {
+                    saveBtn.innerHTML = 'Saved';
+                    setTimeout(() => {
+                        saveBtn.innerText = 'Save Entry';
+                    }, 2000);
+                }, 1000);
+            });
+        }
+    </script>
+</body></html>

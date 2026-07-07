@@ -55,25 +55,176 @@ type Step =
 
 type Pronouns = "he/him" | "she/her" | "they/them";
 
+/* ─── Import Step ─── */
+function ImportStep({
+  importText,
+  setImportText,
+  importing,
+  importResult,
+  onImport,
+  onSkip,
+}: {
+  importText: string;
+  setImportText: (v: string) => void;
+  importing: boolean;
+  importResult: { imported: number; total: number } | null;
+  onImport: () => void;
+  onSkip: () => void;
+}) {
+  return (
+    <div className="flex flex-col">
+      <h2 className="mb-2 font-disp text-[1.8rem] leading-[1.1] text-ink">
+        Import your memories
+      </h2>
+      <p className="mb-6 font-body text-[0.88rem] leading-relaxed text-ink-3">
+        Copy the prompt below, paste it in ChatGPT or Claude, then paste
+        their response here.
+      </p>
+
+      <div className="mb-4 rounded-[4px] border border-rule-soft bg-paper-2 p-4">
+        <div className="mb-2 flex items-center justify-between">
+          <span className="font-body text-[0.72rem] uppercase tracking-[0.1em] text-ink-3">
+            Prompt to copy
+          </span>
+          <button
+            type="button"
+            onClick={() => {
+              void navigator.clipboard.writeText(IMPORT_PROMPT);
+              toast.success("Prompt copied to clipboard");
+            }}
+            className="rounded border border-rule-soft px-2 py-0.5 font-body text-[0.72rem] text-ink-3 transition-colors hover:border-rule hover:text-ink"
+          >
+            Copy
+          </button>
+        </div>
+        <p className="font-body text-[0.82rem] leading-relaxed text-ink-2">
+          {IMPORT_PROMPT}
+        </p>
+      </div>
+
+      <textarea
+        aria-label="Paste imported memories here"
+        value={importText}
+        onChange={(e) => setImportText(e.target.value)}
+        placeholder="Paste the response here..."
+        rows={8}
+        className="mb-4 w-full resize-none rounded-[4px] border border-rule-soft bg-paper-2 px-4 py-3 font-body text-[0.88rem] text-ink placeholder:italic placeholder:text-ink-3 focus:border-rule focus:outline-none"
+      />
+
+      {importResult && (
+        <p className="mb-4 font-body text-[0.82rem] text-ink-2">
+          Imported {importResult.imported} of {importResult.total} memory
+          sections.
+        </p>
+      )}
+
+      <div className="flex gap-3">
+        <button
+          type="button"
+          onClick={onImport}
+          disabled={!importText.trim() || importing}
+          className="flex-1 rounded-[4px] bg-ink px-6 py-3 font-body text-[0.85rem] tracking-[0.04em] text-paper transition-colors hover:bg-ink-2 disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          {importing ? "Importing..." : "Import & Continue"}
+        </button>
+        <button
+          type="button"
+          onClick={onSkip}
+          className="rounded-[4px] border border-rule-soft px-6 py-3 font-body text-[0.85rem] text-ink-3 transition-colors hover:border-rule hover:text-ink"
+        >
+          Skip
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Character Selection Step ─── */
+function CharacterStep({
+  selectedCharacter,
+  setSelectedCharacter,
+  onComplete,
+  isPending,
+}: {
+  selectedCharacter: CharacterId;
+  setSelectedCharacter: (id: CharacterId) => void;
+  onComplete: () => void;
+  isPending: boolean;
+}) {
+  return (
+    <div className="flex flex-col items-center">
+      <h2 className="mb-2 text-center font-disp text-[1.8rem] leading-[1.1] text-ink">
+        Choose your companion
+      </h2>
+      <p className="mb-8 text-center font-body text-[0.88rem] text-ink-3">
+        You can always switch later.
+      </p>
+
+      <div className="mb-8 grid w-full grid-cols-2 gap-3">
+        {CHARACTERS.map((c) => (
+          <button
+            type="button"
+            key={c.id}
+            onClick={() => setSelectedCharacter(c.id)}
+            className={`flex flex-col items-start rounded-[6px] border p-4 text-left transition-all ${selectedCharacter === c.id
+                ? "border-red bg-paper-2 shadow-[0_4px_20px_rgba(203,58,40,0.1)]"
+                : "border-rule-soft bg-paper-2 hover:border-rule"
+              }`}
+          >
+            <div className="mb-2 flex items-center gap-2.5">
+              <div
+                className={`flex h-9 w-9 items-center justify-center rounded-full border ${selectedCharacter === c.id
+                    ? "border-red bg-red text-paper"
+                    : "border-rule bg-paper text-ink"
+                  } font-disp text-[1.1rem] leading-none transition-colors`}
+              >
+                {c.name[0]}
+              </div>
+              <div>
+                <span className="block font-disp text-[1.05rem] leading-none text-ink">
+                  {c.name}
+                </span>
+                <span className="block font-body text-[0.7rem] italic text-ink-3">
+                  {c.title}
+                </span>
+              </div>
+            </div>
+            <p className="font-body text-[0.75rem] leading-snug text-ink-3">
+              {c.description}
+            </p>
+          </button>
+        ))}
+      </div>
+
+      <button
+        type="button"
+        onClick={onComplete}
+        disabled={isPending}
+        className="rounded-[4px] bg-red px-8 py-3 font-body text-[0.85rem] tracking-[0.04em] text-paper transition-colors hover:bg-red-d disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {isPending ? "Setting up..." : "Start your journey"}
+      </button>
+    </div>
+  );
+}
+
+/* ─── Main Onboarding Flow ─── */
 export default function OnboardingFlow() {
   const router = useRouter();
   const [step, setStep] = useState<Step>("choose-path");
 
-  // Form state
   const [nickname, setNickname] = useState("");
   const [pronouns, setPronouns] = useState<Pronouns | "">("");
   const [dob, setDob] = useState("");
   const [selectedCharacter, setSelectedCharacter] =
     useState<CharacterId>(DEFAULT_CHARACTER);
 
-  // Focus ref for nickname input (replaces autoFocus to avoid lint warning)
   const nicknameRef = useCallback((node: HTMLInputElement | null) => {
     if (node) {
       node.focus();
     }
   }, []);
 
-  // Hydration-safe today's date for the date input max
   const todayDate = new Date().toISOString().split("T")[0];
 
   const changeStep = useCallback((newStep: Step) => {
@@ -82,7 +233,6 @@ export default function OnboardingFlow() {
     });
   }, []);
 
-  // Import state
   const [importText, setImportText] = useState("");
   const [importing, setImporting] = useState(false);
   const [importResult, setImportResult] = useState<{
@@ -105,10 +255,8 @@ export default function OnboardingFlow() {
         content: importText.trim(),
       });
       setImportResult(result);
-      // Auto-advance after a brief pause
       setTimeout(() => changeStep("nickname"), 1500);
     } catch {
-      // Allow user to retry or skip
       setImporting(false);
     }
   }, [importText, importMemory, changeStep]);
@@ -229,72 +377,14 @@ export default function OnboardingFlow() {
 
       {/* Step: Import Memory */}
       {step === "import" && (
-        <div className="flex flex-col">
-          <h2 className="mb-2 font-disp text-[1.8rem] leading-[1.1] text-ink">
-            Import your memories
-          </h2>
-          <p className="mb-6 font-body text-[0.88rem] leading-relaxed text-ink-3">
-            Copy the prompt below, paste it in ChatGPT or Claude, then paste
-            their response here.
-          </p>
-
-          {/* Copyable prompt */}
-          <div className="mb-4 rounded-[4px] border border-rule-soft bg-paper-2 p-4">
-            <div className="mb-2 flex items-center justify-between">
-              <span className="font-body text-[0.72rem] uppercase tracking-[0.1em] text-ink-3">
-                Prompt to copy
-              </span>
-              <button
-                type="button"
-                onClick={() => {
-                  void navigator.clipboard.writeText(IMPORT_PROMPT);
-                  toast.success("Prompt copied to clipboard");
-                }}
-                className="rounded border border-rule-soft px-2 py-0.5 font-body text-[0.72rem] text-ink-3 transition-colors hover:border-rule hover:text-ink"
-              >
-                Copy
-              </button>
-            </div>
-            <p className="font-body text-[0.82rem] leading-relaxed text-ink-2">
-              {IMPORT_PROMPT}
-            </p>
-          </div>
-
-          {/* Paste area */}
-          <textarea
-            aria-label="Paste imported memories here"
-            value={importText}
-            onChange={(e) => setImportText(e.target.value)}
-            placeholder="Paste the response here..."
-            rows={8}
-            className="mb-4 w-full resize-none rounded-[4px] border border-rule-soft bg-paper-2 px-4 py-3 font-body text-[0.88rem] text-ink placeholder:italic placeholder:text-ink-3 focus:border-rule focus:outline-none"
-          />
-
-          {importResult && (
-            <p className="mb-4 font-body text-[0.82rem] text-ink-2">
-              Imported {importResult.imported} of {importResult.total} memory
-              sections.
-            </p>
-          )}
-
-          <div className="flex gap-3">
-            <button
-              type="button"
-              onClick={handleImport}
-              disabled={!importText.trim() || importing}
-              className="flex-1 rounded-[4px] bg-ink px-6 py-3 font-body text-[0.85rem] tracking-[0.04em] text-paper transition-colors hover:bg-ink-2 disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              {importing ? "Importing..." : "Import & Continue"}
-            </button>
-            <button
-              type="button"
-              onClick={() => changeStep("nickname")}
-              className="rounded-[4px] border border-rule-soft px-6 py-3 font-body text-[0.85rem] text-ink-3 transition-colors hover:border-rule hover:text-ink"
-            >
-              Skip
-            </button>
-          </div>
-        </div>
+        <ImportStep
+          importText={importText}
+          setImportText={setImportText}
+          importing={importing}
+          importResult={importResult}
+          onImport={handleImport}
+          onSkip={() => changeStep("nickname")}
+        />
       )}
 
       {/* Step: Nickname */}
@@ -398,61 +488,12 @@ export default function OnboardingFlow() {
 
       {/* Step: Character Selection */}
       {step === "character" && (
-        <div className="flex flex-col items-center">
-          <h2 className="mb-2 text-center font-disp text-[1.8rem] leading-[1.1] text-ink">
-            Choose your companion
-          </h2>
-          <p className="mb-8 text-center font-body text-[0.88rem] text-ink-3">
-            You can always switch later.
-          </p>
-
-          <div className="mb-8 grid w-full grid-cols-2 gap-3">
-            {CHARACTERS.map((c) => (
-              <button
-                type="button"
-                key={c.id}
-                onClick={() => setSelectedCharacter(c.id)}
-                className={`flex flex-col items-start rounded-[6px] border p-4 text-left transition-all ${selectedCharacter === c.id
-                    ? "border-red bg-paper-2 shadow-[0_4px_20px_rgba(203,58,40,0.1)]"
-                    : "border-rule-soft bg-paper-2 hover:border-rule"
-                  }`}
-              >
-                <div className="mb-2 flex items-center gap-2.5">
-                  <div
-                    className={`flex h-9 w-9 items-center justify-center rounded-full border ${selectedCharacter === c.id
-                        ? "border-red bg-red text-paper"
-                        : "border-rule bg-paper text-ink"
-                      } font-disp text-[1.1rem] leading-none transition-colors`}
-                  >
-                    {c.name[0]}
-                  </div>
-                  <div>
-                    <span className="block font-disp text-[1.05rem] leading-none text-ink">
-                      {c.name}
-                    </span>
-                    <span className="block font-body text-[0.7rem] italic text-ink-3">
-                      {c.title}
-                    </span>
-                  </div>
-                </div>
-                <p className="font-body text-[0.75rem] leading-snug text-ink-3">
-                  {c.description}
-                </p>
-              </button>
-            ))}
-          </div>
-
-          <button
-            type="button"
-            onClick={handleComplete}
-            disabled={completeOnboarding.isPending}
-            className="rounded-[4px] bg-red px-8 py-3 font-body text-[0.85rem] tracking-[0.04em] text-paper transition-colors hover:bg-red-d disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {completeOnboarding.isPending
-              ? "Setting up..."
-              : "Start your journey"}
-          </button>
-        </div>
+        <CharacterStep
+          selectedCharacter={selectedCharacter}
+          setSelectedCharacter={setSelectedCharacter}
+          onComplete={handleComplete}
+          isPending={completeOnboarding.isPending}
+        />
       )}
 
       {/* Step: Completing */}

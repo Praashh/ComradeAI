@@ -4,7 +4,6 @@ import { useEffect, useRef, useImperativeHandle } from "react";
 import type React from "react";
 import { Crepe } from "@milkdown/crepe";
 import "@milkdown/crepe/theme/common/style.css";
-import "@milkdown/crepe/theme/classic.css";
 
 export interface MilkdownEditorHandle {
   getMarkdown: () => string;
@@ -32,6 +31,11 @@ export function MilkdownEditor({ onChange, defaultValue, ref }: MilkdownEditorPr
     const crepe = new Crepe({
       root: containerRef.current,
       defaultValue: defaultValue ?? "# Start writing...\n\nYour thoughts here.",
+      featureConfigs: {
+        [Crepe.Feature.Placeholder]: {
+          mode: "doc",
+        },
+      },
     });
 
     crepe.on((listener) => {

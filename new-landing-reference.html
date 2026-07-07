@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Comrade AI | Welcome Home</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,wght@0,400;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f5f3f2",
+                    "tertiary-fixed": "#e4e2e2",
+                    "on-secondary-container": "#636262",
+                    "inverse-on-surface": "#f2f0ef",
+                    "inverse-surface": "#303030",
+                    "secondary-container": "#e2dfde",
+                    "on-background": "#1b1c1b",
+                    "inverse-primary": "#ffb4a8",
+                    "primary-fixed-dim": "#ffb4a8",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed-variant": "#474746",
+                    "surface-container": "#efedec",
+                    "on-error": "#ffffff",
+                    "surface-container-high": "#e9e8e7",
+                    "on-surface-variant": "#5a413d",
+                    "on-error-container": "#93000a",
+                    "on-primary-fixed-variant": "#900c05",
+                    "primary-container": "#c93929",
+                    "on-primary-container": "#ffeeeb",
+                    "surface-variant": "#e4e2e1",
+                    "surface": "#fbf9f8",
+                    "secondary": "#5f5e5e",
+                    "on-tertiary-fixed": "#1b1c1c",
+                    "tertiary": "#565656",
+                    "surface-dim": "#dbdad9",
+                    "surface-container-highest": "#e4e2e1",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "outline": "#8e706b",
+                    "primary": "#a61f13",
+                    "error": "#ba1a1a",
+                    "outline-variant": "#e2beb9",
+                    "secondary-fixed": "#e5e2e1",
+                    "on-primary-fixed": "#410000",
+                    "error-container": "#ffdad6",
+                    "on-surface": "#1b1c1b",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-tint": "#b3291b",
+                    "surface-bright": "#fbf9f8",
+                    "on-tertiary-container": "#f3f1f1",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "primary-fixed": "#ffdad4",
+                    "on-tertiary-fixed-variant": "#464747",
+                    "tertiary-container": "#6e6e6e",
+                    "tertiary-fixed-dim": "#c7c6c6",
+                    "on-secondary": "#ffffff",
+                    "background": "#fbf9f8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "sm": "12px",
+                    "margin-desktop": "48px",
+                    "gutter": "24px",
+                    "xs": "4px",
+                    "xl": "64px",
+                    "lg": "40px",
+                    "base": "8px",
+                    "md": "24px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Literata"],
+                    "body-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "display-md": ["Literata"],
+                    "title-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-lg": ["28px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-md": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "title-md": ["18px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                    "label-md": ["12px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(251, 249, 248, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+        .text-balance {
+            text-wrap: balance;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-lg antialiased">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/70 backdrop-blur-xl border-b border-black/5 shadow-sm">
+<div class="flex justify-between items-center px-md py-sm max-w-[1440px] mx-auto">
+<div class="flex items-center gap-base">
+<span class="font-display-md text-display-md font-semibold text-primary">Comrade AI</span>
+</div>
+<div class="hidden md:flex items-center gap-lg">
+<a class="text-primary border-b-2 border-primary font-body-md transition-colors" href="#">Home</a>
+<a class="text-secondary hover:text-primary-container transition-colors font-body-md" href="#">Features</a>
+<a class="text-secondary hover:text-primary-container transition-colors font-body-md" href="#">Pricing</a>
+<a class="text-secondary hover:text-primary-container transition-colors font-body-md" href="#">Community</a>
+</div>
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-transform active:scale-95">account_circle</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-transform active:scale-95">settings</button>
+<button class="bg-primary text-on-primary px-md py-xs rounded-full font-label-md transition-transform active:scale-95">Get Started</button>
+</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<main class="pt-xl overflow-hidden">
+<section class="relative min-h-screen flex items-center overflow-hidden">
+<!-- Full-bleed Atmospheric Background -->
+<div class="absolute inset-0 z-0">
+<img alt="Serene Digital Sanctuary background" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEguJxsdMXwEV850u3Qj8jOMpIDznYOt8cIownG1rvaNWtQlinFH09BSYWpG-qkML-tBvIAV6vnGeAWssEigHpGX_PlGThQ1vCygkjV6viYlP4CqQboDACGaYZ3jxlgU0tTG8eyU4pRRRjAgK5N7X01UQ0c1O6NMM6nuXS96RfYj2aoXIAM8avsZqtlFYBPQ3UtrlA0xlw_KJIXiV5VvwKNrDcotsnBdLEe_vGSWSvFwvCY2UhfYBxDQM375JDIeXUfIRF27V-Gdk"/>
+<!-- Gradient overlay for text legibility on the left -->
+<div class="absolute inset-0 bg-gradient-to-r from-surface/60 via-surface/20 to-transparent"></div>
+</div>
+<!-- Integrated Content Container -->
+<div class="relative z-10 w-full max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="max-w-2xl animate-fade-in">
+<span class="inline-block px-md py-xs bg-primary/10 text-primary font-label-md rounded-full mb-md">WELCOME HOME</span>
+<h1 class="font-display-lg text-display-lg md:text-[64px] leading-tight mb-md text-balance text-on-background">
+        The friend who <span class="text-primary italic">listens</span>, understands, and <span class="text-primary">remembers</span>.
+      </h1>
+<p class="font-body-lg text-on-surface-variant mb-lg text-balance max-w-xl">
+        Comrade AI is your empathetic digital companion. Designed for digital well-being, it bridges the gap between technology and true human understanding through reflective journaling and voice-first interaction.
+      </p>
+<div class="flex flex-wrap gap-md">
+<button class="bg-primary text-on-primary px-xl py-md rounded-full font-title-md shadow-lg shadow-primary/20 hover:scale-105 transition-transform active:scale-95">
+          Start Your Journey
+        </button>
+<button class="bg-surface-container-highest/50 backdrop-blur-md px-xl py-md rounded-full font-title-md border border-outline-variant/30 hover:bg-surface-container-highest transition-colors active:scale-95">
+          Watch How it Works
+        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Bento Grid -->
+<section class="px-margin-mobile md:px-margin-desktop py-xl bg-surface-container-low/50">
+<div class="max-w-[1440px] mx-auto">
+<div class="mb-lg">
+<h2 class="font-display-md text-display-md mb-xs text-primary">Core Pillars</h2>
+<p class="font-body-md text-secondary">Advanced AI, human-centric design.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-md auto-rows-[320px]">
+<!-- Intelligent Journaling -->
+<div class="md:col-span-8 glass-card p-md rounded-xl flex flex-col justify-between overflow-hidden relative group">
+<div class="relative z-10">
+<span class="material-symbols-outlined text-primary text-[32px] mb-base">book_5</span>
+<h3 class="font-headline-lg text-headline-lg mb-base">Intelligent Journaling</h3>
+<p class="font-body-md text-secondary max-w-md">Beyond text on a screen. Comrade analyzes your emotional patterns over time, helping you uncover insights into your daily well-being through guided reflection.</p>
+</div>
+<div class="absolute bottom-0 right-0 w-1/2 h-full opacity-10 group-hover:opacity-20 transition-opacity pointer-events-none">
+<img class="w-full h-full object-cover" data-alt="Abstract visualization of a digital diary with glowing nodes and connecting lines, representing memory and emotional synthesis in a minimalist, crimson-tinted high-tech aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChpy3w9zHQQEtoOPs4e_932IIoDH2lByEHQVq6AKixwX36iatGgbPd-uAgj3WbHM88-Pl6qX5HKyiNYY7SxNhdzHuf4DR_JOZU-ERbTbxFF_kKXlFjLuRQWBG3dHxjBN_uIr0B2HQVX4PhSU9VHC93CSzqqyipu2wVPCB2KKysg0goZGXDiaWAv2qod_EBkUP-sUvGdxS4WajGab_uAv5xfwCpN6NqSrR5LYFC_t49uuvx-63cT5rpkuuBd47rhjb5j3HEPc7q30Y"/>
+</div>
+<button class="relative z-10 self-start font-label-md text-primary mt-md flex items-center gap-xs">
+                            Learn more <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+<!-- Voice / Hold -->
+<div class="md:col-span-4 bg-primary text-on-primary p-md rounded-xl flex flex-col items-center justify-center text-center shadow-md">
+<div class="w-24 h-24 rounded-full bg-white/20 flex items-center justify-center mb-md animate-pulse">
+<span class="material-symbols-outlined text-[48px]" style="font-variation-settings: 'FILL' 1;">mic</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg mb-xs">Hold to Speak</h3>
+<p class="font-body-md opacity-80 mb-md">Natural voice conversations that feel like talking to a real friend.</p>
+<div class="w-full h-1 bg-white/20 rounded-full overflow-hidden">
+<div class="h-full bg-white w-1/3 animate-[shimmer_2s_infinite]"></div>
+</div>
+</div>
+<!-- AskComrade -->
+<div class="md:col-span-4 glass-card p-md rounded-xl flex flex-col justify-end">
+<span class="material-symbols-outlined text-primary text-[32px] mb-base">chat_bubble</span>
+<h3 class="font-headline-lg text-headline-lg mb-base">AskComrade</h3>
+<p class="font-body-md text-secondary">Real-time empathetic support whenever you need a sounding board or a quiet moment of clarity.</p>
+</div>
+<!-- Emotional Insights -->
+<div class="md:col-span-8 glass-card p-md rounded-xl flex flex-row items-center gap-md">
+<div class="flex-1">
+<h3 class="font-headline-lg text-headline-lg mb-base">Emotional Cartography</h3>
+<p class="font-body-md text-secondary">Visualize your internal landscape. See how your moods shift across weeks and months with beautiful, data-driven visualizations.</p>
+</div>
+<div class="w-1/3 aspect-video bg-surface-container rounded-lg overflow-hidden border border-outline-variant/30">
+<img class="w-full h-full object-cover" data-alt="A sophisticated data visualization dashboard showing smooth, flowing waves of crimson and soft rose, representing emotional trends over time in a premium, clean UI interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwpFYCPw7mJVQhooxGAwA8xlg3goUPA0wIEBnjcpl_5bLr1HAG9NK2DTeBc5y5dS5zP-cyJ8s5xkeudHwOigJx4ddkHQB_dvgTkPxcvIplQfzsLzmMJdx9woCr_s8QyxQ_EIgINpTu1CNpKbhLJqLxAKt2JG1Oaze_WHo4RaOx8IDLZOU-e6kWDz0jkTQiigJK0IMsm9BsmQAwdSsJ3VOfy2hbOINX7qEyAV0YXANH6Nr83EpO3Uguix4k0KEdOygKb8Q1pU5Luls"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Value Proposition Section -->
+<section class="py-xl px-margin-mobile md:px-margin-desktop bg-surface">
+<div class="max-w-4xl mx-auto text-center">
+<h2 class="font-display-md text-display-md mb-lg">Your Privacy is Our <span class="text-primary italic">Sanctuary</span></h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<div class="flex flex-col items-center">
+<div class="w-12 h-12 bg-surface-container-high rounded-full flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-primary">security</span>
+</div>
+<h4 class="font-title-md mb-xs">End-to-End</h4>
+<p class="font-body-md text-secondary">Your journals are yours alone, encrypted at every step.</p>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-12 h-12 bg-surface-container-high rounded-full flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-primary">visibility_off</span>
+</div>
+<h4 class="font-title-md mb-xs">Zero Tracking</h4>
+<p class="font-body-md text-secondary">We never sell your data. We aren't an ad company.</p>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-12 h-12 bg-surface-container-high rounded-full flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-primary">verified_user</span>
+</div>
+<h4 class="font-title-md mb-xs">You Control</h4>
+<p class="font-body-md text-secondary">Delete any memory or interaction instantly, forever.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="px-margin-mobile md:px-margin-desktop py-xl mb-xl">
+<div class="max-w-[1440px] mx-auto glass-card rounded-[32px] p-xl flex flex-col md:flex-row items-center justify-between gap-xl relative overflow-hidden">
+<div class="absolute inset-0 -z-10 bg-gradient-to-br from-primary/5 to-transparent"></div>
+<div class="max-w-xl">
+<h2 class="font-display-md text-display-md mb-md">Ready to start your reflective journey?</h2>
+<p class="font-body-lg text-secondary mb-lg">Join over 50,000 users who found a better way to navigate their digital lives.</p>
+<div class="flex gap-md">
+<button class="bg-primary text-on-primary px-lg py-sm rounded-full font-title-md hover:shadow-lg transition-all">Download App</button>
+<button class="bg-surface-container-highest px-lg py-sm rounded-full font-title-md">Try Web Beta</button>
+</div>
+</div>
+<div class="w-full md:w-1/3 aspect-square rounded-2xl overflow-hidden shadow-xl rotate-3">
+<img class="w-full h-full object-cover" data-alt="A peaceful portrait of a person sitting in a modern, light-filled sunroom with a coffee cup, looking at a smartphone displaying the Comrade AI interface. The scene is bathed in warm natural light, emphasizing serenity and well-being." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4R5HtRWZkRUfe_FMaL_eOnMWYrhpTp9oETboIwCn2ENhRljSSNsm_JWOe9OMX7CuL1233E4VMGou_NN1satMMgy9dv2a2S-xReIy9rA1WWFI2gzA64YKSMN_wENAX4f1HGIUr7X3a9X7NStIbSyQWd1qXZ-WeLSHhJrGd2pJD3D1F6Iy4uwOZFi-WPie9TLYb93XWHvEoXKeuFP5m8AMTFBbifO6MgoF03YgC0EBpc8773s8e6BSMmijr8wefIrOktAbn7LBCJYA"/>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-xl bg-surface border-t border-outline-variant/30">
+<div class="flex flex-col items-center justify-center gap-md px-margin-desktop max-w-[1440px] mx-auto">
+<div class="font-display-lg text-display-lg text-primary">Comrade AI</div>
+<div class="flex gap-lg">
+<a class="text-secondary hover:text-primary transition-all font-label-md" href="#">About</a>
+<a class="text-secondary hover:text-primary transition-all font-label-md" href="#">Terms</a>
+<a class="text-secondary hover:text-primary transition-all font-label-md" href="#">Journaling Guide</a>
+</div>
+<div class="flex gap-md my-sm">
+<a class="w-10 h-10 rounded-full border border-outline-variant/30 flex items-center justify-center text-secondary hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">alternate_email</span>
+</a>
+<a class="w-10 h-10 rounded-full border border-outline-variant/30 flex items-center justify-center text-secondary hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">public</span>
+</a>
+</div>
+<p class="font-label-md text-label-md text-on-secondary-container">© 2024 Comrade AI. Built for Digital Well-being.</p>
+</div>
+</footer>
+<!-- Side Navigation (Mobile Hidden, shown as reference context) -->
+<div class="fixed left-0 top-0 h-full w-64 bg-surface-container-low/80 backdrop-blur-md border-r border-black/5 shadow-md -translate-x-full transition-transform duration-300 z-[60] md:hidden" id="sideNav">
+<div class="flex flex-col h-full p-md gap-base">
+<div class="flex items-center gap-sm mb-lg">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">bolt</span>
+</div>
+<div>
+<h2 class="font-display-md text-body-lg font-bold text-primary">Comrade AI</h2>
+<p class="text-[10px] text-secondary">Your Empathetic Companion</p>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-base">
+<a class="bg-primary text-on-primary rounded-full px-4 py-2 flex items-center gap-3 active:scale-98 transition-transform" href="#">
+<span class="material-symbols-outlined">book_5</span> Journal
+                </a>
+<a class="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-4 py-2 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">chat_bubble</span> Chat
+                </a>
+<a class="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-4 py-2 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">mic</span> Voice
+                </a>
+</nav>
+<button class="mt-auto bg-primary/10 text-primary w-full py-md rounded-xl font-title-md border border-primary/20">
+                Hold to Speak
+            </button>
+<div class="pt-md mt-md border-t border-outline-variant/30 flex flex-col gap-xs">
+<a class="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-4 py-1 flex items-center gap-3 text-sm" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span> Help
+                </a>
+<a class="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-4 py-1 flex items-center gap-3 text-sm" href="#">
+<span class="material-symbols-outlined text-[18px]">security</span> Privacy
+                </a>
+</div>
+</div>
+</div>
+<!-- Interaction Script -->
+<script>
+        // Simple Micro-interaction: Scroll reveal for navigation
+        let lastScroll = 0;
+        const nav = document.querySelector('nav');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll <= 0) {
+                nav.classList.remove('shadow-sm');
+                return;
+            }
+            if (currentScroll > lastScroll) {
+                // Downscroll
+                nav.style.transform = 'translateY(-100%)';
+            } else {
+                // Upscroll
+                nav.style.transform = 'translateY(0)';
+                nav.classList.add('shadow-md');
+            }
+            lastScroll = currentScroll;
+            nav.style.transition = 'transform 0.3s ease-out, background-color 0.3s';
+        });
+
+        // Toggle mobile nav (Simulated)
+        const menuBtn = document.querySelector('nav .material-symbols-outlined:first-child');
+        // In a real app we'd add a dedicated hamburger button for mobile, using account_circle for desktop
+    </script>
+</body></html>
