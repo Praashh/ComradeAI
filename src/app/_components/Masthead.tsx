@@ -1,13 +1,11 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import Link from "next/link";
 import { Show, UserButton } from "@clerk/nextjs";
 
 export default function Masthead() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
 
   const toggleMenu = useCallback(() => {
     setMenuOpen((prev) => !prev);
@@ -17,80 +15,52 @@ export default function Masthead() {
     setMenuOpen(false);
   }, []);
 
-  const handleScroll = useCallback(() => {
-    const currentScrollY = window.scrollY;
-    if (currentScrollY <= 50) {
-      setIsVisible(true);
-      return;
-    }
-    if (currentScrollY > lastScrollY) {
-      // Scroll down
-      setIsVisible(false);
-    } else {
-      // Scroll up
-      setIsVisible(true);
-    }
-    setLastScrollY(currentScrollY);
-  }, [lastScrollY]);
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [handleScroll]);
-
   return (
     <>
-      {/* Top Navigation Bar */}
-      <nav
-        className="fixed top-0 w-full z-50 bg-surface/70 backdrop-blur-xl border-b border-black/5 shadow-sm transition-transform duration-300"
-        style={{
-          transform: isVisible ? "translateY(0)" : "translateY(-100%)",
-        }}
-      >
-        <div className="flex justify-between items-center px-md py-sm max-w-[1440px] mx-auto">
-          <div className="flex items-center gap-base">
-            <Link href="/" className="font-display-md text-display-md font-semibold text-primary">
+      {/* Floating Navigation Bar */}
+      <div className="fixed top-4 left-0 right-0 z-50 px-margin-mobile tablet:px-margin-desktop flex justify-center">
+        <nav className="w-full max-w-5xl bg-surface/80 backdrop-blur-xl border border-black/5 rounded-full px-6 py-2.5 shadow-[0_4px_20px_rgba(33,28,22,0.05)] flex justify-between items-center">
+          <div className="flex items-center">
+            <Link href="/" className="font-display-md text-[20px] font-semibold text-primary tracking-tight transition-transform active:scale-98">
               ComradeAI
             </Link>
           </div>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden tablet:flex items-center gap-lg">
+          <div className="hidden tablet:flex items-center gap-6">
             <Show when="signed-out">
-              <Link href="/" className="text-primary border-b-2 border-primary font-body-md transition-colors">
+              <Link href="/" className="text-primary font-body-md font-semibold transition-colors text-sm">
                 Home
               </Link>
-              <Link href="#features" className="text-secondary hover:text-primary-container transition-colors font-body-md">
+              <Link href="#features" className="text-secondary hover:text-primary transition-colors font-body-md text-sm">
                 Features
               </Link>
-              <Link href="#cta" className="text-secondary hover:text-primary-container transition-colors font-body-md">
+              <Link href="#cta" className="text-secondary hover:text-primary transition-colors font-body-md text-sm">
                 Pricing
               </Link>
-              <Link href="#footer" className="text-secondary hover:text-primary-container transition-colors font-body-md">
+              <Link href="#footer" className="text-secondary hover:text-primary transition-colors font-body-md text-sm">
                 Community
               </Link>
             </Show>
 
             <Show when="signed-in">
-              <Link href="/write" className="text-secondary hover:text-primary-container transition-colors font-body-md">
+              <Link href="/write" className="text-secondary hover:text-primary transition-colors font-body-md text-sm">
                 Write
               </Link>
-              <Link href="/chat" className="text-secondary hover:text-primary-container transition-colors font-body-md">
+              <Link href="/chat" className="text-secondary hover:text-primary transition-colors font-body-md text-sm">
                 AskComrade
               </Link>
-              <Link href="/talk" className="text-secondary hover:text-primary-container transition-colors font-body-md">
+              <Link href="/talk" className="text-secondary hover:text-primary transition-colors font-body-md text-sm">
                 Voice
               </Link>
-              <Link href="/mind" className="text-secondary hover:text-primary-container transition-colors font-body-md">
+              <Link href="/mind" className="text-secondary hover:text-primary transition-colors font-body-md text-sm">
                 ComradeMind
               </Link>
             </Show>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-md">
+          <div className="flex items-center gap-4">
             <button
               type="button"
               onClick={toggleMenu}
@@ -101,12 +71,12 @@ export default function Masthead() {
             </button>
 
             <Show when="signed-out">
-              <Link href="/sign-in" className="material-symbols-outlined text-on-surface-variant hover:text-primary transition-transform active:scale-95">
+              <Link href="/sign-in" className="material-symbols-outlined text-on-surface-variant hover:text-primary transition-transform active:scale-95 text-[22px] flex items-center justify-center">
                 account_circle
               </Link>
               <Link href="/sign-up">
-                <button type="button" className="bg-primary text-on-primary px-md py-xs rounded-full font-label-md transition-transform active:scale-95 cursor-pointer">
-                  Get Started
+                <button type="button" className="bg-primary text-on-primary px-4 py-2 rounded-full text-xs font-semibold font-body tracking-wider transition-all hover:bg-primary/95 active:scale-95 cursor-pointer shadow-sm shadow-primary/10">
+                  GET STARTED
                 </button>
               </Link>
             </Show>
@@ -116,15 +86,15 @@ export default function Masthead() {
                 <UserButton
                   appearance={{
                     elements: {
-                      userButtonAvatarBox: "w-[28px] h-[28px] border border-black/5 hover:scale-105 transition-transform",
+                      userButtonAvatarBox: "w-[30px] h-[30px] border border-black/5 hover:scale-105 transition-transform",
                     },
                   }}
                 />
               </div>
             </Show>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </div>
 
       {/* Mobile Drawer Navigation Overlay */}
       {menuOpen && (
@@ -132,7 +102,7 @@ export default function Masthead() {
       )}
 
       <div
-        className={`fixed left-0 top-0 h-full w-64 bg-surface-container-low/95 backdrop-blur-md border-r border-black/5 shadow-md transition-transform duration-300 z-60 tablet:hidden flex flex-col p-md gap-base ${menuOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed right-4 top-4 h-[calc(100vh-32px)] w-64 bg-surface/95 backdrop-blur-xl border border-black/5 rounded-2xl shadow-2xl transition-transform duration-300 z-60 tablet:hidden flex flex-col p-6 gap-4 ${menuOpen ? "translate-x-0" : "translate-x-[calc(100%+32px)]"
           }`}
       >
         <div className="flex items-center gap-sm mb-lg">

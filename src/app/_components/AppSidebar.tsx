@@ -16,6 +16,7 @@ import {
   SidebarRail,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
+import { FeedbackDialog } from "./FeedbackDialog";
 
 const NAV_ITEMS = [
   { label: "Journal", href: "/write", icon: "book_5" },
@@ -112,6 +113,26 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
+            
+            {/* Feedback Dialog Trigger */}
+            <SidebarMenuItem>
+              <FeedbackDialog>
+                <SidebarMenuButton
+                  tooltip="Feedback"
+                  className="text-secondary hover:bg-surface-container rounded-xl cursor-pointer"
+                >
+                  <span
+                    className="material-symbols-outlined shrink-0 size-5 flex items-center justify-center"
+                    style={{ fontSize: "20px" }}
+                  >
+                    rate_review
+                  </span>
+                  <span className="truncate text-sm group-data-[collapsible=icon]:hidden">
+                    Feedback
+                  </span>
+                </SidebarMenuButton>
+              </FeedbackDialog>
+            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarFooter>
 
