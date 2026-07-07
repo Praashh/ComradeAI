@@ -16,7 +16,6 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/app/_components/AppSidebar";
 
@@ -107,20 +106,23 @@ function ConversationList({ activeId }: { activeId?: number }) {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <DialogClose render={<Button variant="outline" />}>
+            <DialogClose
+              className="px-5 py-2.5 rounded-full border border-black/10 bg-surface-container text-on-surface text-sm font-medium hover:bg-surface-container-high transition-colors cursor-pointer"
+            >
               Cancel
             </DialogClose>
-            <Button
-              variant="destructive"
+            <button
+              type="button"
               disabled={deleteConversation.isPending}
               onClick={() => {
                 if (deleteTarget) {
                   deleteConversation.mutate({ id: deleteTarget.id });
                 }
               }}
+              className="px-5 py-2.5 rounded-full bg-red text-white text-sm font-semibold hover:bg-red-d transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {deleteConversation.isPending ? "Deleting..." : "Delete"}
-            </Button>
+            </button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -129,6 +129,7 @@ function ChatView({ conversationId }: { conversationId: number }) {
     if (!trimmed || sendMessage.isPending) return;
     setOptimisticMessage(trimmed);
     setInput("");
+    if (inputRef.current) inputRef.current.style.height = "auto";
     sendMessage.mutate({ conversationId, content: trimmed });
   }, [input, conversationId, sendMessage]);
 
@@ -254,7 +255,7 @@ function ChatView({ conversationId }: { conversationId: number }) {
 
               {/* Input area */}
               <div className="shrink-0 border-t border-black/5 px-6 py-4 bg-background z-10">
-                <div className="mx-auto max-w-2xl flex items-center gap-2 bg-surface-container rounded-full px-4 py-2 shadow-sm border border-black/5">
+                <div className="mx-auto max-w-2xl flex items-end gap-2 bg-surface-container rounded-3xl px-4 py-2 shadow-sm border border-black/5">
                   <button type="button" className="w-8 h-8 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container-high transition-colors cursor-pointer" title="Add files">
                     <Plus size={20} weight="bold" />
                   </button>
@@ -266,7 +267,7 @@ function ChatView({ conversationId }: { conversationId: number }) {
                     placeholder="Speak your mind, I'm listening..."
                     aria-label="Type a message"
                     rows={1}
-                    className="flex-1 resize-none bg-transparent border-none px-2 py-1 text-on-surface text-[0.95rem] placeholder:text-secondary placeholder:italic focus:ring-0 focus:outline-none"
+                    className="flex-1 resize-none bg-transparent border-none px-2 py-1 text-on-surface text-[0.95rem] placeholder:text-secondary placeholder:italic focus:ring-0 focus:outline-none overflow-y-auto"
                     style={{ maxHeight: "120px" }}
                     onInput={(e) => {
                       const target = e.target as HTMLTextAreaElement;
