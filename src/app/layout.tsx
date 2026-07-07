@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
 
 import { type Metadata } from "next";
-import { Instrument_Serif, Newsreader, JetBrains_Mono, Inter, Literata } from "next/font/google";
+import { Instrument_Serif, Newsreader, JetBrains_Mono, Inter, Literata, Material_Symbols_Outlined } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/next";
 

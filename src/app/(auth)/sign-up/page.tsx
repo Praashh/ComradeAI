@@ -56,73 +56,33 @@ function EyeOffIcon() {
 }
 
 const OTP_LENGTH = 6;
+const OTP_INDICES = Array.from({ length: OTP_LENGTH }, (_, i) => i);
 
-export default function SignUpPage() {
-  const { isLoaded, signUp, setActive } = useSignUp();
-  const router = useRouter();
-
-  // Step: "form" | "verify"
-  const [step, setStep] = useState<"form" | "verify">("form");
-
-  // Form fields
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+/* ─── Verify OTP Step ─── */
+function VerifyOtpStep({
+  email,
+  signUp,
+  isLoaded,
+  setActive,
+  router,
+}: {
+  email: string;
+  signUp: NonNullable<ReturnType<typeof useSignUp>["signUp"]>;
+  isLoaded: boolean;
+  setActive: NonNullable<ReturnType<typeof useSignUp>["setActive"]>;
+  router: ReturnType<typeof useRouter>;
+}) {
+  const [otp, setOtp] = useState<string[]>(() => Array.from({ length: OTP_LENGTH }, () => ""));
+  const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // OTP
-  const [otp, setOtp] = useState<string[]>(() => Array.from({ length: OTP_LENGTH }, () => ""));
-  const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
-
-  /* ─── Sign-up form submit ─── */
-  const handleSubmit = useCallback(
-    async (e: FormEvent) => {
-      e.preventDefault();
-      if (!isLoaded || !signUp) return;
-
-      setError("");
-      setLoading(true);
-
-      try {
-        await signUp.create({
-          emailAddress: email,
-          password,
-        });
-
-        // Send email verification code
-        await signUp.prepareEmailAddressVerification({
-          strategy: "email_code",
-        });
-
-        setStep("verify");
-        // Focus first OTP input after the verify step renders
-        requestAnimationFrame(() => {
-          otpRefs.current[0]?.focus();
-        });
-      } catch (err: unknown) {
-        const clerkError = err as { errors?: Array<{ longMessage?: string; message?: string }> };
-        const message =
-          clerkError.errors?.[0]?.longMessage ??
-          clerkError.errors?.[0]?.message ??
-          "Something went wrong. Please try again.";
-        setError(message);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [isLoaded, signUp, email, password],
-  );
-
-  /* ─── OTP input handlers ─── */
   const handleOtpChange = useCallback(
     (index: number, value: string) => {
-      if (!/^\d*$/.test(value)) return; // digits only
+      if (!/^\d*$/.test(value)) return;
       const next = [...otp];
-      next[index] = value.slice(-1); // only last digit
+      next[index] = value.slice(-1);
       setOtp(next);
-
-      // Auto-advance
       if (value && index < OTP_LENGTH - 1) {
         otpRefs.current[index + 1]?.focus();
       }
@@ -149,14 +109,12 @@ export default function SignUpPage() {
         next[i] = pasted[i] ?? "";
       }
       setOtp(next);
-      // Focus last filled or last input
       const focusIdx = Math.min(pasted.length, OTP_LENGTH - 1);
       otpRefs.current[focusIdx]?.focus();
     },
     [otp],
   );
 
-  /* ─── Verify OTP ─── */
   const handleVerify = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
@@ -172,10 +130,7 @@ export default function SignUpPage() {
       setLoading(true);
 
       try {
-        const result = await signUp.attemptEmailAddressVerification({
-          code,
-        });
-
+        const result = await signUp.attemptEmailAddressVerification({ code });
         if (result.status === "complete" && result.createdSessionId) {
           await setActive({ session: result.createdSessionId });
           router.push("/onboarding");
@@ -194,10 +149,108 @@ export default function SignUpPage() {
     [isLoaded, signUp, otp, setActive, router],
   );
 
-  /* ─── Google OAuth ─── */
+  return (
+    <div className="auth-card">
+      <h1 className="auth-heading">Check your email</h1>
+      <p className="auth-subheading">
+        We sent a 6-digit code to <strong>{email}</strong>
+      </p>
+
+      {error && <p className="auth-error">{error}</p>}
+
+      <form onSubmit={handleVerify} className="auth-form">
+        <div className="auth-otp-group">
+          {OTP_INDICES.map((i) => (
+            <input
+              key={`otp-digit-${i}`}
+              ref={(el) => { otpRefs.current[i] = el; }}
+              type="text"
+              inputMode="numeric"
+              maxLength={i}
+              className="auth-otp-input"
+              value={otp[i]}
+              onChange={(e) => handleOtpChange(i, e.target.value)}
+              onKeyDown={(e) => handleOtpKeyDown(i, e)}
+              onPaste={i === 0 ? handleOtpPaste : undefined}
+              autoComplete="one-time-code"
+              aria-label={`Digit ${i + 1}`}
+              id={`otp-${i}`}
+            />
+          ))}
+        </div>
+
+        <button
+          type="submit"
+          className="auth-btn-primary"
+          disabled={loading || !isLoaded}
+          id="verify-submit"
+        >
+          {loading && <span className="auth-spinner" />}
+          {loading ? "Verifying…" : "Verify email"}
+        </button>
+      </form>
+
+      <p className="auth-footer-text">
+        Didn&rsquo;t receive a code?{" "}
+        <button
+          type="button"
+          className="auth-link"
+          onClick={async () => {
+            try {
+              await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
+              setError("");
+            } catch {
+              setError("Could not resend code. Please try again.");
+            }
+          }}
+        >
+          Resend
+        </button>
+      </p>
+    </div>
+  );
+}
+
+/* ─── Main Sign-Up Page ─── */
+export default function SignUpPage() {
+  const { isLoaded, signUp, setActive } = useSignUp();
+  const router = useRouter();
+
+  const [step, setStep] = useState<"form" | "verify">("form");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = useCallback(
+    async (e: FormEvent) => {
+      e.preventDefault();
+      if (!isLoaded || !signUp) return;
+
+      setError("");
+      setLoading(true);
+
+      try {
+        await signUp.create({ emailAddress: email, password });
+        await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
+        setStep("verify");
+      } catch (err: unknown) {
+        const clerkError = err as { errors?: Array<{ longMessage?: string; message?: string }> };
+        const message =
+          clerkError.errors?.[0]?.longMessage ??
+          clerkError.errors?.[0]?.message ??
+          "Something went wrong. Please try again.";
+        setError(message);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [isLoaded, signUp, email, password],
+  );
+
   const handleGoogleSignUp = useCallback(async () => {
     if (!isLoaded || !signUp) return;
-
     try {
       await signUp.authenticateWithRedirect({
         strategy: "oauth_google",
@@ -212,72 +265,18 @@ export default function SignUpPage() {
     }
   }, [isLoaded, signUp]);
 
-  /* ─── Verify step UI ─── */
-  if (step === "verify") {
+  if (step === "verify" && signUp) {
     return (
-      <div className="auth-card">
-        <h1 className="auth-heading">Check your email</h1>
-        <p className="auth-subheading">
-          We sent a 6-digit code to <strong>{email}</strong>
-        </p>
-
-        {error && <p className="auth-error">{error}</p>}
-
-        <form onSubmit={handleVerify} className="auth-form">
-          <div className="auth-otp-group">
-            {otp.map((digit, i) => (
-              <input
-                key={`otp-digit-${i}`}
-                ref={(el) => { otpRefs.current[i] = el; }}
-                type="text"
-                inputMode="numeric"
-                maxLength={i}
-                className="auth-otp-input"
-                value={digit}
-                onChange={(e) => handleOtpChange(i, e.target.value)}
-                onKeyDown={(e) => handleOtpKeyDown(i, e)}
-                onPaste={i === 0 ? handleOtpPaste : undefined}
-                autoComplete="one-time-code"
-                aria-label={`Digit ${i + 1}`}
-                id={`otp-${i}`}
-              />
-            ))}
-          </div>
-
-          <button
-            type="submit"
-            className="auth-btn-primary"
-            disabled={loading || !isLoaded}
-            id="verify-submit"
-          >
-            {loading && <span className="auth-spinner" />}
-            {loading ? "Verifying…" : "Verify email"}
-          </button>
-        </form>
-
-        <p className="auth-footer-text">
-          Didn&rsquo;t receive a code?{" "}
-          <button
-            type="button"
-            className="auth-link"
-            onClick={async () => {
-              if (!signUp) return;
-              try {
-                await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
-                setError("");
-              } catch {
-                setError("Could not resend code. Please try again.");
-              }
-            }}
-          >
-            Resend
-          </button>
-        </p>
-      </div>
+      <VerifyOtpStep
+        email={email}
+        signUp={signUp}
+        isLoaded={isLoaded}
+        setActive={setActive}
+        router={router}
+      />
     );
   }
 
-  /* ─── Sign-up form UI ─── */
   return (
     <div className="auth-card">
       <h1 className="auth-heading">
@@ -296,7 +295,6 @@ export default function SignUpPage() {
       </h1>
       <p className="auth-subheading">Start your journey with Comrade AI</p>
 
-      {/* Google OAuth */}
       <button
         type="button"
         className="auth-social-btn"
@@ -311,10 +309,8 @@ export default function SignUpPage() {
         <span>or continue with email</span>
       </div>
 
-      {/* Error */}
       {error && <p className="auth-error">{error}</p>}
 
-      {/* Email + Password form */}
       <form onSubmit={handleSubmit} className="auth-form">
         <div className="auth-field">
           <label htmlFor="sign-up-email" className="auth-label">

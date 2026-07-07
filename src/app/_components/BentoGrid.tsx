@@ -68,11 +68,13 @@ export default function BentoGrid() {
                 Visualize your internal landscape. See how your moods shift across weeks and months with beautiful, data-driven visualizations.
               </p>
             </div>
-            <div className="w-1/3 aspect-video bg-surface-container rounded-lg overflow-hidden border border-outline-variant/30 shrink-0">
-              <img
-                className="w-full h-full object-cover"
+            <div className="w-1/3 aspect-video bg-surface-container rounded-lg overflow-hidden border border-outline-variant/30 shrink-0 relative">
+              <Image
+                className="object-cover"
                 alt="Emotional trends chart visualization"
                 src="/images/emotional-cartography .jpg"
+                fill
+                sizes="33vw"
               />
             </div>
           </Link>

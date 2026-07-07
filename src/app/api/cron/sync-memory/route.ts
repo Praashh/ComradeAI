@@ -27,23 +27,18 @@ export async function GET(req: Request) {
     );
 
   console.log('[SYNC-MEMORY]: got this stale', stale);
-  let processed = 0;
 
-  for (const journal of stale) {
-    try {
+  const results = await Promise.allSettled(
+    stale.map(async (journal) => {
       await memoryInstance.saveInMemory(journal.content, journal.clerkId);
-
       await db
         .update(journals)
         .set({ memorySyncedAt: new Date() })
         .where(eq(journals.id, journal.id));
-      processed++;
-    } catch (error) {
-      console.error(
-        `[CRON:SYNC-MEMORY] Failed for journal ${journal.id}: ${String(error)}`,
-      );
-    }
-  }
+    }),
+  );
+
+  const processed = results.filter((r) => r.status === "fulfilled").length;
 
   return NextResponse.json({
     success: true,

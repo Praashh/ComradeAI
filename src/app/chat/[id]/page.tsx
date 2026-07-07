@@ -181,6 +181,7 @@ function ChatView({ conversationId }: { conversationId: number }) {
               {/* Chat header */}
               <div className="shrink-0 px-6 py-4 border-b border-black/5 flex items-center gap-sm z-10">
                 <button
+                  type="button"
                   onClick={() => router.push("/chat")}
                   className="material-symbols-outlined p-[8px] hover:bg-surface-container rounded-full text-secondary transition-colors cursor-pointer"
                   title="Back to Chats"
@@ -243,6 +244,7 @@ function ChatView({ conversationId }: { conversationId: number }) {
                 <div className="shrink-0 flex flex-wrap gap-2 justify-center px-6 m-2 z-10">
                   {SUGGESTIONS.map((sug, idx) => (
                     <button
+                      type="button"
                       key={idx}
                       onClick={() => handleSuggestionClick(sug)}
                       className="bg-surface-container-lowest border border-black/5 hover:bg-surface-container transition-colors rounded-full px-4 py-2 text-xs font-semibold text-primary cursor-pointer shadow-sm"

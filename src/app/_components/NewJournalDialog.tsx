@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/trpc/react";
 import * as Icons from "@phosphor-icons/react";
@@ -54,15 +54,40 @@ interface NewJournalDialogProps {
   defaultOpen?: boolean;
 }
 
+type FormState = {
+  title: string;
+  mood: string;
+  selectedColor: string;
+  selectedIcon: string;
+  errorMsg: string;
+};
+
+const initialFormState: FormState = {
+  title: "",
+  mood: "",
+  selectedColor: "#6E56CF",
+  selectedIcon: "MaskHappy",
+  errorMsg: "",
+};
+
+type FormAction =
+  | { type: "SET_FIELD"; field: keyof FormState; value: string }
+  | { type: "RESET" };
+
+function formReducer(state: FormState, action: FormAction): FormState {
+  switch (action.type) {
+    case "SET_FIELD":
+      return { ...state, [action.field]: action.value };
+    case "RESET":
+      return initialFormState;
+  }
+}
+
 export default function NewJournalDialog({ children, defaultOpen = false }: NewJournalDialogProps) {
   const router = useRouter();
   const { refetch: refetchJournals } = useJournals();
   const [open, setOpen] = useState(defaultOpen);
-  const [title, setTitle] = useState("");
-  const [mood, setMood] = useState("");
-  const [selectedColor, setSelectedColor] = useState("#6E56CF");
-  const [selectedIcon, setSelectedIcon] = useState("MaskHappy");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [form, dispatch] = useReducer(formReducer, initialFormState);
 
   const createJournal = api.journal.create.useMutation({
     onSuccess: (data) => {
@@ -71,37 +96,32 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
       router.push(`/write/${data.journal.id}`);
     },
     onError: (err) => {
-      setErrorMsg(err.message || "Failed to create journal. Please try again.");
+      dispatch({ type: "SET_FIELD", field: "errorMsg", value: err.message || "Failed to create journal. Please try again." });
     }
   });
 
   const handleDone = () => {
-    if (!title.trim()) {
-      setErrorMsg("Please enter a journal name.");
+    if (!form.title.trim()) {
+      dispatch({ type: "SET_FIELD", field: "errorMsg", value: "Please enter a journal name." });
       return;
     }
-    setErrorMsg("");
+    dispatch({ type: "SET_FIELD", field: "errorMsg", value: "" });
     createJournal.mutate({
-      title: title.trim(),
-      mood: mood.trim() || undefined,
-      icon: selectedIcon,
-      color: selectedColor,
+      title: form.title.trim(),
+      mood: form.mood.trim() || undefined,
+      icon: form.selectedIcon,
+      color: form.selectedColor,
     });
   };
 
   const handleOpenChange = (nextOpen: boolean) => {
     setOpen(nextOpen);
     if (!nextOpen) {
-      // Reset form on close
-      setTitle("");
-      setMood("");
-      setSelectedColor("#6E56CF");
-      setSelectedIcon("MasksPlay");
-      setErrorMsg("");
+      dispatch({ type: "RESET" });
     }
   };
 
-  const PreviewIcon = (Icons[selectedIcon as keyof typeof Icons] ?? Icons.BookOpen) as React.ElementType;
+  const PreviewIcon = (Icons[form.selectedIcon as keyof typeof Icons] ?? Icons.BookOpen) as React.ElementType;
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -116,7 +136,7 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
         <div className="flex justify-center pt-2">
           <div
             className="w-24 h-24 rounded-full flex items-center justify-center text-white shadow-[0_4px_16px_rgba(33,28,22,0.12)] transition-all duration-500 ease-out hover:scale-105"
-            style={{ background: selectedColor }}
+            style={{ background: form.selectedColor }}
           >
             <PreviewIcon size={48} weight="duotone" />
           </div>
@@ -128,8 +148,8 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
           <input
             type="text"
             placeholder="Journal Name"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={form.title}
+            onChange={(e) => dispatch({ type: "SET_FIELD", field: "title", value: e.target.value })}
             aria-label="Journal name"
             className="w-full bg-transparent border-b-[1.5px] border-[var(--rule-soft)] focus:border-[var(--rule)] px-2 py-3 text-center text-[var(--ink)] placeholder-[var(--ink-3)] font-disp text-2xl font-normal transition-colors focus:outline-none"
           />
@@ -139,8 +159,8 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
             <input
               type="text"
               placeholder="How are you feeling today?"
-              value={mood}
-              onChange={(e) => setMood(e.target.value)}
+              value={form.mood}
+              onChange={(e) => dispatch({ type: "SET_FIELD", field: "mood", value: e.target.value })}
               aria-label="Current mood"
               className="w-full bg-transparent border-b border-[var(--rule-soft)] focus:border-[var(--rule)] px-2 py-2 text-center text-[var(--ink)] placeholder-[var(--ink-3)] font-body text-sm italic transition-colors focus:outline-none"
             />
@@ -150,8 +170,8 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
                 <button
                   key={m.text}
                   type="button"
-                  onClick={() => setMood(m.text)}
-                  className={`text-[11px] px-2.5 py-1 rounded-full border transition-all cursor-pointer font-body ${mood.toLowerCase() === m.text.toLowerCase()
+                  onClick={() => dispatch({ type: "SET_FIELD", field: "mood", value: m.text })}
+                  className={`text-[11px] px-2.5 py-1 rounded-full border transition-all cursor-pointer font-body ${form.mood.toLowerCase() === m.text.toLowerCase()
                     ? "border-[var(--red)] text-[var(--paper)]"
                     : "border-[var(--rule-soft)] text-[var(--ink-3)] hover:border-[var(--rule)] hover:text-[var(--ink-2)]"
                     }`}
@@ -168,12 +188,12 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
           <span className="text-[10px] tracking-[0.1em] uppercase text-[var(--ink-3)] font-body font-medium px-1">Select theme color</span>
           <div className="flex gap-2 overflow-x-auto p-2 no-scrollbar scroll-smooth">
             {COLOR_OPTIONS.map((c) => {
-              const isSelected = selectedColor === c.value;
+              const isSelected = form.selectedColor === c.value;
               return (
                 <button
                   key={c.value}
                   type="button"
-                  onClick={() => setSelectedColor(c.value)}
+                  onClick={() => dispatch({ type: "SET_FIELD", field: "selectedColor", value: c.value })}
                   className={`w-7 h-7 rounded-full shrink-0 transition-all cursor-pointer relative flex items-center justify-center hover:scale-110 active:scale-95 ${isSelected ? "ring-2 ring-[var(--ink)] ring-offset-2 ring-offset-[var(--paper-2)]" : "opacity-75 hover:opacity-100"
                     }`}
                   style={{ background: c.value }}
@@ -194,12 +214,12 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
           <div className="grid grid-cols-7 gap-2 justify-items-center max-h-[200px] overflow-y-auto p-2 border border-[var(--rule-soft)] rounded-[6px] no-scrollbar">
             {ICON_OPTIONS.map((iconName) => {
               const IconComp = (Icons[iconName as keyof typeof Icons] ?? Icons.BookOpen) as React.ElementType;
-              const isSelected = selectedIcon === iconName;
+              const isSelected = form.selectedIcon === iconName;
               return (
                 <button
                   key={iconName}
                   type="button"
-                  onClick={() => setSelectedIcon(iconName)}
+                  onClick={() => dispatch({ type: "SET_FIELD", field: "selectedIcon", value: iconName })}
                   className={`w-9 h-9 rounded-full flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 ${isSelected
                     ? "bg-[var(--ink)] text-[var(--paper)] shadow-sm scale-105"
                     : "text-[var(--ink-3)] hover:text-[var(--ink)] hover:bg-[var(--paper-2)]"
@@ -212,9 +232,9 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
           </div>
         </div>
 
-        {errorMsg && (
+        {form.errorMsg && (
           <p className="text-[var(--red)] text-xs text-center font-body font-medium animate-pulse">
-            {errorMsg}
+            {form.errorMsg}
           </p>
         )}
 

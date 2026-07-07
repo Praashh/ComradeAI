@@ -59,23 +59,24 @@ function ConversationList({ activeId }: { activeId?: number }) {
           return (
             <div
               key={conv.id}
-              onClick={() => router.push(`/chat/${conv.id}`)}
-              className={`p-md rounded-2xl transition-all cursor-pointer border ${
+              className={`relative p-md rounded-2xl transition-all cursor-pointer border ${
                 isActive
                   ? "bg-surface-container-lowest border-black/5 card-shadow"
                   : "bg-surface hover:bg-surface-container border-transparent"
               }`}
             >
-              <div className="flex justify-between items-center mb-[4px]">
+              <Link href={`/chat/${conv.id}`} className="absolute inset-0 rounded-2xl">
+                <span className="sr-only">Open {conv.title ?? "New conversation"}</span>
+              </Link>
+              <div className="relative flex justify-between items-center mb-[4px]">
                 <h3 className={`font-title-md text-title-md truncate flex-1 transition-colors ${isActive ? "text-primary font-semibold" : ""}`}>
                   {conv.title ?? "New conversation"}
                 </h3>
                 <button
                   type="button"
-                  className="p-1 rounded hover:bg-surface-container text-secondary hover:text-primary transition-all cursor-pointer shrink-0 ml-2"
+                  className="relative z-10 p-1 rounded hover:bg-surface-container text-secondary hover:text-primary transition-all cursor-pointer shrink-0 ml-2"
                   title="Delete"
                   onClick={(e) => {
-                    e.preventDefault();
                     e.stopPropagation();
                     setDeleteTarget({
                       id: conv.id,

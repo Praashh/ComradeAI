@@ -34,7 +34,7 @@ export default function Masthead() {
   }, [lastScrollY]);
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -92,8 +92,10 @@ export default function Masthead() {
           {/* Action Buttons */}
           <div className="flex items-center gap-md">
             <button
+              type="button"
               onClick={toggleMenu}
               className="landing-hamburger material-symbols-outlined text-on-surface-variant hover:text-primary transition-transform active:scale-95 cursor-pointer"
+              aria-label="Toggle menu"
             >
               menu
             </button>
@@ -103,7 +105,7 @@ export default function Masthead() {
                 account_circle
               </Link>
               <Link href="/sign-up">
-                <button className="bg-primary text-on-primary px-md py-xs rounded-full font-label-md transition-transform active:scale-95 cursor-pointer">
+                <button type="button" className="bg-primary text-on-primary px-md py-xs rounded-full font-label-md transition-transform active:scale-95 cursor-pointer">
                   Get Started
                 </button>
               </Link>
@@ -126,7 +128,7 @@ export default function Masthead() {
 
       {/* Mobile Drawer Navigation Overlay */}
       {menuOpen && (
-        <div className="fixed inset-0 z-55 bg-black/40 backdrop-blur-sm tablet:hidden" onClick={closeMenu} />
+        <button type="button" className="fixed inset-0 z-55 bg-black/40 backdrop-blur-sm tablet:hidden border-none cursor-default" onClick={closeMenu} aria-label="Close menu" />
       )}
 
       <div
@@ -216,7 +218,7 @@ export default function Masthead() {
 
         <Show when="signed-in">
           <Link href="/talk" onClick={closeMenu}>
-            <button className="mt-auto bg-primary/10 text-primary w-full py-md rounded-xl font-title-md border border-primary/20 cursor-pointer hover:bg-primary/20 transition-colors">
+            <button type="button" className="mt-auto bg-primary/10 text-primary w-full py-md rounded-xl font-title-md border border-primary/20 cursor-pointer hover:bg-primary/20 transition-colors">
               Talk to Comrade
             </button>
           </Link>

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Hero() {
@@ -7,10 +8,13 @@ export default function Hero() {
     <section className="relative min-h-screen flex items-center overflow-hidden">
       {/* Full-bleed Atmospheric Background */}
       <div className="absolute inset-0 z-0">
-        <img
+        <Image
           alt="Serene Digital Sanctuary background"
-          className="w-full h-full object-cover"
+          className="object-cover"
           src="/images/hero-bg.jpg"
+          fill
+          sizes="100vw"
+          priority
         />
         {/* Gradient overlay for text legibility on the left */}
         <div className="absolute inset-0 bg-gradient-to-r from-surface/60 via-surface/20 to-transparent"></div>
@@ -30,12 +34,12 @@ export default function Hero() {
           </p>
           <div className="flex flex-wrap gap-md">
             <Link href="/write">
-              <button className="bg-primary text-on-primary px-xl py-md rounded-full font-title-md shadow-lg shadow-primary/20 hover:scale-105 transition-transform active:scale-95 cursor-pointer">
+              <button type="button" className="bg-primary text-on-primary px-xl py-md rounded-full font-title-md shadow-lg shadow-primary/20 hover:scale-105 transition-transform active:scale-95 cursor-pointer">
                 Start Your Journey
               </button>
             </Link>
             <Link href="#features">
-              <button className="bg-surface-container-highest/50 backdrop-blur-md px-xl py-md rounded-full font-title-md border border-outline-variant/30 hover:bg-surface-container-highest transition-colors active:scale-95 cursor-pointer">
+              <button type="button" className="bg-surface-container-highest/50 backdrop-blur-md px-xl py-md rounded-full font-title-md border border-outline-variant/30 hover:bg-surface-container-highest transition-colors active:scale-95 cursor-pointer">
                 Watch How it Works
               </button>
             </Link>

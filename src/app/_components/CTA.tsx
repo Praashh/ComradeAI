@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 
 export default function CTA() {
@@ -16,22 +17,24 @@ export default function CTA() {
           </p>
           <div className="flex gap-md flex-wrap">
             <Link href="/write">
-              <button className="bg-primary text-on-primary px-lg py-sm rounded-full font-title-md hover:shadow-lg transition-all cursor-pointer active:scale-95">
+              <button type="button" className="bg-primary text-on-primary px-lg py-sm rounded-full font-title-md hover:shadow-lg transition-all cursor-pointer active:scale-95">
                 Download App
               </button>
             </Link>
             <Link href="/write">
-              <button className="bg-surface-container-highest px-lg py-sm rounded-full font-title-md cursor-pointer hover:bg-surface-container-highest/80 transition-all active:scale-95">
+              <button type="button" className="bg-surface-container-highest px-lg py-sm rounded-full font-title-md cursor-pointer hover:bg-surface-container-highest/80 transition-all active:scale-95">
                 Try Web Beta
               </button>
             </Link>
           </div>
         </div>
-        <div className="w-full tablet:w-1/3 aspect-square rounded-2xl overflow-hidden shadow-xl rotate-3 shrink-0">
-          <img
-            className="w-full h-full object-cover"
+        <div className="w-full tablet:w-1/3 aspect-square rounded-2xl overflow-hidden shadow-xl rotate-3 shrink-0 relative">
+          <Image
+            className="object-cover"
             alt="Person sitting in a light-filled sunroom reflecting"
             src="/images/cta.jpg"
+            fill
+            sizes="(min-width: 860px) 33vw, 100vw"
           />
         </div>
       </div>
