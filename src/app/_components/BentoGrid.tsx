@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import intelligentJournaling from "public/images/intelligent-journaling.png"
 
 export default function BentoGrid() {
   return (
@@ -28,7 +27,7 @@ export default function BentoGrid() {
                 alt="Abstract visualization of a digital diary"
                 width={100}
                 height={100}
-                src={intelligentJournaling}
+                src={"/images/intelligent-journaling.png"}
               />
             </div>
             <Link href="/write" className="relative z-10 self-start font-label-md text-primary mt-md flex items-center gap-xs hover:underline">
