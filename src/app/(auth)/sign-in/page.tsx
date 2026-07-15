@@ -109,20 +109,7 @@ export default function SignInPage() {
 
   return (
     <div className="auth-card">
-      <h1 className="auth-heading">
-        Welcome back
-        <svg
-          viewBox="0 0 180 12"
-          preserveAspectRatio="none"
-          style={{ width: "60%", height: "0.25em", display: "block", marginTop: 4, overflow: "visible" }}
-        >
-          <path
-            className="mark auto"
-            d="M3 7 C 40 2, 80 11, 130 5 C 155 3, 170 8, 178 5"
-            pathLength={1}
-          />
-        </svg>
-      </h1>
+      <h1 className="auth-heading">Welcome back</h1>
       <p className="auth-subheading">Sign in to continue to Comrade AI</p>
 
       {/* Google OAuth */}

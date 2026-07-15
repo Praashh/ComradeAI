@@ -5,6 +5,7 @@ import { conversationRouter } from "./routers/conversation";
 import { mindRouter } from "./routers/mind";
 import { onboardingRouter } from "./routers/onboarding";
 import { feedbackRouter } from "./routers/feedback";
+import { voiceRouter } from "./routers/voice";
 
 /**
  * This is the primary router for your server.
@@ -18,6 +19,7 @@ export const appRouter = createTRPCRouter({
   mind: mindRouter,
   onboarding: onboardingRouter,
   feedback: feedbackRouter,
+  voice: voiceRouter,
 });
 
 // export type definition of API

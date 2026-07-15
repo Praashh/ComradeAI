@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "voice_seconds_used" integer DEFAULT 0 NOT NULL;

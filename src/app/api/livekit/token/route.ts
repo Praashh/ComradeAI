@@ -34,16 +34,27 @@ export async function POST(req: NextRequest) {
     ? (body.speaker as CharacterId)
     : DEFAULT_CHARACTER;
 
-  // Fetch user data for room metadata
+  // Fetch user data for room metadata + voice quota
   const user = await db
     .select({
       firstName: users.firstName,
       nickname: users.nickname,
       comradeSummary: users.comradeSummary,
+      voiceSecondsUsed: users.voiceSecondsUsed,
     })
     .from(users)
     .where(eq(users.clerkId, userId))
     .then((rows) => rows[0]);
+
+  // Check voice quota
+  const VOICE_QUOTA_SECONDS = 300;
+  const remaining = VOICE_QUOTA_SECONDS - (user?.voiceSecondsUsed ?? 0);
+  if (remaining <= 0) {
+    return NextResponse.json(
+      { error: "quota_exceeded", message: "Voice quota exceeded. Upgrade to continue." },
+      { status: 403 },
+    );
+  }
 
   const roomName = `comrade-${userId}-${Date.now()}`;
   const participantIdentity = userId;
@@ -66,9 +77,11 @@ export async function POST(req: NextRequest) {
   });
   console.log("[LIVEKIT] Room created:", room.name, "metadata:", room.metadata);
 
+  // TTL matches remaining quota so LiveKit hard-caps the session
+  const ttlSeconds = Math.min(remaining + 30, VOICE_QUOTA_SECONDS); // +30s grace for connection overhead
   const token = new AccessToken(env.LIVEKIT_API_KEY, env.LIVEKIT_API_SECRET, {
     identity: participantIdentity,
-    ttl: "10m",
+    ttl: `${ttlSeconds}s`,
   });
 
   token.addGrant({
