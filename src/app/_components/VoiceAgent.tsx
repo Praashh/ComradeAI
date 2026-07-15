@@ -26,6 +26,8 @@ type ConnectionDetails = {
 
 type CallState = "idle" | "connecting" | "active" | "ended";
 
+const WARNING_THRESHOLD = 30; // show warning when 30s remain
+
 function formatDuration(seconds: number) {
   const m = Math.floor(seconds / 60);
   const s = seconds % 60;
@@ -40,7 +42,15 @@ export default function VoiceAgent() {
   const durationIntervalRef =
     useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const { data: userStatus, isPending: isuserStatusPending } = api.onboarding.getOnboardingStatus.useQuery();
+  const { data: userStatus, isPending: isuserStatusPending } =
+    api.onboarding.getOnboardingStatus.useQuery();
+  const {
+    data: quota,
+    isPending: isQuotaPending,
+    refetch: refetchQuota,
+  } = api.voice.getQuota.useQuery();
+  const recordUsage = api.voice.recordUsage.useMutation();
+
   const [selectedSpeaker, setSelectedSpeaker] = useState<CharacterId>(
     DEFAULT_CHARACTER,
   );
@@ -54,7 +64,24 @@ export default function VoiceAgent() {
   const activeCharacter = CHARACTERS.find((c) => c.id === selectedSpeaker)!;
   const activeSpeakerName = activeCharacter.name;
 
+  const remaining = quota?.remaining ?? 0;
+  const quotaExhausted = quota != null && remaining <= 0;
+
+  // Auto-disconnect when quota runs out during a call
+  const endCallRef = useRef<(() => void) | null>(null);
+
+  useEffect(() => {
+    if (
+      callState === "active" &&
+      quota != null &&
+      callDuration >= remaining
+    ) {
+      endCallRef.current?.();
+    }
+  }, [callDuration, callState, quota, remaining]);
+
   const startCall = useCallback(async () => {
+    if (quotaExhausted) return;
     setCallState("connecting");
     try {
       const res = await fetch("/api/livekit/token", {
@@ -62,7 +89,15 @@ export default function VoiceAgent() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ speaker: selectedSpeaker }),
       });
-      if (!res.ok) throw new Error("Failed to get token");
+      if (!res.ok) {
+        const data = (await res.json()) as { error?: string };
+        if (data.error === "quota_exceeded") {
+          void refetchQuota();
+          setCallState("idle");
+          return;
+        }
+        throw new Error("Failed to get token");
+      }
       const details = (await res.json()) as ConnectionDetails;
       setConnectionDetails(details);
       setCallState("active");
@@ -75,7 +110,7 @@ export default function VoiceAgent() {
     } catch {
       setCallState("idle");
     }
-  }, [selectedSpeaker]);
+  }, [selectedSpeaker, quotaExhausted, refetchQuota]);
 
   const endCall = useCallback(() => {
     setConnectionDetails(null);
@@ -84,20 +119,62 @@ export default function VoiceAgent() {
       clearInterval(durationIntervalRef.current);
       durationIntervalRef.current = null;
     }
+    // Record usage
+    if (callDuration > 0) {
+      recordUsage.mutate(
+        { seconds: callDuration },
+        { onSettled: () => void refetchQuota() },
+      );
+    }
     setTimeout(() => setCallState("idle"), 2000);
-  }, []);
+  }, [callDuration, recordUsage, refetchQuota]);
+
+  // Keep ref in sync for the auto-disconnect effect
+  endCallRef.current = endCall;
+
+  const isLoading = isuserStatusPending || isQuotaPending;
+
+  // Remaining time during an active call
+  const callRemaining = Math.max(0, remaining - callDuration);
+  const isWarning = callState === "active" && callRemaining <= WARNING_THRESHOLD;
 
   return (
     <div className="flex w-full max-w-[420px] flex-col items-center px-[var(--pad)]">
       {/* Call card */}
       <div className="call-card flex w-full flex-col items-center rounded-2xl border border-black/5 bg-surface-container px-8 py-12 shadow-[0_8px_40px_rgba(0,0,0,0.04)]">
-        {isuserStatusPending ? (
+        {isLoading ? (
           <div className="flex w-full flex-col items-center">
             <Skeleton className="mb-8 h-[120px] w-[120px] rounded-full bg-rule-soft" />
             <Skeleton className="mb-2 h-7 w-32 rounded-md bg-rule-soft" />
             <Skeleton className="mb-8 h-4 w-24 rounded-md bg-rule-soft" />
             <Skeleton className="mb-6 h-3 w-40 rounded-md bg-rule-soft" />
             <Skeleton className="h-[56px] w-[56px] rounded-full bg-rule-soft" />
+          </div>
+        ) : quotaExhausted && callState !== "active" ? (
+          /* ---- Upgrade card ---- */
+          <div className="flex w-full flex-col items-center">
+            <div className="relative mb-8">
+              <div className="flex h-[120px] w-[120px] items-center justify-center rounded-full border-2 border-black/10 bg-surface transition-all duration-500">
+                <span className="font-display-md text-[3.2rem] leading-none text-secondary">
+                  {activeSpeakerName[0]}
+                </span>
+              </div>
+            </div>
+            <h2 className="mb-[8px] font-display-md text-[2.2rem] leading-none text-primary">
+              {activeSpeakerName}
+            </h2>
+            <p className="mb-4 text-center font-body-md text-body-md text-secondary">
+              You&apos;ve used your 5 free minutes
+            </p>
+            <p className="mb-6 text-center font-body-md text-label-md text-secondary/70">
+              Upgrade to keep talking with {activeSpeakerName}
+            </p>
+            <button
+              type="button"
+              className="call-upgrade-btn"
+            >
+              Upgrade
+            </button>
           </div>
         ) : (
           <>
@@ -106,7 +183,9 @@ export default function VoiceAgent() {
               <div
                 className={`flex h-[120px] w-[120px] items-center justify-center rounded-full border-2 ${
                   callState === "active"
-                    ? "border-primary"
+                    ? isWarning
+                      ? "border-[var(--red)]"
+                      : "border-primary"
                     : callState === "connecting"
                       ? "border-secondary"
                       : "border-black/10"
@@ -119,8 +198,8 @@ export default function VoiceAgent() {
               {/* Pulse rings for active call */}
               {callState === "active" && (
                 <>
-                  <span className="call-pulse call-pulse-1" />
-                  <span className="call-pulse call-pulse-2" />
+                  <span className={`call-pulse call-pulse-1 ${isWarning ? "call-pulse-warning" : ""}`} />
+                  <span className={`call-pulse call-pulse-2 ${isWarning ? "call-pulse-warning" : ""}`} />
                 </>
               )}
               {/* Connecting spinner */}
@@ -133,12 +212,26 @@ export default function VoiceAgent() {
             </h2>
 
             {/* Status text */}
-            <p className="mb-8 font-body-md text-label-md uppercase tracking-[0.08em] text-secondary">
+            <p
+              className={`mb-8 font-body-md text-label-md uppercase tracking-[0.08em] ${
+                isWarning ? "call-timer-warning" : "text-secondary"
+              }`}
+            >
               {callState === "idle" && "Ready to talk"}
               {callState === "connecting" && "Connecting…"}
-              {callState === "active" && formatDuration(callDuration)}
+              {callState === "active" &&
+                (isWarning
+                  ? `${formatDuration(callRemaining)} remaining`
+                  : formatDuration(callDuration))}
               {callState === "ended" && "Call ended"}
             </p>
+
+            {/* Quota indicator when idle */}
+            {callState === "idle" && quota != null && (
+              <p className="mb-2 -mt-4 font-body-md text-label-md text-secondary/60">
+                {formatDuration(remaining)} remaining
+              </p>
+            )}
 
             {/* Visualizer (only when connected) */}
             {connectionDetails && callState === "active" && (
@@ -152,7 +245,10 @@ export default function VoiceAgent() {
                 style={{ background: "transparent" }}
               >
                 <RoomAudioRenderer />
-                <ActiveCallUI onEndCall={endCall} speakerName={activeSpeakerName} />
+                <ActiveCallUI
+                  onEndCall={endCall}
+                  speakerName={activeSpeakerName}
+                />
               </LiveKitRoom>
             )}
 
@@ -176,7 +272,11 @@ export default function VoiceAgent() {
             )}
 
             {callState === "connecting" && (
-              <button type="button" disabled className="call-btn call-btn-connecting">
+              <button
+                type="button"
+                disabled
+                className="call-btn call-btn-connecting"
+              >
                 <PhoneIcon />
               </button>
             )}

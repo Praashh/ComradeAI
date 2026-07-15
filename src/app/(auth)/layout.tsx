@@ -11,9 +11,9 @@ export default function AuthLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className="auth-page">
+    <div className="auth-page landing-theme">
       <Link href="/" className="auth-logo">
-        Comrade<span className="dot">.</span>
+        ComradeAI
       </Link>
       {children}
     </div>

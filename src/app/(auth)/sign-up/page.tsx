@@ -279,20 +279,7 @@ export default function SignUpPage() {
 
   return (
     <div className="auth-card">
-      <h1 className="auth-heading">
-        Create your account
-        <svg
-          viewBox="0 0 220 12"
-          preserveAspectRatio="none"
-          style={{ width: "70%", height: "0.25em", display: "block", marginTop: 4, overflow: "visible" }}
-        >
-          <path
-            className="mark auto"
-            d="M3 7 C 50 2, 100 11, 160 5 C 190 3, 210 8, 218 5"
-            pathLength={1}
-          />
-        </svg>
-      </h1>
+      <h1 className="auth-heading">Create your account</h1>
       <p className="auth-subheading">Start your journey with Comrade AI</p>
 
       <button

@@ -1,72 +1,86 @@
-import { boolean, date, integer, pgTable, serial, text, timestamp, pgEnum } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  date,
+  integer,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  pgEnum,
+} from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
-    id: serial("id").primaryKey(),
+  id: serial("id").primaryKey(),
 
-    clerkId: text("clerk_id").notNull().unique(),
-    email: text("email").notNull(),
-    firstName: text("first_name"),
-    lastName: text("last_name"),
-    profileImageUrl: text("profile_image_url"),
+  clerkId: text("clerk_id").notNull().unique(),
+  email: text("email").notNull(),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  profileImageUrl: text("profile_image_url"),
 
-    bio: text("bio"),
+  bio: text("bio"),
 
-    isOnboarded: boolean("is_onboarded").default(false).notNull(),
-    nickname: text("nickname"),
-    pronouns: text("pronouns"),
-    dob: date("dob", { mode: "string" }),
-    preferredSpeaker: text("preferred_speaker"),
+  isOnboarded: boolean("is_onboarded").default(false).notNull(),
+  nickname: text("nickname"),
+  pronouns: text("pronouns"),
+  dob: date("dob", { mode: "string" }),
+  preferredSpeaker: text("preferred_speaker"),
 
-    comradeSummary: text("mira_summary"),
-    comradeSummaryUpdatedAt: timestamp("mira_summary_updated_at"),
+  voiceSecondsUsed: integer("voice_seconds_used").default(0).notNull(),
 
-    createdAt: timestamp("created_at").defaultNow(),
-    updatedAt: timestamp("updated_at").defaultNow(),
+  comradeSummary: text("mira_summary"),
+  comradeSummaryUpdatedAt: timestamp("mira_summary_updated_at"),
+
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 export const journals = pgTable("journals", {
-    id: serial("id").primaryKey(),
+  id: serial("id").primaryKey(),
 
-    userId: integer("user_id")
-        .notNull()
-        .references(() => users.id, { onDelete: "cascade" }),
-    title: text("title"),
-    content: text("content").notNull(),
-    mood: text("mood"),
-    icon: text("icon"),
-    color: text("color"),
+  userId: integer("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  title: text("title"),
+  content: text("content").notNull(),
+  mood: text("mood"),
+  icon: text("icon"),
+  color: text("color"),
 
-    summary: text("summary"),
-    summarizedAt: timestamp("summarized_at"),
-    memorySyncedAt: timestamp("memory_synced_at"),
+  summary: text("summary"),
+  summarizedAt: timestamp("summarized_at"),
+  memorySyncedAt: timestamp("memory_synced_at"),
 
-    createdAt: timestamp("created_at").defaultNow(),
-    updatedAt: timestamp("updated_at").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-
-const messageRoleEnum = pgEnum("message_role", ["user", "assistant", "system"]);
+export const messageRoleEnum = pgEnum("message_role", [
+  "user",
+  "assistant",
+  "system",
+]);
 
 export const conversations = pgTable("conversations", {
-    id: serial("id").primaryKey(),
+  id: serial("id").primaryKey(),
 
-    userId: integer("user_id")
-        .notNull()
-        .references(() => users.id, { onDelete: "cascade" }),
-    title: text("title"),
+  userId: integer("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  title: text("title"),
 
-    createdAt: timestamp("created_at").defaultNow(),
-    updatedAt: timestamp("updated_at").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 export const messages = pgTable("messages", {
-    id: serial("id").primaryKey(),
+  id: serial("id").primaryKey(),
 
-    conversationId: integer("conversation_id")
-        .notNull()
-        .references(() => conversations.id, { onDelete: "cascade" }),
-    role: messageRoleEnum("role").notNull(),
-    content: text("content").notNull(),
+  conversationId: integer("conversation_id")
+    .notNull()
+    .references(() => conversations.id, { onDelete: "cascade" }),
+  role: messageRoleEnum("role").notNull(),
+  content: text("content").notNull(),
 
-    createdAt: timestamp("created_at").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
 });
