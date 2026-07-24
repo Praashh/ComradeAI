@@ -1,29 +1,94 @@
-# Create T3 App
+# Comrade AI
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+The friend who listens, understands, and remembers.
 
-## What's next? How do I make an app with this?
+Comrade AI is an AI journaling companion that learns from your writing and provides personalized emotional support through intelligent journaling, voice conversations, text chat, and emotional insights.
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Features
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+### Intelligent Journaling (`/write`)
+Rich markdown editor with mood tagging. Journal entries are semantically indexed via SuperMemory so the AI understands your history and emotional patterns over time.
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+### Voice Conversations (`/talk`)
+Real-time voice calls powered by LiveKit. Choose from multiple AI speaker personas. Includes a per-user quota system (5 minutes free).
 
-## Learn More
+### AskComrade Chat (`/chat`)
+Text-based conversations backed by memory-aware context. The AI recalls relevant journal entries and your profile to provide personalized responses. Conversations are persisted with auto-generated titles.
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+### Mind Graph (`/mind`)
+Visual knowledge graph of your memories and emotional patterns using SuperMemory's memory graph component.
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+## Tech Stack
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+| Layer | Technology |
+|-------|-----------|
+| Framework | Next.js 15 (App Router), React 19, TypeScript |
+| API | tRPC 11 with React Query |
+| Database | PostgreSQL (Neon serverless) + Drizzle ORM |
+| Auth | Clerk |
+| LLM | Groq (Llama 3.3 70B) |
+| Memory | SuperMemory (semantic storage & retrieval) |
+| Voice | LiveKit |
+| Editor | Milkdown (markdown) |
+| Styling | Tailwind CSS 4, shadcn/ui |
 
-## How do I deploy this?
+## Getting Started
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+### Prerequisites
+
+- [Bun](https://bun.sh) runtime
+- PostgreSQL database (recommended: [Neon](https://neon.tech))
+- Account keys for Clerk, SuperMemory, Groq, and LiveKit
+
+### Setup
+
+1. Clone the repo and install dependencies:
+
+```bash
+git clone <repo-url>
+cd talktome
+bun install
+```
+
+2. Copy the example env file and fill in your keys:
+
+```bash
+cp .env.example .env
+```
+
+Required variables:
+
+| Variable | Description |
+|----------|-------------|
+| `DATABASE_URL` | PostgreSQL connection string |
+| `CLERK_SECRET_KEY` | Clerk backend key |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk frontend key |
+| `CLERK_WEBHOOK_SECRET` | Clerk webhook signing secret |
+| `SUPERMEMORY_API_KEY` | SuperMemory API key |
+| `GROQ_API_KEY` | Groq API key |
+| `CRON_SECRET` | Secret for cron job endpoints |
+
+3. Push the database schema:
+
+```bash
+bun run db:push
+```
+
+4. Start the dev server:
+
+```bash
+bun dev
+```
+
+The app will be available at `http://localhost:3000`.
+
+## Scripts
+
+```bash
+bun dev              # Start dev server (Next.js + Turbo)
+bun run build        # Production build
+```
+
+## License
+
+Private.
