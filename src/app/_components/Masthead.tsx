@@ -17,66 +17,143 @@ export default function Masthead() {
 
   return (
     <>
-      {/* Floating Navigation Bar */}
-      <div className="fixed top-4 left-0 right-0 z-50 px-margin-mobile tablet:px-margin-desktop flex justify-center">
-        <nav className="w-full max-w-5xl bg-surface/80 backdrop-blur-xl border border-black/5 rounded-full px-6 py-2.5 shadow-[0_4px_20px_rgba(33,28,22,0.05)] flex justify-between items-center">
-          <div className="flex items-center">
-            <Link href="/" className="font-display-md text-[20px] font-semibold text-primary tracking-tight transition-transform active:scale-98">
+      <nav
+        className="fixed top-0 right-0 left-0 z-50 w-full border-b border-[var(--border-subtle)] bg-[var(--dark-bg)]/90 backdrop-blur-[10px]"
+        style={{ WebkitBackdropFilter: "blur(10px)" }}
+      >
+        <div className="mx-auto flex w-full max-w-[1080px] items-center justify-between px-6 py-4">
+          <Link
+            href="/"
+            className="flex items-center gap-1.5 text-[var(--text-pure-white)] transition-opacity hover:opacity-90"
+          >
+            <svg
+              className="h-6 w-6"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M 0 0 L 0 6"
+                fill="transparent"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
+                stroke="white"
+                transform="translate(4.5 9)"
+              />
+              <path
+                d="M 0 0 L 0 18"
+                fill="transparent"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
+                stroke="white"
+                transform="translate(8.25 3)"
+              />
+              <path
+                d="M 0 0 L 0 12"
+                fill="transparent"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
+                stroke="white"
+                transform="translate(12 6)"
+              />
+              <path
+                d="M 0 0 L 0 6"
+                fill="transparent"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
+                stroke="white"
+                transform="translate(15.75 9)"
+              />
+              <path
+                d="M 0 0 L 0 9"
+                fill="transparent"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
+                stroke="white"
+                transform="translate(19.5 7.5)"
+              />
+            </svg>
+            <span className="font-instrument text-[22px] leading-[1.1] font-normal tracking-[0.01em] text-[var(--text-pure-white)]">
               ComradeAI
-            </Link>
-          </div>
+            </span>
+          </Link>
 
-          {/* Desktop Navigation Links */}
-          <div className="hidden tablet:flex items-center gap-6">
+          <div className="tablet:flex hidden items-center gap-4">
             <Show when="signed-out">
-              <Link href="/" className="text-primary font-body-md font-semibold transition-colors text-sm">
-                Home
-              </Link>
-              <Link href="#features" className="text-secondary hover:text-primary transition-colors font-body-md text-sm">
+              <Link
+                href="#features"
+                className="nav-link font-satoshi text-[14px] font-normal text-[var(--text-muted-grey)] hover:text-[var(--text-pure-white)]"
+              >
                 Features
               </Link>
-              <Link href="#cta" className="text-secondary hover:text-primary transition-colors font-body-md text-sm">
+              <Link
+                href="#testimonials"
+                className="nav-link font-satoshi text-[14px] font-normal text-[var(--text-muted-grey)] hover:text-[var(--text-pure-white)]"
+              >
+                Testimonials
+              </Link>
+              <Link
+                href="#pricing"
+                className="nav-link font-satoshi text-[14px] font-normal text-[var(--text-muted-grey)] hover:text-[var(--text-pure-white)]"
+              >
                 Pricing
               </Link>
-              <Link href="#footer" className="text-secondary hover:text-primary transition-colors font-body-md text-sm">
-                Community
+              <Link
+                href="#faq"
+                className="nav-link font-satoshi text-[14px] font-normal text-[var(--text-muted-grey)] hover:text-[var(--text-pure-white)]"
+              >
+                FAQ
               </Link>
             </Show>
-
             <Show when="signed-in">
-              <Link href="/write" className="text-secondary hover:text-primary transition-colors font-body-md text-sm">
-                Write
+              <Link
+                href="/write"
+                className="nav-link font-satoshi text-[14px] font-normal text-[var(--text-muted-grey)] hover:text-[var(--text-pure-white)]"
+              >
+                Journal
               </Link>
-              <Link href="/chat" className="text-secondary hover:text-primary transition-colors font-body-md text-sm">
+              <Link
+                href="/chat"
+                className="nav-link font-satoshi text-[14px] font-normal text-[var(--text-muted-grey)] hover:text-[var(--text-pure-white)]"
+              >
                 AskComrade
               </Link>
-              <Link href="/talk" className="text-secondary hover:text-primary transition-colors font-body-md text-sm">
+              <Link
+                href="/talk"
+                className="nav-link font-satoshi text-[14px] font-normal text-[var(--text-muted-grey)] hover:text-[var(--text-pure-white)]"
+              >
                 Voice
               </Link>
-              <Link href="/mind" className="text-secondary hover:text-primary transition-colors font-body-md text-sm">
+              <Link
+                href="/mind"
+                className="font-satoshi text-[14px] font-normal text-[var(--text-muted-grey)] hover:text-[var(--text-pure-white)]"
+              >
                 ComradeMind
               </Link>
             </Show>
           </div>
 
-          {/* Action Buttons */}
           <div className="flex items-center gap-4">
             <button
               type="button"
               onClick={toggleMenu}
-              className="landing-hamburger material-symbols-outlined text-on-surface-variant hover:text-primary transition-transform active:scale-95 cursor-pointer"
+              className="tablet:hidden material-symbols-outlined cursor-pointer text-white/60 transition-colors hover:text-white"
               aria-label="Toggle menu"
             >
               menu
             </button>
 
             <Show when="signed-out">
-              <Link href="/sign-in" className="material-symbols-outlined text-on-surface-variant hover:text-primary transition-transform active:scale-95 text-[22px] flex items-center justify-center">
-                account_circle
-              </Link>
-              <Link href="/sign-up">
-                <button type="button" className="bg-primary text-on-primary px-4 py-2 rounded-full text-xs font-semibold font-body tracking-wider transition-all hover:bg-primary/95 active:scale-95 cursor-pointer shadow-sm shadow-primary/10">
-                  GET STARTED
+              <Link href="/sign-up" className="tablet:block hidden">
+                <button
+                  type="button"
+                  className="glass-btn font-satoshi cursor-pointer rounded-full px-5 py-2 text-[13px] font-medium tracking-wide transition-all active:scale-95"
+                >
+                  Try Now
                 </button>
               </Link>
             </Show>
@@ -86,71 +163,110 @@ export default function Masthead() {
                 <UserButton
                   appearance={{
                     elements: {
-                      userButtonAvatarBox: "w-[30px] h-[30px] border border-black/5 hover:scale-105 transition-transform",
+                      userButtonAvatarBox:
+                        "w-[32px] h-[32px] border border-white/20 hover:scale-105 transition-transform rounded-full",
                     },
                   }}
                 />
               </div>
             </Show>
           </div>
-        </nav>
-      </div>
+        </div>
+      </nav>
 
-      {/* Mobile Drawer Navigation Overlay */}
       {menuOpen && (
-        <button type="button" className="fixed inset-0 z-55 bg-black/40 backdrop-blur-sm tablet:hidden border-none cursor-default" onClick={closeMenu} aria-label="Close menu" />
+        <button
+          type="button"
+          className="tablet:hidden fixed inset-0 z-55 cursor-default border-none bg-black/40 backdrop-blur-sm"
+          onClick={closeMenu}
+          aria-label="Close menu"
+        />
       )}
 
       <div
-        className={`fixed right-4 top-4 h-[calc(100vh-32px)] w-64 bg-surface/95 backdrop-blur-xl border border-black/5 rounded-2xl shadow-2xl transition-transform duration-300 z-60 tablet:hidden flex flex-col p-6 gap-4 ${menuOpen ? "translate-x-0" : "translate-x-[calc(100%+32px)]"
-          }`}
+        className={`tablet:hidden fixed top-4 right-4 z-60 flex h-[calc(100vh-32px)] w-64 flex-col gap-4 rounded-2xl border border-white/10 bg-[var(--dark-bg)]/95 p-6 shadow-2xl backdrop-blur-2xl transition-transform duration-300 ${
+          menuOpen ? "translate-x-0" : "translate-x-[calc(100%+32px)]"
+        }`}
       >
-        <div className="flex items-center gap-sm mb-lg">
-          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary">
-            <span className="material-symbols-outlined">bolt</span>
+        <div className="mb-4 flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--accent-neon)] text-[var(--dark-bg)]">
+            <span className="material-symbols-outlined font-bold">bolt</span>
           </div>
           <div>
-            <h2 className="font-display-md text-body-lg font-bold text-primary">Comrade AI</h2>
-            <p className="text-[10px] text-secondary">Your Empathetic Companion</p>
+            <h2 className="font-instrument text-[20px] font-normal text-[var(--text-pure-white)]">
+              Comrade AI
+            </h2>
+            <p className="text-[11px] text-[var(--text-muted-grey)]">
+              Your Empathetic Companion
+            </p>
           </div>
         </div>
 
-        <nav className="flex-1 flex flex-col gap-base">
+        <nav className="flex flex-1 flex-col gap-2">
           <Show when="signed-out">
             <Link
               href="/"
               onClick={closeMenu}
-              className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-4 py-2 flex items-center gap-3 transition-all font-body-md"
+              className="font-satoshi flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm text-[var(--text-pure-white)] transition-all hover:bg-white/5"
             >
-              <span className="material-symbols-outlined">home</span> Home
+              <span className="material-symbols-outlined text-[var(--text-muted-grey)]">
+                home
+              </span>{" "}
+              Home
             </Link>
             <Link
               href="#features"
               onClick={closeMenu}
-              className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-4 py-2 flex items-center gap-3 transition-all font-body-md"
+              className="font-satoshi flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm text-[var(--text-pure-white)] transition-all hover:bg-white/5"
             >
-              <span className="material-symbols-outlined">featured_play_list</span> Features
+              <span className="material-symbols-outlined text-[var(--text-muted-grey)]">
+                featured_play_list
+              </span>{" "}
+              Features
             </Link>
             <Link
-              href="#privacy"
+              href="#testimonials"
               onClick={closeMenu}
-              className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-4 py-2 flex items-center gap-3 transition-all font-body-md"
+              className="font-satoshi flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm text-[var(--text-pure-white)] transition-all hover:bg-white/5"
             >
-              <span className="material-symbols-outlined">security</span> Privacy
+              <span className="material-symbols-outlined text-[var(--text-muted-grey)]">
+                rate_review
+              </span>{" "}
+              Testimonials
+            </Link>
+            <Link
+              href="#pricing"
+              onClick={closeMenu}
+              className="font-satoshi flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm text-[var(--text-pure-white)] transition-all hover:bg-white/5"
+            >
+              <span className="material-symbols-outlined text-[var(--text-muted-grey)]">
+                payments
+              </span>{" "}
+              Pricing
+            </Link>
+            <Link
+              href="#faq"
+              onClick={closeMenu}
+              className="font-satoshi flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm text-[var(--text-pure-white)] transition-all hover:bg-white/5"
+            >
+              <span className="material-symbols-outlined text-[var(--text-muted-grey)]">
+                quiz
+              </span>{" "}
+              FAQ
             </Link>
             <Link
               href="/sign-in"
               onClick={closeMenu}
-              className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-4 py-2 flex items-center gap-3 transition-all font-body-md"
+              className="font-satoshi mt-2 flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm text-[var(--text-muted-grey)] transition-all hover:text-[var(--text-pure-white)]"
             >
               <span className="material-symbols-outlined">login</span> Sign In
             </Link>
             <Link
               href="/sign-up"
               onClick={closeMenu}
-              className="bg-primary text-on-primary rounded-full px-4 py-2 flex items-center gap-3 active:scale-98 transition-transform font-body-md"
+              className="neon-btn font-satoshi flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold tracking-wider"
             >
-              <span className="material-symbols-outlined">assignment_ind</span> Get Started
+              TRY NOW
             </Link>
           </Show>
 
@@ -158,49 +274,64 @@ export default function Masthead() {
             <Link
               href="/write"
               onClick={closeMenu}
-              className="bg-primary text-on-primary rounded-full px-4 py-2 flex items-center gap-3 active:scale-98 transition-transform font-body-md"
+              className="neon-btn font-satoshi mb-2 flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-semibold"
             >
               <span className="material-symbols-outlined">book_5</span> Journal
             </Link>
             <Link
               href="/chat"
               onClick={closeMenu}
-              className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-4 py-2 flex items-center gap-3 transition-all font-body-md"
+              className="font-satoshi flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm text-[var(--text-pure-white)] transition-all hover:bg-white/5"
             >
-              <span className="material-symbols-outlined">chat_bubble</span> Chat
+              <span className="material-symbols-outlined text-[var(--text-muted-grey)]">
+                chat_bubble
+              </span>{" "}
+              Chat
             </Link>
             <Link
               href="/talk"
               onClick={closeMenu}
-              className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-4 py-2 flex items-center gap-3 transition-all font-body-md"
+              className="font-satoshi flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm text-[var(--text-pure-white)] transition-all hover:bg-white/5"
             >
-              <span className="material-symbols-outlined">mic</span> Voice
+              <span className="material-symbols-outlined text-[var(--text-muted-grey)]">
+                mic
+              </span>{" "}
+              Voice
             </Link>
             <Link
               href="/mind"
               onClick={closeMenu}
-              className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-4 py-2 flex items-center gap-3 transition-all font-body-md"
+              className="font-satoshi flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm text-[var(--text-pure-white)] transition-all hover:bg-white/5"
             >
-              <span className="material-symbols-outlined">hub</span> ComradeMind
+              <span className="material-symbols-outlined text-[var(--text-muted-grey)]">
+                hub
+              </span>{" "}
+              ComradeMind
             </Link>
           </Show>
         </nav>
 
         <Show when="signed-in">
           <Link href="/talk" onClick={closeMenu}>
-            <button type="button" className="mt-auto bg-primary/10 text-primary w-full py-md rounded-xl font-title-md border border-primary/20 cursor-pointer hover:bg-primary/20 transition-colors">
+            <button
+              type="button"
+              className="bg-primary/10 text-primary py-md font-title-md border-primary/20 hover:bg-primary/20 mt-auto w-full cursor-pointer rounded-xl border transition-colors"
+            >
               Talk to Comrade
             </button>
           </Link>
         </Show>
 
-        <div className="pt-md mt-md border-t border-outline-variant/30 flex flex-col gap-xs">
+        <div className="pt-md mt-md border-outline-variant/30 gap-xs flex flex-col border-t">
           <Link
             href="/onboarding"
             onClick={closeMenu}
-            className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-4 py-1 flex items-center gap-3 text-sm"
+            className="text-on-secondary-container hover:bg-secondary-container/50 flex items-center gap-3 rounded-full px-4 py-1 text-sm"
           >
-            <span className="material-symbols-outlined text-[18px]">settings</span> Onboarding
+            <span className="material-symbols-outlined text-[18px]">
+              settings
+            </span>{" "}
+            Onboarding
           </Link>
         </div>
       </div>

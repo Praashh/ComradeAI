@@ -17,8 +17,8 @@ vi.mock("@phosphor-icons/react", () => ({
 describe("Hero", () => {
   it("renders the headline", () => {
     render(<Hero />);
-    expect(screen.getByText(/The friend who/)).toBeInTheDocument();
-    expect(screen.getByText(/remembers/)).toBeInTheDocument();
+    expect(screen.getByText(/The friend who listens/)).toBeInTheDocument();
+    expect(screen.getByText(/understands, and remembers/)).toBeInTheDocument();
   });
 
   it("renders the introductory paragraph about Comrade AI", () => {
@@ -28,9 +28,9 @@ describe("Hero", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders the CTA button linking to /write", () => {
+  it("renders the CTA button linking to /sign-up", () => {
     render(<Hero />);
     const link = screen.getByRole("link", { name: /Start your journey/ });
-    expect(link).toHaveAttribute("href", "/write");
+    expect(link).toHaveAttribute("href", "/sign-up");
   });
 });

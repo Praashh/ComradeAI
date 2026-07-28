@@ -4,39 +4,73 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="w-full py-xl bg-surface border-t border-outline-variant/30">
-      <div className="flex flex-col items-center justify-center gap-md px-margin-mobile tablet:px-margin-desktop max-w-[1440px] mx-auto">
-        <div className="font-display-lg text-display-lg text-primary">Comrade AI</div>
-        
-        <div className="flex gap-lg flex-wrap justify-center">
-          <Link href="#" className="text-secondary hover:text-primary transition-all font-label-md">
-            About
+    <footer
+      id="footer"
+      className="w-full border-t border-white/10 bg-[var(--dark-bg)] py-12"
+    >
+      <div className="tablet:px-8 mx-auto flex max-w-5xl flex-col items-center justify-center gap-6 px-4 text-center">
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-white transition-opacity hover:opacity-90"
+        >
+          <svg className="h-6 w-6 fill-current text-white" viewBox="0 0 24 24">
+            <path
+              d="M12 3v18M8 6v12M4 9v6M16 6v12M20 9v6"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
+          <span className="font-instrument text-[32px] font-normal text-white">
+            ComradeAI
+          </span>
+        </Link>
+
+        <div className="font-satoshi flex flex-wrap justify-center gap-8 text-sm text-[var(--text-muted-grey)]">
+          <Link href="#features" className="transition-colors hover:text-white">
+            Features
           </Link>
-          <Link href="#" className="text-secondary hover:text-primary transition-all font-label-md">
-            Terms
+          <Link
+            href="#testimonials"
+            className="transition-colors hover:text-white"
+          >
+            Testimonials
           </Link>
-          <Link href="#" className="text-secondary hover:text-primary transition-all font-label-md">
-            Journaling Guide
+          <Link href="#pricing" className="transition-colors hover:text-white">
+            Pricing
+          </Link>
+          <Link href="#faq" className="transition-colors hover:text-white">
+            FAQ
+          </Link>
+          <Link href="#privacy" className="transition-colors hover:text-white">
+            Privacy Policy
           </Link>
         </div>
-        
-        <div className="flex gap-md my-sm">
+
+        <div className="my-2 flex gap-4">
           <Link
             href="#"
-            className="w-10 h-10 rounded-full border border-outline-variant/30 flex items-center justify-center text-secondary hover:text-primary transition-colors"
+            aria-label="Email"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[var(--text-muted-grey)] transition-all hover:border-white/30 hover:text-white"
           >
-            <span className="material-symbols-outlined">alternate_email</span>
+            <span className="material-symbols-outlined text-[18px]">
+              alternate_email
+            </span>
           </Link>
           <Link
             href="#"
-            className="w-10 h-10 rounded-full border border-outline-variant/30 flex items-center justify-center text-secondary hover:text-primary transition-colors"
+            aria-label="Website"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[var(--text-muted-grey)] transition-all hover:border-white/30 hover:text-white"
           >
-            <span className="material-symbols-outlined">public</span>
+            <span className="material-symbols-outlined text-[18px]">
+              public
+            </span>
           </Link>
         </div>
-        
-        <p className="font-label-md text-label-md text-on-secondary-container">
-          © 2026 Comrade AI. Built for Digital Well-being.
+
+        <p className="font-satoshi text-xs text-[var(--text-muted-grey)]/70">
+          &copy; 2026 Comrade AI. Built for Digital Well-being and Deep
+          Mindfulness.
         </p>
       </div>
     </footer>

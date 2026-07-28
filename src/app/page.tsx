@@ -3,6 +3,9 @@ import { auth } from "@clerk/nextjs/server";
 import Masthead from "@/app/_components/Masthead";
 import Hero from "@/app/_components/Hero";
 import BentoGrid from "@/app/_components/BentoGrid";
+import Testimonials from "@/app/_components/Testimonials";
+import Pricing from "@/app/_components/Pricing";
+import FAQ from "@/app/_components/FAQ";
 import Privacy from "@/app/_components/Privacy";
 import CTA from "@/app/_components/CTA";
 import Footer from "@/app/_components/Footer";
@@ -16,15 +19,25 @@ export const metadata: Metadata = {
 
 function FeedbackSection() {
   return (
-    <section className="py-16 bg-surface border-t border-outline-variant/20 flex flex-col items-center justify-center text-center px-margin-mobile tablet:px-margin-desktop">
-      <div className="max-w-md flex flex-col items-center gap-4 animate-fade-in">
-        <span className="material-symbols-outlined text-primary text-[32px]">rate_review</span>
-        <h3 className="font-display-lg text-[24px] text-on-background font-normal">Have thoughts to share?</h3>
-        <p className="font-body-md text-secondary leading-relaxed">
-          We want to make Comrade AI your perfect digital sanctuary. Share your ideas, improvements, or report bugs directly to our development team.
+    <section className="tablet:px-8 flex flex-col items-center justify-center border-t border-white/10 bg-[var(--dark-bg)] px-4 py-16 text-center">
+      <div className="animate-fade-in flex max-w-md flex-col items-center gap-4">
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[var(--accent-neon)]/20 bg-[var(--accent-neon)]/10 text-[var(--accent-neon)]">
+          <span className="material-symbols-outlined text-[24px]">
+            rate_review
+          </span>
+        </div>
+        <h3 className="font-instrument text-[28px] font-normal text-white">
+          Have thoughts to share?
+        </h3>
+        <p className="font-satoshi text-sm leading-relaxed text-[var(--text-muted-grey)]">
+          We want to make Comrade AI your perfect digital sanctuary. Share your
+          ideas, improvements, or report bugs directly to our core team.
         </p>
         <FeedbackDialog>
-          <button type="button" className="bg-primary text-on-primary px-6 py-2.5 rounded-full text-xs font-semibold font-body tracking-wider transition-all hover:bg-primary/95 active:scale-95 cursor-pointer shadow-sm shadow-primary/10 mt-2">
+          <button
+            type="button"
+            className="neon-btn font-satoshi mt-2 cursor-pointer rounded-full px-6 py-2.5 text-xs font-semibold tracking-wider uppercase transition-all"
+          >
             GIVE FEEDBACK
           </button>
         </FeedbackDialog>
@@ -37,11 +50,14 @@ export default async function Home() {
   const { userId } = await auth();
 
   return (
-    <div className="landing-theme min-h-screen flex flex-col bg-background text-on-background">
+    <div className="landing-theme font-satoshi flex min-h-screen flex-col bg-[var(--dark-bg)] text-white selection:bg-white selection:text-[var(--dark-bg)]">
       <Masthead />
       <main className="flex-grow overflow-hidden">
         <Hero />
         <BentoGrid />
+        <Testimonials />
+        <Pricing />
+        <FAQ />
         <Privacy />
         <CTA />
         {userId && <FeedbackSection />}
