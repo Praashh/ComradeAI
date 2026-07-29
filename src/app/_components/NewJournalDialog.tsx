@@ -130,12 +130,12 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
       </DialogTrigger>
       <DialogContent
         showCloseButton={false}
-        className="!border !border-[var(--rule-soft)] !rounded-[8px] !p-6 !shadow-[0_8px_40px_rgba(33,28,22,0.12)] !max-w-[480px] !ring-0 flex flex-col gap-6 font-body select-none"
+        className="!border !border-white/15 !bg-[#121212] !rounded-[28px] !p-6 !shadow-2xl !shadow-black/90 !max-w-[480px] !ring-0 flex flex-col gap-6 font-satoshi select-none text-white"
       >
         {/* Dynamic Icon Preview */}
         <div className="flex justify-center pt-2">
           <div
-            className="w-24 h-24 rounded-full flex items-center justify-center text-white shadow-[0_4px_16px_rgba(33,28,22,0.12)] transition-all duration-500 ease-out hover:scale-105"
+            className="w-24 h-24 rounded-full flex items-center justify-center text-white shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-500 ease-out hover:scale-105"
             style={{ background: form.selectedColor }}
           >
             <PreviewIcon size={48} weight="duotone" />
@@ -151,7 +151,7 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
             value={form.title}
             onChange={(e) => dispatch({ type: "SET_FIELD", field: "title", value: e.target.value })}
             aria-label="Journal name"
-            className="w-full bg-transparent border-b-[1.5px] border-[var(--rule-soft)] focus:border-[var(--rule)] px-2 py-3 text-center text-[var(--ink)] placeholder-[var(--ink-3)] font-disp text-2xl font-normal transition-colors focus:outline-none"
+            className="w-full bg-transparent border-b border-white/20 focus:border-white px-2 py-3 text-center text-white placeholder-white/40 font-instrument text-2xl font-normal transition-colors focus:outline-none"
           />
 
           {/* Journal Mood */}
@@ -162,7 +162,7 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
               value={form.mood}
               onChange={(e) => dispatch({ type: "SET_FIELD", field: "mood", value: e.target.value })}
               aria-label="Current mood"
-              className="w-full bg-transparent border-b border-[var(--rule-soft)] focus:border-[var(--rule)] px-2 py-2 text-center text-[var(--ink)] placeholder-[var(--ink-3)] font-body text-sm italic transition-colors focus:outline-none"
+              className="w-full bg-transparent border-b border-white/15 focus:border-white/40 px-2 py-2 text-center text-white placeholder-white/30 font-satoshi text-sm italic transition-colors focus:outline-none"
             />
             {/* Quick Mood Shortcuts */}
             <div className="flex flex-wrap gap-1.5 justify-center mt-1">
@@ -171,9 +171,9 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
                   key={m.text}
                   type="button"
                   onClick={() => dispatch({ type: "SET_FIELD", field: "mood", value: m.text })}
-                  className={`text-[11px] px-2.5 py-1 rounded-full border transition-all cursor-pointer font-body ${form.mood.toLowerCase() === m.text.toLowerCase()
-                    ? "border-[var(--red)] text-[var(--paper)]"
-                    : "border-[var(--rule-soft)] text-[var(--ink-3)] hover:border-[var(--rule)] hover:text-[var(--ink-2)]"
+                  className={`text-[11px] px-2.5 py-1 rounded-full border transition-all cursor-pointer font-satoshi ${form.mood.toLowerCase() === m.text.toLowerCase()
+                    ? "border-white bg-white/15 text-white"
+                    : "border-white/15 text-white/50 hover:border-white/30 hover:text-white/80"
                     }`}
                 >
                   {m.label}
@@ -185,7 +185,7 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
 
         {/* Colors Carousel/Row */}
         <div className="flex flex-col gap-2.5">
-          <span className="text-[10px] tracking-[0.1em] uppercase text-[var(--ink-3)] font-body font-medium px-1">Select theme color</span>
+          <span className="text-[10px] tracking-[0.1em] uppercase text-white/50 font-satoshi font-medium px-1">Select theme color</span>
           <div className="flex gap-2 overflow-x-auto p-2 no-scrollbar scroll-smooth">
             {COLOR_OPTIONS.map((c) => {
               const isSelected = form.selectedColor === c.value;
@@ -194,7 +194,7 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
                   key={c.value}
                   type="button"
                   onClick={() => dispatch({ type: "SET_FIELD", field: "selectedColor", value: c.value })}
-                  className={`w-7 h-7 rounded-full shrink-0 transition-all cursor-pointer relative flex items-center justify-center hover:scale-110 active:scale-95 ${isSelected ? "ring-2 ring-[var(--ink)] ring-offset-2 ring-offset-[var(--paper-2)]" : "opacity-75 hover:opacity-100"
+                  className={`w-7 h-7 rounded-full shrink-0 transition-all cursor-pointer relative flex items-center justify-center hover:scale-110 active:scale-95 ${isSelected ? "ring-2 ring-white ring-offset-2 ring-offset-[#121212]" : "opacity-75 hover:opacity-100"
                     }`}
                   style={{ background: c.value }}
                   title={c.label}
@@ -210,8 +210,8 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
 
         {/* Icons Grid */}
         <div className="flex flex-col gap-2.5">
-          <span className="text-[10px] tracking-[0.1em] uppercase text-[var(--ink-3)] font-body font-medium px-1">Select journal icon</span>
-          <div className="grid grid-cols-7 gap-2 justify-items-center max-h-[200px] overflow-y-auto p-2 border border-[var(--rule-soft)] rounded-[6px] no-scrollbar">
+          <span className="text-[10px] tracking-[0.1em] uppercase text-white/50 font-satoshi font-medium px-1">Select journal icon</span>
+          <div className="grid grid-cols-7 gap-2 justify-items-center max-h-[200px] overflow-y-auto p-2 border border-white/10 rounded-[16px] bg-white/[0.03] no-scrollbar">
             {ICON_OPTIONS.map((iconName) => {
               const IconComp = (Icons[iconName as keyof typeof Icons] ?? Icons.BookOpen) as React.ElementType;
               const isSelected = form.selectedIcon === iconName;
@@ -221,8 +221,8 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
                   type="button"
                   onClick={() => dispatch({ type: "SET_FIELD", field: "selectedIcon", value: iconName })}
                   className={`w-9 h-9 rounded-full flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 ${isSelected
-                    ? "bg-[var(--ink)] text-[var(--paper)] shadow-sm scale-105"
-                    : "text-[var(--ink-3)] hover:text-[var(--ink)] hover:bg-[var(--paper-2)]"
+                    ? "bg-white text-black shadow-sm scale-105"
+                    : "text-white/40 hover:text-white hover:bg-white/10"
                     }`}
                 >
                   <IconComp size={18} weight={isSelected ? "bold" : "regular"} />
@@ -233,7 +233,7 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
         </div>
 
         {form.errorMsg && (
-          <p className="text-[var(--red)] text-xs text-center font-body font-medium animate-pulse">
+          <p className="text-red-400 text-xs text-center font-satoshi font-medium animate-pulse">
             {form.errorMsg}
           </p>
         )}
@@ -243,7 +243,7 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
           <button
             type="button"
             onClick={() => handleOpenChange(false)}
-            className="px-5 py-2.5  text-[var(--ink-2)] hover:text-[var(--ink)] border border-[var(--rule-soft)] hover:border-[var(--rule)] rounded-[4px] text-sm font-body font-medium transition-all cursor-pointer"
+            className="px-5 py-2.5 text-white/70 hover:text-white border border-white/15 hover:border-white/30 bg-white/5 hover:bg-white/10 rounded-full text-sm font-satoshi font-medium transition-all cursor-pointer"
           >
             Cancel
           </button>
@@ -251,11 +251,11 @@ export default function NewJournalDialog({ children, defaultOpen = false }: NewJ
             type="button"
             disabled={createJournal.isPending}
             onClick={handleDone}
-            className="px-6 py-2.5 bg-[var(--red)] hover:bg-[var(--red-d)] disabled:bg-[var(--ink-3)] text-[var(--paper)] rounded-[4px] text-sm font-body font-semibold tracking-wide uppercase transition-all cursor-pointer shadow-[0_2px_6px_rgba(203,58,40,0.2)] disabled:cursor-not-allowed flex items-center gap-2"
+            className="px-6 py-2.5 bg-white hover:bg-white/90 disabled:bg-white/20 text-black rounded-full text-sm font-satoshi font-semibold transition-all cursor-pointer shadow-lg disabled:cursor-not-allowed flex items-center gap-2"
           >
             {createJournal.isPending ? (
               <>
-                <Icons.CircleNotch size={16} className="animate-spin" />
+                <Icons.CircleNotch size={16} className="animate-spin text-black" />
                 Creating...
               </>
             ) : (

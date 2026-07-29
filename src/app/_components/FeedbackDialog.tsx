@@ -66,22 +66,22 @@ export function FeedbackDialog({ children, open, onOpenChange }: FeedbackDialogP
           {children}
         </DialogTrigger>
       )}
-      <DialogContent className="sm:max-w-[420px] bg-surface-container-lowest border border-black/5 rounded-2xl shadow-xl">
+      <DialogContent className="!border !border-white/15 !bg-[#121212] !rounded-[28px] !p-6 !shadow-2xl !shadow-black/90 sm:!max-w-[440px] !ring-0 text-white font-satoshi">
         <DialogHeader>
-          <DialogTitle className="text-lg font-semibold text-on-surface">Share Feedback</DialogTitle>
-          <DialogDescription className="text-sm text-secondary">
+          <DialogTitle className="text-xl font-medium tracking-tight text-white font-satoshi">Share Feedback</DialogTitle>
+          <DialogDescription className="text-sm text-white/60 font-satoshi mt-1">
             Help us improve Comrade AI. Let us know what you think, report a bug, or suggest a new feature.
           </DialogDescription>
         </DialogHeader>
 
         {success ? (
           <div className="flex flex-col items-center justify-center py-6 text-center gap-3">
-            <span className="material-symbols-outlined text-primary text-[48px] animate-pulse">
+            <span className="material-symbols-outlined text-white text-[48px] animate-pulse">
               check_circle
             </span>
             <div>
-              <h3 className="font-semibold text-on-surface">Thank You!</h3>
-              <p className="text-sm text-secondary mt-1">
+              <h3 className="font-medium text-white text-lg">Thank You!</h3>
+              <p className="text-sm text-white/60 mt-1">
                 Your feedback has been received and helps us build a better companion.
               </p>
             </div>
@@ -89,7 +89,7 @@ export function FeedbackDialog({ children, open, onOpenChange }: FeedbackDialogP
               <Button
                 type="button"
                 onClick={() => handleOpenChange(false)}
-                className="w-full bg-primary text-on-primary hover:bg-primary/95 rounded-xl cursor-pointer"
+                className="w-full bg-white text-black hover:bg-white/90 font-satoshi font-semibold text-sm rounded-full cursor-pointer py-3 transition-all shadow-lg"
               >
                 Done
               </Button>
@@ -97,8 +97,8 @@ export function FeedbackDialog({ children, open, onOpenChange }: FeedbackDialogP
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-2">
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-secondary uppercase tracking-wider">
+            <div className="flex flex-col gap-2">
+              <label className="text-xs font-semibold text-white/40 uppercase tracking-wider font-satoshi">
                 Feedback Type
               </label>
               <div className="grid grid-cols-2 gap-2">
@@ -107,10 +107,10 @@ export function FeedbackDialog({ children, open, onOpenChange }: FeedbackDialogP
                     key={opt}
                     type="button"
                     onClick={() => setType(opt)}
-                    className={`px-3 py-2 rounded-xl text-xs font-medium border text-center transition-all cursor-pointer capitalize ${
+                    className={`px-3 py-2.5 rounded-full text-xs font-medium border text-center transition-all cursor-pointer capitalize font-satoshi ${
                       type === opt
-                        ? "bg-primary/10 border-primary text-primary"
-                        : "bg-surface hover:bg-surface-container border-black/5 text-secondary"
+                        ? "bg-white/15 border-white text-white font-semibold shadow-sm"
+                        : "bg-white/5 border-white/10 text-white/60 hover:border-white/30 hover:text-white"
                     }`}
                   >
                     {opt === "improvements" ? "improvement" : opt}
@@ -119,8 +119,8 @@ export function FeedbackDialog({ children, open, onOpenChange }: FeedbackDialogP
               </div>
             </div>
 
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="feedback-message" className="text-xs font-semibold text-secondary uppercase tracking-wider">
+            <div className="flex flex-col gap-2">
+              <label htmlFor="feedback-message" className="text-xs font-semibold text-white/40 uppercase tracking-wider font-satoshi">
                 Message
               </label>
               <textarea
@@ -130,7 +130,7 @@ export function FeedbackDialog({ children, open, onOpenChange }: FeedbackDialogP
                 placeholder="Describe your feedback or suggestion..."
                 rows={4}
                 required
-                className="w-full p-3 rounded-xl border border-black/10 bg-surface text-on-surface text-sm placeholder:text-secondary focus:outline-none focus:border-primary transition-all resize-none"
+                className="w-full p-3.5 rounded-[16px] border border-white/10 bg-[#181818] text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-white/30 transition-all resize-none font-satoshi"
               />
             </div>
 
@@ -138,7 +138,7 @@ export function FeedbackDialog({ children, open, onOpenChange }: FeedbackDialogP
               <Button
                 type="submit"
                 disabled={submitMutation.isPending}
-                className="w-full bg-primary text-on-primary hover:bg-primary/95 rounded-xl cursor-pointer py-2.5 flex items-center justify-center gap-2"
+                className="w-full bg-white text-black hover:bg-white/90 font-satoshi font-semibold text-sm rounded-full cursor-pointer py-3 transition-all shadow-lg flex items-center justify-center gap-2 border-0 disabled:opacity-50"
               >
                 {submitMutation.isPending ? "Submitting..." : "Submit Feedback"}
               </Button>

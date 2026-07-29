@@ -5,25 +5,28 @@ import RevealOnScroll from "./RevealOnScroll";
 
 const STEPS = [
   {
-    title: "Describe the scene",
+    number: "01",
+    title: "Journal",
     description:
-      "Write the image or video you want, then add details for style, mood, subject, and format.",
-    mockup: "https://framerusercontent.com/images/w4nhLCDnIfIm3D5Tl6LRUhOClr0.png",
-    alt: "Prompt Editor panel mockup",
+      "Write down your daily thoughts, reflections, and feelings in your private space.",
+    mockup: "/images/journal.png",
+    alt: "Journaling interface mockup",
   },
   {
-    title: "Refine the direction",
+    number: "02",
+    title: "Chat",
     description:
-      "Adjust style, aspect ratio, motion, references, or keyframes until the output matches your vision.",
-    mockup: "https://framerusercontent.com/images/FuJFf3VwASR51eL7KMNGCb5xFAQ.png",
-    alt: "Style & Motion controls mockup",
+      "Text with your AI best friend anytime to process your emotions and get empathetic responses.",
+    mockup: "/images/chat.png",
+    alt: "Chat interface mockup",
   },
   {
-    title: "Export and publish",
+    number: "03",
+    title: "Talk",
     description:
-      "Download polished visuals for ads, social content, product pages, storyboards, and campaigns.",
-    mockup: "https://framerusercontent.com/images/DW2J0oQA57NXRuKQWnEAyt2wrxs.png",
-    alt: "Export & Publish panel mockup",
+      "Have real-time 1-on-1 voice calls with your AI companion whenever you need to speak out loud.",
+    mockup: "/images/talk.png",
+    alt: "Voice call interface mockup",
   },
 ];
 
@@ -41,9 +44,9 @@ export default function HowItWorks() {
 
           <h2 className="font-instrument w-full max-w-[620px] text-center text-[36px] leading-[1.15] font-normal text-white sm:text-[48px] md:text-[54px]">
             <span className="text-[var(--text-muted-grey)]">From </span>
-            prompt to finished{" "}
+            reflection to connection{" "}
             <span className="text-[var(--text-muted-grey)]">
-              visual in three simple steps.
+              in three simple steps.
             </span>
           </h2>
         </RevealOnScroll>
@@ -52,33 +55,27 @@ export default function HowItWorks() {
           {STEPS.map((step, idx) => (
             <RevealOnScroll key={idx} className="flex">
               <div className="dark-gradient-card group relative flex w-full flex-col justify-between overflow-hidden rounded-[32px] p-6 shadow-xl transition-all duration-300 hover:border-white/30">
-                {/* Mountain Landscape Background + Panel UI Mockup */}
-                <div className="relative mb-6 h-[320px] w-full overflow-hidden rounded-[24px] border border-white/10">
-                  {/* Dark Sunset Mountain Background */}
+                {/* UI Mockup Container */}
+                <div className="relative mb-6 h-[280px] w-full overflow-hidden rounded-[24px] border border-white/10 bg-[#0d0d0d]">
                   <Image
-                    src="https://framerusercontent.com/images/fQRil4z1ZxGKGZ6GCGKGBMBWEdo.png"
-                    alt="Mountain landscape background"
+                    src={step.mockup}
+                    alt={step.alt}
                     fill
-                    className="object-cover object-center"
+                    className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
                   />
-                  {/* Floating Mockup Panel Overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center p-3">
-                    <div className="relative h-full w-full">
-                      <Image
-                        src={step.mockup}
-                        alt={step.alt}
-                        fill
-                        className="object-contain transition-transform duration-500 group-hover:scale-[1.02]"
-                      />
-                    </div>
-                  </div>
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/40 via-transparent to-transparent" />
                 </div>
 
                 {/* Text Content */}
                 <div className="px-2 pb-2">
-                  <h3 className="font-satoshi mb-2 text-[20px] font-medium tracking-tight text-white">
-                    {step.title}
-                  </h3>
+                  <div className="mb-2 flex items-center gap-2">
+                    <span className="font-satoshi text-[12px] font-semibold text-white/40 border border-white/10 rounded-full px-2 py-0.5">
+                      {step.number}
+                    </span>
+                    <h3 className="font-satoshi text-[20px] font-medium tracking-tight text-white">
+                      {step.title}
+                    </h3>
+                  </div>
                   <p className="font-satoshi text-[14px] leading-relaxed text-white/60">
                     {step.description}
                   </p>

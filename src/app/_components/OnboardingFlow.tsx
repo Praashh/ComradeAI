@@ -73,17 +73,17 @@ function ImportStep({
 }) {
   return (
     <div className="flex flex-col">
-      <h2 className="mb-2 font-disp text-[1.8rem] leading-[1.1] text-ink">
+      <h2 className="mb-2 font-instrument text-[2rem] leading-[1.1] text-white">
         Import your memories
       </h2>
-      <p className="mb-6 font-body text-[0.88rem] leading-relaxed text-ink-3">
+      <p className="mb-6 font-satoshi text-[0.9rem] leading-relaxed text-white/60">
         Copy the prompt below, paste it in ChatGPT or Claude, then paste
         their response here.
       </p>
 
-      <div className="mb-4 rounded-[4px] border border-rule-soft bg-paper-2 p-4">
+      <div className="mb-4 rounded-[20px] border border-white/10 bg-[#141414] p-4 text-white">
         <div className="mb-2 flex items-center justify-between">
-          <span className="font-body text-[0.72rem] uppercase tracking-[0.1em] text-ink-3">
+          <span className="font-satoshi text-[0.72rem] uppercase tracking-[0.1em] text-white/40 font-medium">
             Prompt to copy
           </span>
           <button
@@ -92,12 +92,12 @@ function ImportStep({
               void navigator.clipboard.writeText(IMPORT_PROMPT);
               toast.success("Prompt copied to clipboard");
             }}
-            className="rounded border border-rule-soft px-2 py-0.5 font-body text-[0.72rem] text-ink-3 transition-colors hover:border-rule hover:text-ink"
+            className="rounded-full border border-white/15 bg-white/5 px-3 py-1 font-satoshi text-[0.75rem] text-white/70 transition-all hover:border-white/30 hover:bg-white/10 hover:text-white"
           >
             Copy
           </button>
         </div>
-        <p className="font-body text-[0.82rem] leading-relaxed text-ink-2">
+        <p className="font-satoshi text-[0.82rem] leading-relaxed text-white/75">
           {IMPORT_PROMPT}
         </p>
       </div>
@@ -107,12 +107,12 @@ function ImportStep({
         value={importText}
         onChange={(e) => setImportText(e.target.value)}
         placeholder="Paste the response here..."
-        rows={8}
-        className="mb-4 w-full resize-none rounded-[4px] border border-rule-soft bg-paper-2 px-4 py-3 font-body text-[0.88rem] text-ink placeholder:italic placeholder:text-ink-3 focus:border-rule focus:outline-none"
+        rows={6}
+        className="mb-4 w-full resize-none rounded-[20px] border border-white/10 bg-[#141414] px-4 py-3 font-satoshi text-[0.88rem] text-white placeholder:italic placeholder:text-white/30 focus:border-white/30 focus:outline-none"
       />
 
       {importResult && (
-        <p className="mb-4 font-body text-[0.82rem] text-ink-2">
+        <p className="mb-4 font-satoshi text-[0.82rem] text-white/70">
           Imported {importResult.imported} of {importResult.total} memory
           sections.
         </p>
@@ -123,14 +123,14 @@ function ImportStep({
           type="button"
           onClick={onImport}
           disabled={!importText.trim() || importing}
-          className="flex-1 rounded-[4px] bg-ink px-6 py-3 font-body text-[0.85rem] tracking-[0.04em] text-paper transition-colors hover:bg-ink-2 disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex-1 rounded-full bg-white px-6 py-3 font-satoshi text-[0.88rem] font-semibold text-black transition-all hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-40 shadow-lg"
         >
           {importing ? "Importing..." : "Import & Continue"}
         </button>
         <button
           type="button"
           onClick={onSkip}
-          className="rounded-[4px] border border-rule-soft px-6 py-3 font-body text-[0.85rem] text-ink-3 transition-colors hover:border-rule hover:text-ink"
+          className="rounded-full border border-white/15 bg-white/5 px-6 py-3 font-satoshi text-[0.88rem] font-medium text-white/80 transition-all hover:border-white/30 hover:bg-white/10 hover:text-white"
         >
           Skip
         </button>
@@ -153,10 +153,10 @@ function CharacterStep({
 }) {
   return (
     <div className="flex flex-col items-center">
-      <h2 className="mb-2 text-center font-disp text-[1.8rem] leading-[1.1] text-ink">
+      <h2 className="mb-2 text-center font-instrument text-[2rem] leading-[1.1] text-white">
         Choose your companion
       </h2>
-      <p className="mb-8 text-center font-body text-[0.88rem] text-ink-3">
+      <p className="mb-8 text-center font-satoshi text-[0.9rem] text-white/60">
         You can always switch later.
       </p>
 
@@ -166,30 +166,30 @@ function CharacterStep({
             type="button"
             key={c.id}
             onClick={() => setSelectedCharacter(c.id)}
-            className={`flex flex-col items-start rounded-[6px] border p-4 text-left transition-all ${selectedCharacter === c.id
-                ? "border-red bg-paper-2 shadow-[0_4px_20px_rgba(203,58,40,0.1)]"
-                : "border-rule-soft bg-paper-2 hover:border-rule"
+            className={`flex flex-col items-start rounded-[24px] border p-4 text-left transition-all ${selectedCharacter === c.id
+                ? "border-white bg-[#1a1a1a] shadow-xl text-white ring-1 ring-white/20"
+                : "border-white/10 bg-white/5 hover:border-white/20 text-white"
               }`}
           >
             <div className="mb-2 flex items-center gap-2.5">
               <div
                 className={`flex h-9 w-9 items-center justify-center rounded-full border ${selectedCharacter === c.id
-                    ? "border-red bg-red text-paper"
-                    : "border-rule bg-paper text-ink"
-                  } font-disp text-[1.1rem] leading-none transition-colors`}
+                    ? "border-white bg-white text-black font-semibold"
+                    : "border-white/20 bg-white/10 text-white"
+                  } font-satoshi text-[1.1rem] leading-none transition-colors`}
               >
                 {c.name[0]}
               </div>
               <div>
-                <span className="block font-disp text-[1.05rem] leading-none text-ink">
+                <span className="block font-satoshi text-[1.05rem] font-medium leading-none text-white">
                   {c.name}
                 </span>
-                <span className="block font-body text-[0.7rem] italic text-ink-3">
+                <span className="block font-satoshi text-[0.7rem] italic text-white/50">
                   {c.title}
                 </span>
               </div>
             </div>
-            <p className="font-body text-[0.75rem] leading-snug text-ink-3">
+            <p className="font-satoshi text-[0.78rem] leading-snug text-white/60">
               {c.description}
             </p>
           </button>
@@ -200,7 +200,7 @@ function CharacterStep({
         type="button"
         onClick={onComplete}
         disabled={isPending}
-        className="rounded-[4px] bg-red px-8 py-3 font-body text-[0.85rem] tracking-[0.04em] text-paper transition-colors hover:bg-red-d disabled:cursor-not-allowed disabled:opacity-60"
+        className="rounded-full bg-white px-8 py-3.5 font-satoshi text-[0.88rem] font-semibold text-black transition-all hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-60 shadow-lg"
       >
         {isPending ? "Setting up..." : "Start your journey"}
       </button>
@@ -308,13 +308,13 @@ export default function OnboardingFlow() {
   };
 
   return (
-    <div className="w-full max-w-[520px]">
+    <div className="w-full max-w-[520px] rounded-[32px] border border-white/10 bg-[#0d0d0d] p-8 shadow-2xl shadow-black/80 backdrop-blur-xl">
       {/* Back button */}
       {step !== "choose-path" && step !== "completing" && (
         <button
           type="button"
           onClick={handleBack}
-          className="mb-6 flex items-center gap-1 font-body text-[0.82rem] text-ink-3 transition-colors hover:text-ink"
+          className="mb-6 flex items-center gap-1.5 font-satoshi text-sm text-white/50 transition-colors hover:text-white"
         >
           <svg
             width="16"
@@ -336,11 +336,10 @@ export default function OnboardingFlow() {
       {/* Step: Choose Path */}
       {step === "choose-path" && (
         <div className="flex flex-col items-center text-center">
-          <h1 className="mb-3 font-disp text-[2.4rem] leading-[1.1] text-ink">
-            Welcome to <span className="italic">Comrade AI</span>
-            <span className="text-red">.</span>
+          <h1 className="mb-3 font-instrument text-[2.4rem] leading-[1.1] text-white">
+            Welcome to <span className="italic">Comrade AI</span>.
           </h1>
-          <p className="mb-10 font-body text-[0.95rem] text-ink-3">
+          <p className="mb-8 font-satoshi text-[0.95rem] text-white/60">
             Let&apos;s get to know you a little.
           </p>
 
@@ -348,12 +347,12 @@ export default function OnboardingFlow() {
             <button
               type="button"
               onClick={() => changeStep("import")}
-              className="w-full rounded-[6px] border border-rule-soft bg-paper-2 px-6 py-5 text-left transition-all hover:border-rule hover:shadow-[0_4px_20px_rgba(33,28,22,0.08)]"
+              className="w-full rounded-[24px] border border-white/10 bg-white/5 p-6 text-left transition-all hover:border-white/30 hover:bg-white/10"
             >
-              <span className="mb-1 block font-disp text-[1.2rem] text-ink">
+              <span className="mb-1 block font-satoshi font-medium text-[1.15rem] text-white">
                 I have memories to bring
               </span>
-              <span className="block font-body text-[0.82rem] text-ink-3">
+              <span className="block font-satoshi text-[0.85rem] text-white/60">
                 Import from ChatGPT, Claude, or any AI you&apos;ve been talking
                 to
               </span>
@@ -362,12 +361,12 @@ export default function OnboardingFlow() {
             <button
               type="button"
               onClick={() => changeStep("nickname")}
-              className="w-full rounded-[6px] border border-rule-soft bg-paper-2 px-6 py-5 text-left transition-all hover:border-rule hover:shadow-[0_4px_20px_rgba(33,28,22,0.08)]"
+              className="w-full rounded-[24px] border border-white/10 bg-white/5 p-6 text-left transition-all hover:border-white/30 hover:bg-white/10"
             >
-              <span className="mb-1 block font-disp text-[1.2rem] text-ink">
+              <span className="mb-1 block font-satoshi font-medium text-[1.15rem] text-white">
                 Start fresh
               </span>
-              <span className="block font-body text-[0.82rem] text-ink-3">
+              <span className="block font-satoshi text-[0.85rem] text-white/60">
                 We&apos;ll learn about you as we go
               </span>
             </button>
@@ -390,10 +389,10 @@ export default function OnboardingFlow() {
       {/* Step: Nickname */}
       {step === "nickname" && (
         <div className="flex flex-col items-center text-center">
-          <h2 className="mb-2 font-disp text-[1.8rem] leading-[1.1] text-ink">
+          <h2 className="mb-2 font-instrument text-[2rem] leading-[1.1] text-white">
             What should I call you?
           </h2>
-          <p className="mb-8 font-body text-[0.88rem] text-ink-3">
+          <p className="mb-8 font-satoshi text-[0.9rem] text-white/60">
             A name, nickname, whatever feels right.
           </p>
           <input
@@ -407,13 +406,13 @@ export default function OnboardingFlow() {
             }}
             placeholder="Your name"
             maxLength={50}
-            className="mb-8 w-full max-w-[320px] border-b-[1.5px] border-rule-soft bg-transparent px-0 py-3 text-center font-disp text-[1.6rem] text-ink placeholder:text-ink-3 focus:border-rule focus:outline-none"
+            className="mb-8 w-full max-w-[320px] border-b border-white/20 bg-transparent px-0 py-3 text-center font-instrument text-[1.8rem] text-white placeholder:text-white/30 focus:border-white focus:outline-none"
           />
           <button
             type="button"
             onClick={handleNext}
             disabled={!canGoNext()}
-            className="rounded-[4px] bg-ink px-8 py-3 font-body text-[0.85rem] tracking-[0.04em] text-paper transition-colors hover:bg-ink-2 disabled:cursor-not-allowed disabled:opacity-40"
+            className="rounded-full bg-white px-8 py-3 font-satoshi text-sm font-semibold text-black transition-all hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-40 shadow-lg"
           >
             Next
           </button>
@@ -423,10 +422,10 @@ export default function OnboardingFlow() {
       {/* Step: Pronouns */}
       {step === "pronouns" && (
         <div className="flex flex-col items-center text-center">
-          <h2 className="mb-2 font-disp text-[1.8rem] leading-[1.1] text-ink">
+          <h2 className="mb-2 font-instrument text-[2rem] leading-[1.1] text-white">
             How should I refer to you?
           </h2>
-          <p className="mb-8 font-body text-[0.88rem] text-ink-3">
+          <p className="mb-8 font-satoshi text-[0.9rem] text-white/60">
             Pick your pronouns.
           </p>
           <div className="mb-8 flex gap-3">
@@ -435,9 +434,9 @@ export default function OnboardingFlow() {
                 type="button"
                 key={p}
                 onClick={() => setPronouns(p)}
-                className={`rounded-full border px-5 py-2.5 font-body text-[0.88rem] transition-colors ${pronouns === p
-                    ? "border-ink bg-ink text-paper"
-                    : "border-rule text-ink-3 hover:border-ink-3"
+                className={`rounded-full border px-5 py-2.5 font-satoshi text-sm transition-all ${pronouns === p
+                    ? "border-white bg-white text-black font-semibold shadow-md"
+                    : "border-white/15 bg-white/5 text-white/70 hover:border-white/30 hover:text-white"
                   }`}
               >
                 {p}
@@ -448,7 +447,7 @@ export default function OnboardingFlow() {
             type="button"
             onClick={handleNext}
             disabled={!canGoNext()}
-            className="rounded-[4px] bg-ink px-8 py-3 font-body text-[0.85rem] tracking-[0.04em] text-paper transition-colors hover:bg-ink-2 disabled:cursor-not-allowed disabled:opacity-40"
+            className="rounded-full bg-white px-8 py-3 font-satoshi text-sm font-semibold text-black transition-all hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-40 shadow-lg"
           >
             Next
           </button>
@@ -458,10 +457,10 @@ export default function OnboardingFlow() {
       {/* Step: DOB */}
       {step === "dob" && (
         <div className="flex flex-col items-center text-center">
-          <h2 className="mb-2 font-disp text-[1.8rem] leading-[1.1] text-ink">
+          <h2 className="mb-2 font-instrument text-[2rem] leading-[1.1] text-white">
             When&apos;s your birthday?
           </h2>
-          <p className="mb-8 font-body text-[0.88rem] text-ink-3">
+          <p className="mb-8 font-satoshi text-[0.9rem] text-white/60">
             So we can celebrate with you.
           </p>
           <input
@@ -473,13 +472,13 @@ export default function OnboardingFlow() {
               if (e.key === "Enter" && canGoNext()) handleNext();
             }}
             max={todayDate}
-            className="mb-8 w-full max-w-[280px] rounded-[4px] border border-rule-soft bg-paper-2 px-4 py-3 font-body text-[0.95rem] text-ink focus:border-rule focus:outline-none"
+            className="mb-8 w-full max-w-[280px] rounded-[16px] border border-white/15 bg-[#141414] px-4 py-3 font-satoshi text-sm text-white focus:border-white/40 focus:outline-none"
           />
           <button
             type="button"
             onClick={handleNext}
             disabled={!canGoNext()}
-            className="rounded-[4px] bg-ink px-8 py-3 font-body text-[0.85rem] tracking-[0.04em] text-paper transition-colors hover:bg-ink-2 disabled:cursor-not-allowed disabled:opacity-40"
+            className="rounded-full bg-white px-8 py-3 font-satoshi text-sm font-semibold text-black transition-all hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-40 shadow-lg"
           >
             Next
           </button>
@@ -498,9 +497,9 @@ export default function OnboardingFlow() {
 
       {/* Step: Completing */}
       {step === "completing" && (
-        <div className="flex flex-col items-center text-center">
-          <div className="mb-6 h-12 w-12 animate-spin rounded-full border-2 border-rule-soft border-t-ink" />
-          <p className="font-body text-[0.95rem] text-ink-2">
+        <div className="flex flex-col items-center text-center py-6">
+          <div className="mb-6 h-12 w-12 animate-spin rounded-full border-2 border-white/20 border-t-white" />
+          <p className="font-satoshi text-[0.95rem] text-white/80">
             Setting things up for you...
           </p>
         </div>
