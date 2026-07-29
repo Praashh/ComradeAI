@@ -151,7 +151,7 @@ export default function Hero() {
           className="mt-2"
           style={{ opacity: 0.001, transform: "translateY(24px)" }}
         >
-          <Link href="/sign-up">
+          <Link href="/write">
             <button
               type="button"
               className="font-satoshi cursor-pointer rounded-full bg-white px-7 py-3 text-[14px] font-medium text-[#0a0a0a] shadow-lg transition-all duration-200 hover:bg-white/90 hover:shadow-xl active:scale-95"
