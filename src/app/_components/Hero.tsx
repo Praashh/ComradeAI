@@ -58,7 +58,7 @@ export default function Hero() {
 
   return (
     <header
-      className="relative flex min-h-screen w-full flex-col items-center justify-start overflow-hidden bg-[#030914]"
+      className="relative flex min-h-screen w-full flex-col items-center justify-start overflow-hidden bg-[#0a0a0a]"
       id="hero"
     >
       {/* Background image with subtle top dark sky fade */}
@@ -72,8 +72,8 @@ export default function Hero() {
             className="object-cover object-center"
             sizes="100vw"
           />
-          {/* Subtle top/bottom dark blue sky overlay matching reference */}
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#030914]/75 via-transparent to-[#030914]/80" />
+          {/* Subtle top/bottom dark sky overlay matching reference */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/75 via-transparent to-[#0a0a0a]/80" />
         </div>
       </div>
 

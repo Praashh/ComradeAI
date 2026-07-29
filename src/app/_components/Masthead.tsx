@@ -17,7 +17,7 @@ export default function Masthead() {
   return (
     <>
       <nav
-        className="fixed top-0 right-0 left-0 z-50 w-full border-b border-white/10 bg-[#030914]/40 backdrop-blur-md"
+        className="fixed top-0 right-0 left-0 z-50 w-full border-b border-white/10 bg-[#0a0a0a]/60 backdrop-blur-md"
         style={{ WebkitBackdropFilter: "blur(12px)" }}
       >
         <div className="mx-auto flex w-full max-w-[1200px] items-center justify-between px-6 py-4">
@@ -25,57 +25,6 @@ export default function Masthead() {
             href="/"
             className="flex items-center gap-2 text-white transition-opacity hover:opacity-90"
           >
-            <svg
-              className="h-6 w-6 text-white"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M 0 0 L 0 6"
-                fill="transparent"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                transform="translate(4.5 9)"
-              />
-              <path
-                d="M 0 0 L 0 18"
-                fill="transparent"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                transform="translate(8.25 3)"
-              />
-              <path
-                d="M 0 0 L 0 12"
-                fill="transparent"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                transform="translate(12 6)"
-              />
-              <path
-                d="M 0 0 L 0 6"
-                fill="transparent"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                transform="translate(15.75 9)"
-              />
-              <path
-                d="M 0 0 L 0 9"
-                fill="transparent"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                transform="translate(19.5 7.5)"
-              />
-            </svg>
             <span className="font-instrument text-[22px] leading-none font-normal tracking-[0.01em] text-white">
               ComradeAI
             </span>
@@ -132,7 +81,7 @@ export default function Masthead() {
 
       {/* Full-screen Mobile Menu Overlay */}
       {menuOpen && (
-        <div className="tablet:hidden fixed inset-0 z-60 flex flex-col items-center justify-between bg-[#0a0a0c]/98 px-6 py-12 backdrop-blur-2xl animate-in fade-in duration-200">
+        <div className="tablet:hidden fixed inset-0 z-60 flex flex-col items-center justify-between bg-[#0a0a0a]/98 px-6 py-12 backdrop-blur-2xl animate-in fade-in duration-200">
           {/* Centered Navigation Links */}
           <div className="my-auto flex flex-col items-center gap-6 text-center">
             <Link

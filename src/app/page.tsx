@@ -7,7 +7,7 @@ import Benefits from "@/app/_components/Benefits";
 import Testimonials from "@/app/_components/Testimonials";
 import Pricing from "@/app/_components/Pricing";
 import FAQ from "@/app/_components/FAQ";
-import Privacy from "@/app/_components/Privacy";
+import HowItWorks from "@/app/_components/HowItWorks";
 import CTA from "@/app/_components/CTA";
 import Footer from "@/app/_components/Footer";
 import { FeedbackDialog } from "@/app/_components/FeedbackDialog";
@@ -60,10 +60,10 @@ export default async function Home() {
           <Hero />
           <BentoGrid />
           <Benefits />
-          <Testimonials />
+          <HowItWorks />
           <Pricing />
+          <Testimonials />
           <FAQ />
-          <Privacy />
           <CTA />
           {userId && <FeedbackSection />}
         </main>

@@ -87,14 +87,26 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={cn(instrumentSerif.variable, newsreader.variable, inter.variable, literata.variable, "font-mono", jetbrainsMono.variable)}>
+      <html
+        lang="en"
+        style={{ backgroundColor: "#0a0a0a" }}
+        className={cn(
+          instrumentSerif.variable,
+          newsreader.variable,
+          inter.variable,
+          literata.variable,
+          "font-mono",
+          jetbrainsMono.variable,
+          "bg-[#0a0a0a]",
+        )}
+      >
         <head>
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           />
         </head>
-        <body className="loaded">
+        <body className="loaded bg-[#0a0a0a]" style={{ backgroundColor: "#0a0a0a" }}>
           <TRPCReactProvider>{children}</TRPCReactProvider>
           <Toaster
             position="top-right"
