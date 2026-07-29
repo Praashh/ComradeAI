@@ -21,7 +21,7 @@ export default function Pricing() {
           <h2 className="font-instrument w-full max-w-[640px] text-center text-[36px] leading-[1.15] font-normal text-white sm:text-[48px] md:text-[54px]">
             Choose the plan{" "}
             <span className="text-[var(--text-muted-grey)]">
-              that fits your creative output
+              that fits your budget
             </span>
           </h2>
 
@@ -29,9 +29,8 @@ export default function Pricing() {
           <div className="mt-8 flex items-center justify-center gap-3">
             <span
               onClick={() => setIsYearly(false)}
-              className={`font-satoshi cursor-pointer text-sm font-medium transition-colors ${
-                !isYearly ? "text-white" : "text-white/50 hover:text-white/80"
-              }`}
+              className={`font-satoshi cursor-pointer text-sm font-medium transition-colors ${!isYearly ? "text-white" : "text-white/50 hover:text-white/80"
+                }`}
             >
               Monthly
             </span>
@@ -43,39 +42,33 @@ export default function Pricing() {
               aria-label="Toggle annual billing"
             >
               <span
-                className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform duration-300 ${
-                  isYearly ? "translate-x-5" : "translate-x-0"
-                }`}
+                className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform duration-300 ${isYearly ? "translate-x-5" : "translate-x-0"
+                  }`}
               />
             </button>
 
             <span
               onClick={() => setIsYearly(true)}
-              className={`font-satoshi cursor-pointer text-sm font-medium transition-colors ${
-                isYearly ? "text-white" : "text-white/50 hover:text-white/80"
-              }`}
+              className={`font-satoshi cursor-pointer text-sm font-medium transition-colors ${isYearly ? "text-white" : "text-white/50 hover:text-white/80"
+                }`}
             >
               Yearly
-            </span>
-
-            <span className="font-satoshi rounded-full border border-white/15 bg-white/10 px-2.5 py-1 text-[11px] font-medium text-white/90">
-              20% OFF
             </span>
           </div>
         </RevealOnScroll>
 
         <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-3">
-          {/* Card 1: Starter */}
+          {/* Card 1: Free */}
           <RevealOnScroll className="flex">
             <div className="dark-gradient-card group relative flex w-full flex-col justify-between overflow-hidden rounded-[32px] p-8 shadow-xl transition-all duration-300 hover:border-white/30">
               <div>
                 <h3 className="font-satoshi mb-4 text-[20px] font-medium tracking-tight text-white">
-                  Starter
+                  Free
                 </h3>
 
                 <div className="mb-4 flex items-baseline">
                   <span className="font-instrument text-[42px] font-normal leading-none text-white">
-                    €0
+                    $0
                   </span>
                   <span className="font-satoshi ml-1.5 text-[14px] text-white/50">
                     /month
@@ -83,8 +76,7 @@ export default function Pricing() {
                 </div>
 
                 <p className="font-satoshi mb-6 min-h-[42px] text-[14px] leading-relaxed text-white/60">
-                  Perfect for trying VISIO with essential image generation and
-                  simple edits.
+                  Get started with unlimited journals, chat support, and quick AI companion calls.
                 </p>
 
                 <Link href="/sign-up" className="block w-full">
@@ -92,7 +84,7 @@ export default function Pricing() {
                     type="button"
                     className="font-satoshi w-full cursor-pointer rounded-full border border-white/15 bg-white/5 py-3 text-[14px] font-medium text-white transition-all hover:bg-white/10 active:scale-98"
                   >
-                    Start Creating
+                    Get Started Free
                   </button>
                 </Link>
 
@@ -119,7 +111,7 @@ export default function Pricing() {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    100 image credits monthly
+                    Unlimited journals
                   </li>
                   <li className="flex items-center gap-3">
                     <svg
@@ -135,7 +127,7 @@ export default function Pricing() {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    Basic image generation
+                    Unlimited chat support
                   </li>
                   <li className="flex items-center gap-3">
                     <svg
@@ -151,14 +143,14 @@ export default function Pricing() {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    Community support
+                    5 min call with your AI best friend
                   </li>
                 </ul>
               </div>
             </div>
           </RevealOnScroll>
 
-          {/* Card 2: Pro (Popular) */}
+          {/* Card 2: Pro */}
           <RevealOnScroll className="flex">
             <div className="dark-gradient-card group relative flex w-full flex-col justify-between overflow-hidden rounded-[32px] p-8 shadow-xl transition-all duration-300 hover:border-white/30">
               <div>
@@ -173,7 +165,7 @@ export default function Pricing() {
 
                 <div className="mb-4 flex items-baseline">
                   <span className="font-instrument text-[42px] font-normal leading-none text-white">
-                    €{isYearly ? "23" : "29"}
+                    ${isYearly ? "16" : "20"}
                   </span>
                   <span className="font-satoshi ml-1.5 text-[14px] text-white/50">
                     /month
@@ -181,8 +173,7 @@ export default function Pricing() {
                 </div>
 
                 <p className="font-satoshi mb-6 min-h-[42px] text-[14px] leading-relaxed text-white/60">
-                  More credits, faster models, and video tools for serious
-                  creators and teams.
+                  Extended monthly talk time for regular calls with your AI best friend.
                 </p>
 
                 <Link href="/sign-up" className="block w-full">
@@ -217,7 +208,7 @@ export default function Pricing() {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    Unlimited image prompts
+                    Unlimited journals
                   </li>
                   <li className="flex items-center gap-3">
                     <svg
@@ -233,7 +224,7 @@ export default function Pricing() {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    AI video generation credits
+                    Unlimited chat support
                   </li>
                   <li className="flex items-center gap-3">
                     <svg
@@ -249,51 +240,19 @@ export default function Pricing() {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    Priority model access
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <svg
-                      className="h-4 w-4 shrink-0 text-white/80"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M5 13l4 4L19 7"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                    Brand style presets
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <svg
-                      className="h-4 w-4 shrink-0 text-white/80"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M5 13l4 4L19 7"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                    Commercial usage rights
+                    30 hour call with your AI best friend
                   </li>
                 </ul>
               </div>
             </div>
           </RevealOnScroll>
 
-          {/* Card 3: Studio */}
+          {/* Card 3: Custom */}
           <RevealOnScroll className="flex">
             <div className="dark-gradient-card group relative flex w-full flex-col justify-between overflow-hidden rounded-[32px] p-8 shadow-xl transition-all duration-300 hover:border-white/30">
               <div>
                 <h3 className="font-satoshi mb-4 text-[20px] font-medium tracking-tight text-white">
-                  Studio
+                  Custom
                 </h3>
 
                 <div className="mb-4 flex items-baseline">
@@ -303,16 +262,15 @@ export default function Pricing() {
                 </div>
 
                 <p className="font-satoshi mb-6 min-h-[42px] text-[14px] leading-relaxed text-white/60">
-                  Custom credits, team controls, premium support, and
-                  collaboration.
+                  Custom AI persona tailoring with completely uncapped call time.
                 </p>
 
-                <Link href="mailto:support@comrade.ai" className="block w-full">
+                <Link href="https://x.com/10xpraash" className="block w-full">
                   <button
                     type="button"
                     className="font-satoshi w-full cursor-pointer rounded-full border border-white/15 bg-white/5 py-3 text-[14px] font-medium text-white transition-all hover:bg-white/10 active:scale-98"
                   >
-                    Contact Sales
+                    Contact Us
                   </button>
                 </Link>
 
@@ -339,7 +297,7 @@ export default function Pricing() {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    Shared team workspace
+                    Unlimited journals
                   </li>
                   <li className="flex items-center gap-3">
                     <svg
@@ -355,7 +313,7 @@ export default function Pricing() {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    Custom model workflows
+                    Unlimited chat support
                   </li>
                   <li className="flex items-center gap-3">
                     <svg
@@ -371,7 +329,7 @@ export default function Pricing() {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    Premium support and SLA
+                    Unlimited call with your AI best friend
                   </li>
                   <li className="flex items-center gap-3">
                     <svg
@@ -387,23 +345,7 @@ export default function Pricing() {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    Onboarding and training
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <svg
-                      className="h-4 w-4 shrink-0 text-white/80"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M5 13l4 4L19 7"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                    Custom brand controls
+                    Custom AI best friend
                   </li>
                 </ul>
               </div>
