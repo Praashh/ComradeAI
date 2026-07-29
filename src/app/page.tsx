@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import Masthead from "@/app/_components/Masthead";
 import Hero from "@/app/_components/Hero";
 import BentoGrid from "@/app/_components/BentoGrid";
+import Benefits from "@/app/_components/Benefits";
 import Testimonials from "@/app/_components/Testimonials";
 import Pricing from "@/app/_components/Pricing";
 import FAQ from "@/app/_components/FAQ";
@@ -10,6 +11,8 @@ import Privacy from "@/app/_components/Privacy";
 import CTA from "@/app/_components/CTA";
 import Footer from "@/app/_components/Footer";
 import { FeedbackDialog } from "@/app/_components/FeedbackDialog";
+
+import SmoothScroll from "@/app/_components/SmoothScroll";
 
 export const metadata: Metadata = {
   title: "Comrade AI - A thinking, consoling and understanding AI friend",
@@ -50,19 +53,22 @@ export default async function Home() {
   const { userId } = await auth();
 
   return (
-    <div className="landing-theme font-satoshi flex min-h-screen flex-col bg-[var(--dark-bg)] text-white selection:bg-white selection:text-[var(--dark-bg)]">
-      <Masthead />
-      <main className="flex-grow overflow-hidden">
-        <Hero />
-        <BentoGrid />
-        <Testimonials />
-        <Pricing />
-        <FAQ />
-        <Privacy />
-        <CTA />
-        {userId && <FeedbackSection />}
-      </main>
-      <Footer />
-    </div>
+    <SmoothScroll>
+      <div className="landing-theme font-satoshi flex min-h-screen flex-col bg-[var(--dark-bg)] text-white selection:bg-white selection:text-[var(--dark-bg)]">
+        <Masthead />
+        <main className="flex-grow overflow-hidden">
+          <Hero />
+          <BentoGrid />
+          <Benefits />
+          <Testimonials />
+          <Pricing />
+          <FAQ />
+          <Privacy />
+          <CTA />
+          {userId && <FeedbackSection />}
+        </main>
+        <Footer />
+      </div>
+    </SmoothScroll>
   );
 }

@@ -1647,6 +1647,12 @@ body:has(.landing-theme)::before {
 }
 
 /* Explicit max-width overrides globally to prevent Tailwind CSS v4 spacing conflicts */
+.max-w-xs {
+  max-width: 20rem !important;
+}
+.max-w-sm {
+  max-width: 24rem !important;
+}
 .max-w-md {
   max-width: 28rem !important;
 }
@@ -1843,3 +1849,26 @@ body:has(.landing-theme)::before {
 .hero-char {
   will-change: opacity, filter, transform;
 }
+
+/* Lenis Smooth Scroll Styles */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+

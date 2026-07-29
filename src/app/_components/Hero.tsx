@@ -51,35 +51,19 @@ export default function Hero() {
     }
   }, []);
 
-  const headingWords = [
-    "The",
-    "friend",
-    "who",
-    "listens,",
-    "understands,",
-    "and",
-    "remembers.",
-  ];
+  const headingLine1 = ["The", "friend", "who", "listens,"];
+  const headingLine2 = ["understands,", "and", "remembers."];
   const subtitleText =
     "A safe harbor for your thoughts - an intelligent journal that feels human.";
 
   return (
     <header
-      className="relative flex h-screen w-full flex-col items-center justify-start overflow-hidden bg-black"
+      className="relative flex min-h-screen w-full flex-col items-center justify-start overflow-hidden bg-[#030914]"
       id="hero"
     >
-      {/* Background image with mask fade */}
-      <div
-        className="absolute inset-0 z-0 h-full w-full overflow-hidden"
-        style={{
-          WebkitMask: "linear-gradient(#000 52%, #0000 100%)",
-          mask: "linear-gradient(#000 52%, #0000 100%)",
-        }}
-      >
-        <div
-          className="h-full w-full"
-          style={{ willChange: "transform", transform: "scale(1.05)" }}
-        >
+      {/* Background image with subtle top dark sky fade */}
+      <div className="absolute inset-0 z-0 h-full w-full overflow-hidden">
+        <div className="relative h-full w-full">
           <Image
             src="/images/hero-bg.png"
             alt="Scenic dusk mountain and lake background"
@@ -88,42 +72,61 @@ export default function Hero() {
             className="object-cover object-center"
             sizes="100vw"
           />
+          {/* Subtle top/bottom dark blue sky overlay matching reference */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#030914]/75 via-transparent to-[#030914]/80" />
         </div>
       </div>
 
       {/* Content */}
       <div
-        className="relative z-10 mx-auto flex w-full max-w-[560px] flex-col items-center gap-8 px-4 text-center"
-        style={{ paddingTop: "160px" }}
+        className="relative z-10 mx-auto flex w-full max-w-[680px] flex-col items-center gap-6 px-4 text-center"
+        style={{ paddingTop: "170px" }}
       >
         {/* Text group */}
         <div className="flex w-full flex-col items-center gap-4">
-          {/* Heading - word-by-word reveal */}
+          {/* Heading - word-by-word reveal (upright Instrument Serif) */}
           <h1
             ref={headingRef}
-            className="font-instrument w-full text-center text-[40px] leading-[1em] font-normal tracking-[-0.03em] text-white sm:text-[56px] md:text-[58px]"
-            style={{ fontStyle: "italic" }}
+            className="font-instrument w-full text-center text-[40px] leading-[1.12] font-normal tracking-[-0.01em] text-white sm:text-[56px] md:text-[62px]"
           >
-            {headingWords.map((word, i) => (
-              <span
-                key={i}
-                className="hero-word inline-block"
-                style={{
-                  opacity: 0.001,
-                  filter: "blur(4px)",
-                  transform: "translateY(12px)",
-                }}
-              >
-                {word}
-                {i < headingWords.length - 1 ? "\u00A0" : ""}
-              </span>
-            ))}
+            <span className="block">
+              {headingLine1.map((word, i) => (
+                <span
+                  key={`l1-${i}`}
+                  className="hero-word inline-block"
+                  style={{
+                    opacity: 0.001,
+                    filter: "blur(4px)",
+                    transform: "translateY(12px)",
+                  }}
+                >
+                  {word}
+                  {i < headingLine1.length - 1 ? "\u00A0" : ""}
+                </span>
+              ))}
+            </span>
+            <span className="block">
+              {headingLine2.map((word, i) => (
+                <span
+                  key={`l2-${i}`}
+                  className="hero-word inline-block"
+                  style={{
+                    opacity: 0.001,
+                    filter: "blur(4px)",
+                    transform: "translateY(12px)",
+                  }}
+                >
+                  {word}
+                  {i < headingLine2.length - 1 ? "\u00A0" : ""}
+                </span>
+              ))}
+            </span>
           </h1>
 
           {/* Subtitle - character reveal */}
           <p
             ref={subtitleRef}
-            className="font-satoshi max-w-[350px] text-center text-[14px] leading-[1.3em] font-normal text-white sm:text-[15px]"
+            className="font-satoshi max-w-[440px] text-center text-[14px] leading-[1.45] font-normal text-white/80 sm:text-[15px]"
           >
             {subtitleText.split("").map((char, i) => (
               <span
@@ -142,15 +145,16 @@ export default function Hero() {
           </p>
         </div>
 
-        {/* CTA Button — neon lime green matching reference */}
+        {/* CTA Button — white solid pill button with dark text */}
         <div
           ref={ctaRef}
+          className="mt-2"
           style={{ opacity: 0.001, transform: "translateY(24px)" }}
         >
           <Link href="/sign-up">
             <button
               type="button"
-              className="neon-btn font-satoshi cursor-pointer rounded-full px-7 py-3 text-[14px] font-medium tracking-normal transition-all duration-200 active:scale-95"
+              className="font-satoshi cursor-pointer rounded-full bg-white px-7 py-3 text-[14px] font-medium text-[#0a0a0a] shadow-lg transition-all duration-200 hover:bg-white/90 hover:shadow-xl active:scale-95"
             >
               Start your journey
             </button>
@@ -160,3 +164,4 @@ export default function Hero() {
     </header>
   );
 }
+
