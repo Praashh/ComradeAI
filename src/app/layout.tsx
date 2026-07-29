@@ -21,10 +21,13 @@ export const metadata: Metadata = {
   },
   description:
     "Comrade AI is an AI application, that stores your journal, learns about you from your journals, and console you, understand you and help you in decision making based on your nature, situation or circumstances.",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [
+    { rel: "icon", type: "image/png", url: "/icon.png" },
+    { rel: "apple-touch-icon", url: "/icon.png" },
+  ],
   openGraph: {
     type: "website",
-    url: process.env.NEXT_PUBLIC_APP_URL ?? "https://comrade.ai",
+    url: process.env.NEXT_PUBLIC_APP_URL ?? "https://comradeai.vercel.app",
     siteName: "Comrade AI",
     title: "Comrade AI - A thinking, consoling and understanding AI friend.",
     description:
