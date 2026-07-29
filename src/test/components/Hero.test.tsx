@@ -16,21 +16,24 @@ vi.mock("@phosphor-icons/react", () => ({
 
 describe("Hero", () => {
   it("renders the headline", () => {
-    render(<Hero />);
-    expect(screen.getByText(/The friend who/)).toBeInTheDocument();
-    expect(screen.getByText(/remembers/)).toBeInTheDocument();
+    const { container } = render(<Hero />);
+    const normalizedText = container.textContent?.replace(/\u00a0/g, " ");
+    expect(normalizedText).toContain("The friend who listens,");
+    expect(normalizedText).toContain("understands, and remembers.");
   });
 
   it("renders the introductory paragraph about Comrade AI", () => {
-    render(<Hero />);
-    expect(
-      screen.getByText(/A safe harbor for your thoughts/),
-    ).toBeInTheDocument();
+    const { container } = render(<Hero />);
+    const normalizedText = container.textContent?.replace(/\u00a0/g, " ");
+    expect(normalizedText).toContain(
+      "A safe harbor for your thoughts - an intelligent journal that feels human.",
+    );
   });
 
-  it("renders the CTA button linking to /write", () => {
+  it("renders the CTA button linking to /sign-up", () => {
     render(<Hero />);
     const link = screen.getByRole("link", { name: /Start your journey/ });
-    expect(link).toHaveAttribute("href", "/write");
+    expect(link).toHaveAttribute("href", "/sign-up");
   });
 });
+

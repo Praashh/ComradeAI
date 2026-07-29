@@ -1,56 +1,167 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import { CaretDown } from "@phosphor-icons/react";
 
 export default function Hero() {
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Word-by-word reveal animation for heading
+    if (headingRef.current) {
+      const words =
+        headingRef.current.querySelectorAll<HTMLSpanElement>(".hero-word");
+      words.forEach((word, i) => {
+        word.style.transition = `opacity 0.5s ease ${i * 0.08}s, filter 0.5s ease ${i * 0.08}s, transform 0.5s ease ${i * 0.08}s`;
+        requestAnimationFrame(() => {
+          word.style.opacity = "1";
+          word.style.filter = "blur(0px)";
+          word.style.transform = "translateY(0px)";
+        });
+      });
+    }
+
+    // Letter-by-letter reveal for subtitle
+    if (subtitleRef.current) {
+      const chars =
+        subtitleRef.current.querySelectorAll<HTMLSpanElement>(".hero-char");
+      chars.forEach((char, i) => {
+        char.style.transition = `opacity 0.3s ease ${0.5 + i * 0.02}s, filter 0.3s ease ${0.5 + i * 0.02}s, transform 0.3s ease ${0.5 + i * 0.02}s`;
+        requestAnimationFrame(() => {
+          char.style.opacity = "1";
+          char.style.filter = "blur(0px)";
+          char.style.transform = "translateY(0px)";
+        });
+      });
+    }
+
+    // CTA fade up
+    if (ctaRef.current) {
+      ctaRef.current.style.transition =
+        "opacity 0.6s ease 1.2s, transform 0.6s ease 1.2s";
+      requestAnimationFrame(() => {
+        if (ctaRef.current) {
+          ctaRef.current.style.opacity = "1";
+          ctaRef.current.style.transform = "translateY(0px)";
+        }
+      });
+    }
+  }, []);
+
+  const headingLine1 = ["The", "friend", "who", "listens,"];
+  const headingLine2 = ["understands,", "and", "remembers."];
+  const subtitleText =
+    "A safe harbor for your thoughts - an intelligent journal that feels human.";
+
   return (
-    <section className="relative min-h-screen flex flex-col justify-center items-center overflow-hidden bg-background px-margin-mobile tablet:px-margin-desktop py-xl">
-      {/* Premium Mesh Gradient Background */}
-      <div className="absolute inset-0 z-0 bg-background overflow-hidden">
-        {/* Top-Right Peach Glow */}
-        <div className="absolute -top-[20%] -right-[10%] w-[70vw] h-[70vw] max-w-[800px] max-h-[800px] rounded-full bg-[#fbe7e1] opacity-70 blur-[120px]"></div>
-        
-        {/* Bottom-Left Lavender Glow */}
-        <div className="absolute -bottom-[20%] -left-[10%] w-[60vw] h-[60vw] max-w-[700px] max-h-[700px] rounded-full bg-[#ecdfe9] opacity-50 blur-[140px]"></div>
-        
-        {/* Center-Left Warm Gold Glow */}
-        <div className="absolute top-[20%] left-[-20%] w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] rounded-full bg-[#fdf6e2] opacity-60 blur-[100px]"></div>
+    <header
+      className="relative flex min-h-screen w-full flex-col items-center justify-start overflow-hidden bg-[#0a0a0a]"
+      id="hero"
+    >
+      {/* Background image with subtle top dark sky fade */}
+      <div className="absolute inset-0 z-0 h-full w-full overflow-hidden">
+        <div className="relative h-full w-full">
+          <Image
+            src="/images/hero-bg.png"
+            alt="Scenic dusk mountain and lake background"
+            fill
+            priority
+            className="object-cover object-center"
+            sizes="100vw"
+          />
+          {/* Subtle top/bottom dark sky overlay matching reference */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/75 via-transparent to-[#0a0a0a]/80" />
+        </div>
       </div>
-      
-      {/* Integrated Content Container */}
-      <div className="relative z-10 w-full max-w-4xl mx-auto flex flex-col items-center text-center animate-fade-in gap-6">
-        <span className="inline-block px-4 py-1.5 bg-primary/5 text-primary text-[10px] tracking-[0.15em] font-body font-semibold rounded-full uppercase">
-          YOUR EMPATHETIC ARCHIVE
-        </span>
-        
-        <h1 className="font-display-lg text-[44px] sm:text-[56px] md:text-[64px] leading-tight mb-2 text-balance text-on-background font-normal max-w-3xl">
-          The friend who <span className="text-primary italic">listens</span>,<br />understands, and <span className="text-primary">remembers</span>.
-        </h1>
-        
-        <p className="font-body-lg text-on-surface-variant mb-6 text-balance max-w-2xl leading-relaxed">
-          A safe harbor for your thoughts. Comrade AI bridges the gap between digital convenience and human warmth, preserving your growth in a tactile, intelligent journal.
-        </p>
-        
-        <div className="flex flex-wrap gap-4 justify-center">
-          <Link href="/write">
-            <button type="button" className="bg-primary text-on-primary px-8 py-3.5 rounded-2xl text-sm font-body font-semibold shadow-lg shadow-primary/20 hover:scale-105 transition-transform active:scale-95 cursor-pointer">
+
+      {/* Content */}
+      <div
+        className="relative z-10 mx-auto flex w-full max-w-[680px] flex-col items-center gap-6 px-4 text-center"
+        style={{ paddingTop: "170px" }}
+      >
+        {/* Text group */}
+        <div className="flex w-full flex-col items-center gap-4">
+          {/* Heading - word-by-word reveal (upright Instrument Serif) */}
+          <h1
+            ref={headingRef}
+            className="font-instrument w-full text-center text-[40px] leading-[1.12] font-normal tracking-[-0.01em] text-white sm:text-[56px] md:text-[62px]"
+          >
+            <span className="block">
+              {headingLine1.map((word, i) => (
+                <span
+                  key={`l1-${i}`}
+                  className="hero-word inline-block"
+                  style={{
+                    opacity: 0.001,
+                    filter: "blur(4px)",
+                    transform: "translateY(12px)",
+                  }}
+                >
+                  {word}
+                  {i < headingLine1.length - 1 ? "\u00A0" : ""}
+                </span>
+              ))}
+            </span>
+            <span className="block">
+              {headingLine2.map((word, i) => (
+                <span
+                  key={`l2-${i}`}
+                  className="hero-word inline-block"
+                  style={{
+                    opacity: 0.001,
+                    filter: "blur(4px)",
+                    transform: "translateY(12px)",
+                  }}
+                >
+                  {word}
+                  {i < headingLine2.length - 1 ? "\u00A0" : ""}
+                </span>
+              ))}
+            </span>
+          </h1>
+
+          {/* Subtitle - character reveal */}
+          <p
+            ref={subtitleRef}
+            className="font-satoshi max-w-[440px] text-center text-[14px] leading-[1.45] font-normal text-white/80 sm:text-[15px]"
+          >
+            {subtitleText.split("").map((char, i) => (
+              <span
+                key={i}
+                className="hero-char inline-block"
+                style={{
+                  opacity: 0.001,
+                  filter: "blur(10px)",
+                  transform: "translateY(20px)",
+                  whiteSpace: char === " " ? "pre" : undefined,
+                }}
+              >
+                {char === " " ? "\u00A0" : char}
+              </span>
+            ))}
+          </p>
+        </div>
+
+        {/* CTA Button — white solid pill button with dark text */}
+        <div
+          ref={ctaRef}
+          className="mt-2"
+          style={{ opacity: 0.001, transform: "translateY(24px)" }}
+        >
+          <Link href="/sign-up">
+            <button
+              type="button"
+              className="font-satoshi cursor-pointer rounded-full bg-white px-7 py-3 text-[14px] font-medium text-[#0a0a0a] shadow-lg transition-all duration-200 hover:bg-white/90 hover:shadow-xl active:scale-95"
+            >
               Start your journey
-            </button>
-          </Link>
-          <Link href="#features">
-            <button type="button" className="bg-transparent border border-outline-variant/60 text-on-surface px-8 py-3.5 rounded-2xl text-sm font-body font-medium hover:bg-surface-container-high transition-colors active:scale-95 cursor-pointer">
-              Watch how it feels
             </button>
           </Link>
         </div>
       </div>
-
-      {/* Scroll indicator */}
-      <Link href="#features" className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 z-10 text-secondary hover:text-primary transition-colors cursor-pointer group">
-        <span className="text-[10px] tracking-[0.2em] font-body font-semibold opacity-80 group-hover:opacity-100 transition-opacity">EXPLORE</span>
-        <CaretDown size={14} className="animate-bounce" />
-      </Link>
-    </section>
+    </header>
   );
 }
+

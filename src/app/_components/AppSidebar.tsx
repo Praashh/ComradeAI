@@ -22,6 +22,7 @@ const NAV_ITEMS = [
   { label: "Journal", href: "/write", icon: "book_5" },
   { label: "Chat", href: "/chat", icon: "chat_bubble" },
   { label: "Voice", href: "/talk", icon: "mic" },
+  { label: "Mind", href: "/mind", icon: "hub" },
 ];
 
 const FOOTER_ITEMS = [
@@ -36,18 +37,12 @@ export function AppSidebar() {
     <TooltipProvider delay={0}>
       <Sidebar
         collapsible="icon"
-        className="border-r border-black/5 bg-surface-container-low/80 backdrop-blur-md"
+        className="border-r border-white/10 bg-[#0a0a0a] text-white"
       >
         <SidebarHeader className="px-3 py-4 group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:py-3">
           <Link href="/" className="flex items-center gap-2.5 overflow-hidden">
-            <span
-              className="material-symbols-outlined text-primary shrink-0 size-5 flex items-center justify-center"
-              style={{ fontSize: "22px", fontVariationSettings: "'FILL' 1" }}
-            >
-              favorite
-            </span>
-            <span className="font-semibold text-primary truncate text-sm tracking-tight group-data-[collapsible=icon]:hidden">
-              Comrade AI
+            <span className="font-instrument font-normal text-white truncate text-lg tracking-tight group-data-[collapsible=icon]:hidden">
+              ComradeAI
             </span>
           </Link>
         </SidebarHeader>
@@ -55,7 +50,7 @@ export function AppSidebar() {
         <SidebarContent className="group-data-[collapsible=icon]:pt-2">
           <SidebarGroup>
             <SidebarGroupContent>
-              <SidebarMenu className="gap-1">
+              <SidebarMenu className="gap-1.5">
                 {NAV_ITEMS.map((item) => {
                   const isActive =
                     pathname === item.href ||
@@ -69,8 +64,8 @@ export function AppSidebar() {
                         render={<Link href={item.href} />}
                         className={
                           isActive
-                            ? "bg-primary text-on-primary hover:bg-primary/90 hover:text-on-primary data-active:bg-primary data-active:text-on-primary rounded-xl"
-                            : "text-on-secondary-container hover:bg-secondary-container/50 rounded-xl"
+                            ? "bg-white text-black hover:bg-white/90 hover:text-black data-active:bg-white data-active:text-black font-semibold rounded-xl shadow-md"
+                            : "text-white/60 hover:bg-white/10 hover:text-white rounded-xl"
                         }
                       >
                         <span
@@ -79,7 +74,7 @@ export function AppSidebar() {
                         >
                           {item.icon}
                         </span>
-                        <span className="truncate font-medium text-sm group-data-[collapsible=icon]:hidden">
+                        <span className="truncate font-satoshi font-medium text-sm group-data-[collapsible=icon]:hidden">
                           {item.label}
                         </span>
                       </SidebarMenuButton>
@@ -92,14 +87,14 @@ export function AppSidebar() {
         </SidebarContent>
 
         <SidebarFooter className="pb-4 group-data-[collapsible=icon]:pb-2">
-          <SidebarSeparator className="mb-2 group-data-[collapsible=icon]:hidden" />
+          <SidebarSeparator className="mb-2 bg-white/10 group-data-[collapsible=icon]:hidden" />
           <SidebarMenu className="gap-1">
             {FOOTER_ITEMS.map((item) => (
               <SidebarMenuItem key={item.label}>
                 <SidebarMenuButton
                   tooltip={item.label}
                   render={<Link href={item.href} />}
-                  className="text-secondary hover:bg-surface-container rounded-xl"
+                  className="text-white/50 hover:bg-white/10 hover:text-white rounded-xl"
                 >
                   <span
                     className="material-symbols-outlined shrink-0 size-5 flex items-center justify-center"
@@ -107,19 +102,19 @@ export function AppSidebar() {
                   >
                     {item.icon}
                   </span>
-                  <span className="truncate text-sm group-data-[collapsible=icon]:hidden">
+                  <span className="truncate font-satoshi text-sm group-data-[collapsible=icon]:hidden">
                     {item.label}
                   </span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
-            
+
             {/* Feedback Dialog Trigger */}
             <SidebarMenuItem>
               <FeedbackDialog>
                 <SidebarMenuButton
                   tooltip="Feedback"
-                  className="text-secondary hover:bg-surface-container rounded-xl cursor-pointer"
+                  className="text-white/50 hover:bg-white/10 hover:text-white rounded-xl cursor-pointer"
                 >
                   <span
                     className="material-symbols-outlined shrink-0 size-5 flex items-center justify-center"
@@ -127,7 +122,7 @@ export function AppSidebar() {
                   >
                     rate_review
                   </span>
-                  <span className="truncate text-sm group-data-[collapsible=icon]:hidden">
+                  <span className="truncate font-satoshi text-sm group-data-[collapsible=icon]:hidden">
                     Feedback
                   </span>
                 </SidebarMenuButton>
@@ -141,3 +136,4 @@ export function AppSidebar() {
     </TooltipProvider>
   );
 }
+

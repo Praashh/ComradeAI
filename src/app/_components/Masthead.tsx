@@ -2,7 +2,6 @@
 
 import { useState, useCallback } from "react";
 import Link from "next/link";
-import { Show, UserButton } from "@clerk/nextjs";
 
 export default function Masthead() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -17,193 +16,123 @@ export default function Masthead() {
 
   return (
     <>
-      {/* Floating Navigation Bar */}
-      <div className="fixed top-4 left-0 right-0 z-50 px-margin-mobile tablet:px-margin-desktop flex justify-center">
-        <nav className="w-full max-w-5xl bg-surface/80 backdrop-blur-xl border border-black/5 rounded-full px-6 py-2.5 shadow-[0_4px_20px_rgba(33,28,22,0.05)] flex justify-between items-center">
-          <div className="flex items-center">
-            <Link href="/" className="font-display-md text-[20px] font-semibold text-primary tracking-tight transition-transform active:scale-98">
+      <nav
+        className="fixed top-0 right-0 left-0 z-50 w-full border-b border-white/10 bg-[#0a0a0a]/60 backdrop-blur-md"
+        style={{ WebkitBackdropFilter: "blur(12px)" }}
+      >
+        <div className="mx-auto flex w-full max-w-[1200px] items-center justify-between px-6 py-4">
+          <Link
+            href="/"
+            className="flex items-center gap-2 text-white transition-opacity hover:opacity-90"
+          >
+            <span className="font-instrument text-[22px] leading-none font-normal tracking-[0.01em] text-white">
               ComradeAI
+            </span>
+          </Link>
+
+          <div className="tablet:flex hidden items-center gap-7">
+            <Link
+              href="#features"
+              className="nav-link font-satoshi text-[14px] font-normal text-white/80 transition-colors hover:text-white"
+            >
+              Features
+            </Link>
+            <Link
+              href="#testimonials"
+              className="nav-link font-satoshi text-[14px] font-normal text-white/80 transition-colors hover:text-white"
+            >
+              Testimonials
+            </Link>
+            <Link
+              href="#pricing"
+              className="nav-link font-satoshi text-[14px] font-normal text-white/80 transition-colors hover:text-white"
+            >
+              Pricing
+            </Link>
+            <Link
+              href="#faq"
+              className="nav-link font-satoshi text-[14px] font-normal text-white/80 transition-colors hover:text-white"
+            >
+              FAQ
             </Link>
           </div>
 
-          {/* Desktop Navigation Links */}
-          <div className="hidden tablet:flex items-center gap-6">
-            <Show when="signed-out">
-              <Link href="/" className="text-primary font-body-md font-semibold transition-colors text-sm">
-                Home
-              </Link>
-              <Link href="#features" className="text-secondary hover:text-primary transition-colors font-body-md text-sm">
-                Features
-              </Link>
-              <Link href="#cta" className="text-secondary hover:text-primary transition-colors font-body-md text-sm">
-                Pricing
-              </Link>
-              <Link href="#footer" className="text-secondary hover:text-primary transition-colors font-body-md text-sm">
-                Community
-              </Link>
-            </Show>
-
-            <Show when="signed-in">
-              <Link href="/write" className="text-secondary hover:text-primary transition-colors font-body-md text-sm">
-                Write
-              </Link>
-              <Link href="/chat" className="text-secondary hover:text-primary transition-colors font-body-md text-sm">
-                AskComrade
-              </Link>
-              <Link href="/talk" className="text-secondary hover:text-primary transition-colors font-body-md text-sm">
-                Voice
-              </Link>
-              <Link href="/mind" className="text-secondary hover:text-primary transition-colors font-body-md text-sm">
-                ComradeMind
-              </Link>
-            </Show>
-          </div>
-
-          {/* Action Buttons */}
           <div className="flex items-center gap-4">
             <button
               type="button"
               onClick={toggleMenu}
-              className="landing-hamburger material-symbols-outlined text-on-surface-variant hover:text-primary transition-transform active:scale-95 cursor-pointer"
+              className="tablet:hidden flex items-center justify-center cursor-pointer text-white/60 transition-colors hover:text-white"
               aria-label="Toggle menu"
             >
-              menu
+              <span className="material-symbols-outlined">menu</span>
             </button>
 
-            <Show when="signed-out">
-              <Link href="/sign-in" className="material-symbols-outlined text-on-surface-variant hover:text-primary transition-transform active:scale-95 text-[22px] flex items-center justify-center">
-                account_circle
-              </Link>
-              <Link href="/sign-up">
-                <button type="button" className="bg-primary text-on-primary px-4 py-2 rounded-full text-xs font-semibold font-body tracking-wider transition-all hover:bg-primary/95 active:scale-95 cursor-pointer shadow-sm shadow-primary/10">
-                  GET STARTED
-                </button>
-              </Link>
-            </Show>
-
-            <Show when="signed-in">
-              <div className="flex items-center">
-                <UserButton
-                  appearance={{
-                    elements: {
-                      userButtonAvatarBox: "w-[30px] h-[30px] border border-black/5 hover:scale-105 transition-transform",
-                    },
-                  }}
-                />
-              </div>
-            </Show>
-          </div>
-        </nav>
-      </div>
-
-      {/* Mobile Drawer Navigation Overlay */}
-      {menuOpen && (
-        <button type="button" className="fixed inset-0 z-55 bg-black/40 backdrop-blur-sm tablet:hidden border-none cursor-default" onClick={closeMenu} aria-label="Close menu" />
-      )}
-
-      <div
-        className={`fixed right-4 top-4 h-[calc(100vh-32px)] w-64 bg-surface/95 backdrop-blur-xl border border-black/5 rounded-2xl shadow-2xl transition-transform duration-300 z-60 tablet:hidden flex flex-col p-6 gap-4 ${menuOpen ? "translate-x-0" : "translate-x-[calc(100%+32px)]"
-          }`}
-      >
-        <div className="flex items-center gap-sm mb-lg">
-          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary">
-            <span className="material-symbols-outlined">bolt</span>
-          </div>
-          <div>
-            <h2 className="font-display-md text-body-lg font-bold text-primary">Comrade AI</h2>
-            <p className="text-[10px] text-secondary">Your Empathetic Companion</p>
+            <Link href="/sign-up" className="tablet:block hidden">
+              <button
+                type="button"
+                className="font-satoshi cursor-pointer rounded-full border border-white/20 bg-white/10 px-5 py-2 text-[13px] font-medium text-white transition-all hover:bg-white/15 active:scale-95"
+              >
+                Try Now
+              </button>
+            </Link>
           </div>
         </div>
+      </nav>
 
-        <nav className="flex-1 flex flex-col gap-base">
-          <Show when="signed-out">
+      {/* Full-screen Mobile Menu Overlay */}
+      {menuOpen && (
+        <div className="tablet:hidden fixed inset-0 z-60 flex flex-col items-center justify-between bg-[#0a0a0a]/98 px-6 py-12 backdrop-blur-2xl animate-in fade-in duration-200">
+          {/* Centered Navigation Links */}
+          <div className="my-auto flex flex-col items-center gap-6 text-center">
             <Link
-              href="/"
+              href="#hero"
               onClick={closeMenu}
-              className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-4 py-2 flex items-center gap-3 transition-all font-body-md"
+              className="font-instrument text-[28px] font-normal text-white transition-opacity hover:opacity-75 sm:text-[32px]"
             >
-              <span className="material-symbols-outlined">home</span> Home
+              About
             </Link>
             <Link
               href="#features"
               onClick={closeMenu}
-              className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-4 py-2 flex items-center gap-3 transition-all font-body-md"
+              className="font-instrument text-[28px] font-normal text-white transition-opacity hover:opacity-75 sm:text-[32px]"
             >
-              <span className="material-symbols-outlined">featured_play_list</span> Features
+              Features
             </Link>
             <Link
-              href="#privacy"
+              href="#testimonials"
               onClick={closeMenu}
-              className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-4 py-2 flex items-center gap-3 transition-all font-body-md"
+              className="font-instrument text-[28px] font-normal text-white transition-opacity hover:opacity-75 sm:text-[32px]"
             >
-              <span className="material-symbols-outlined">security</span> Privacy
+              Testimonials
             </Link>
             <Link
-              href="/sign-in"
+              href="#pricing"
               onClick={closeMenu}
-              className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-4 py-2 flex items-center gap-3 transition-all font-body-md"
+              className="font-instrument text-[28px] font-normal text-white transition-opacity hover:opacity-75 sm:text-[32px]"
             >
-              <span className="material-symbols-outlined">login</span> Sign In
+              Pricing
             </Link>
             <Link
-              href="/sign-up"
+              href="#faq"
               onClick={closeMenu}
-              className="bg-primary text-on-primary rounded-full px-4 py-2 flex items-center gap-3 active:scale-98 transition-transform font-body-md"
+              className="font-instrument text-[28px] font-normal text-white transition-opacity hover:opacity-75 sm:text-[32px]"
             >
-              <span className="material-symbols-outlined">assignment_ind</span> Get Started
+              FAQ
             </Link>
-          </Show>
+          </div>
 
-          <Show when="signed-in">
-            <Link
-              href="/write"
-              onClick={closeMenu}
-              className="bg-primary text-on-primary rounded-full px-4 py-2 flex items-center gap-3 active:scale-98 transition-transform font-body-md"
-            >
-              <span className="material-symbols-outlined">book_5</span> Journal
-            </Link>
-            <Link
-              href="/chat"
-              onClick={closeMenu}
-              className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-4 py-2 flex items-center gap-3 transition-all font-body-md"
-            >
-              <span className="material-symbols-outlined">chat_bubble</span> Chat
-            </Link>
-            <Link
-              href="/talk"
-              onClick={closeMenu}
-              className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-4 py-2 flex items-center gap-3 transition-all font-body-md"
-            >
-              <span className="material-symbols-outlined">mic</span> Voice
-            </Link>
-            <Link
-              href="/mind"
-              onClick={closeMenu}
-              className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-4 py-2 flex items-center gap-3 transition-all font-body-md"
-            >
-              <span className="material-symbols-outlined">hub</span> ComradeMind
-            </Link>
-          </Show>
-        </nav>
-
-        <Show when="signed-in">
-          <Link href="/talk" onClick={closeMenu}>
-            <button type="button" className="mt-auto bg-primary/10 text-primary w-full py-md rounded-xl font-title-md border border-primary/20 cursor-pointer hover:bg-primary/20 transition-colors">
-              Talk to Comrade
-            </button>
-          </Link>
-        </Show>
-
-        <div className="pt-md mt-md border-t border-outline-variant/30 flex flex-col gap-xs">
-          <Link
-            href="/onboarding"
+          {/* Bottom Center Close Button */}
+          <button
+            type="button"
             onClick={closeMenu}
-            className="text-on-secondary-container hover:bg-secondary-container/50 rounded-full px-4 py-1 flex items-center gap-3 text-sm"
+            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full text-white/60 transition-colors hover:text-white focus:outline-none"
+            aria-label="Close menu"
           >
-            <span className="material-symbols-outlined text-[18px]">settings</span> Onboarding
-          </Link>
+            <span className="material-symbols-outlined text-[24px]">close</span>
+          </button>
         </div>
-      </div>
+      )}
     </>
   );
 }
+

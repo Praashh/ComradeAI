@@ -21,10 +21,13 @@ export const metadata: Metadata = {
   },
   description:
     "Comrade AI is an AI application, that stores your journal, learns about you from your journals, and console you, understand you and help you in decision making based on your nature, situation or circumstances.",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [
+    { rel: "icon", type: "image/png", url: "/icon.png" },
+    { rel: "apple-touch-icon", url: "/icon.png" },
+  ],
   openGraph: {
     type: "website",
-    url: process.env.NEXT_PUBLIC_APP_URL ?? "https://comrade.ai",
+    url: process.env.NEXT_PUBLIC_APP_URL ?? "https://comradeai.vercel.app",
     siteName: "Comrade AI",
     title: "Comrade AI - A thinking, consoling and understanding AI friend.",
     description:
@@ -87,14 +90,26 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={cn(instrumentSerif.variable, newsreader.variable, inter.variable, literata.variable, "font-mono", jetbrainsMono.variable)}>
+      <html
+        lang="en"
+        style={{ backgroundColor: "#0a0a0a" }}
+        className={cn(
+          instrumentSerif.variable,
+          newsreader.variable,
+          inter.variable,
+          literata.variable,
+          "font-mono",
+          jetbrainsMono.variable,
+          "bg-[#0a0a0a]",
+        )}
+      >
         <head>
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           />
         </head>
-        <body className="loaded">
+        <body className="loaded bg-[#0a0a0a]" style={{ backgroundColor: "#0a0a0a" }}>
           <TRPCReactProvider>{children}</TRPCReactProvider>
           <Toaster
             position="top-right"

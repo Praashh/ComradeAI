@@ -2,42 +2,50 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import RevealOnScroll from "./RevealOnScroll";
 
 export default function CTA() {
   return (
-    <section id="cta" className="px-margin-mobile tablet:px-margin-desktop py-xl mb-xl">
-      <div className="max-w-[1440px] mx-auto glass-card rounded-[32px] p-xl flex flex-col tablet:flex-row items-center justify-between gap-xl relative overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/5 to-transparent"></div>
-        <div className="max-w-xl">
-          <h2 className="font-display-md text-display-md mb-md text-balance text-on-background">
-            Ready to start your reflective journey?
-          </h2>
-          <p className="font-body-lg text-secondary mb-lg text-balance">
-            Join over 50,000 users who found a better way to navigate their digital lives.
-          </p>
-          <div className="flex gap-md flex-wrap">
-            <Link href="/write">
-              <button type="button" className="bg-primary text-on-primary px-lg py-sm rounded-full font-title-md hover:shadow-lg transition-all cursor-pointer active:scale-95">
-                Download App
-              </button>
-            </Link>
-            <Link href="/write">
-              <button type="button" className="bg-surface-container-highest px-lg py-sm rounded-full font-title-md cursor-pointer hover:bg-surface-container-highest/80 transition-all active:scale-95">
-                Try Web Beta
-              </button>
-            </Link>
+    <section id="cta" className="tablet:px-8 bg-[var(--dark-bg)] px-4 py-24">
+      <div className="section-wrapper">
+        <RevealOnScroll>
+          <div className="group relative flex min-h-[380px] w-full flex-col justify-center overflow-hidden rounded-[36px] border border-white/12 p-8 shadow-2xl sm:min-h-[420px] sm:p-12 md:p-16">
+            {/* Background Image: Lake & Autumn Red Tree Sunset Landscape */}
+            <Image
+              src="https://framerusercontent.com/images/WiXK9IxjSYae5vhRgnPTaFtm6M.png"
+              alt="ComradeAI landscape CTA background"
+              fill
+              className="object-cover object-right-bottom transition-transform duration-700 group-hover:scale-[1.02]"
+            />
+
+            {/* Dark Sky Gradient Overlay for High Text Readability */}
+            <div className="absolute inset-0 z-10 bg-gradient-to-r from-[#0a0a0a]/90 via-[#0a0a0a]/65 to-transparent sm:w-3/4" />
+
+            {/* CTA Foreground Content */}
+            <div className="relative z-20 max-w-md">
+              <h2 className="font-instrument text-[36px] font-normal leading-[1.12] text-white sm:text-[46px] md:text-[52px]">
+                Start creating with <br />
+                ComradeAI today
+              </h2>
+
+              <p className="font-satoshi mt-4 mb-8 max-w-sm text-[14px] leading-relaxed text-white/70 sm:text-[15px]">
+                Generate your next image, video concept, product shot, or
+                campaign scene with AI in seconds.
+              </p>
+
+              <Link href="/sign-up">
+                <button
+                  type="button"
+                  className="font-satoshi cursor-pointer rounded-full bg-white px-7 py-3 text-[14px] font-semibold text-black shadow-xl transition-all hover:bg-white/90 active:scale-95"
+                >
+                  Try Now
+                </button>
+              </Link>
+            </div>
           </div>
-        </div>
-        <div className="w-full tablet:w-1/3 aspect-square rounded-2xl overflow-hidden shadow-xl rotate-3 shrink-0 relative">
-          <Image
-            className="object-cover"
-            alt="Person sitting in a light-filled sunroom reflecting"
-            src="/images/cta.jpg"
-            fill
-            sizes="(min-width: 860px) 33vw, 100vw"
-          />
-        </div>
+        </RevealOnScroll>
       </div>
     </section>
   );
 }
+

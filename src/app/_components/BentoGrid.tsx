@@ -1,85 +1,219 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import RevealOnScroll from "./RevealOnScroll";
+
+const PROMPTS = [
+  "worked through ideas...",
+  "found unexpected clarity...",
+  "felt deeply focused...",
+];
 
 export default function BentoGrid() {
+  const [promptIndex, setPromptIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPromptIndex((prev) => (prev + 1) % PROMPTS.length);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <section id="features" className="px-margin-mobile tablet:px-margin-desktop py-xl bg-surface-container-low/50">
-      <div className="max-w-[1440px] mx-auto">
-        <div className="mb-lg">
-          <h2 className="font-display-md text-display-md mb-xs text-primary">Core Pillars</h2>
-          <p className="font-body-md text-secondary">Advanced AI, human-centric design.</p>
-        </div>
-        <div className="grid grid-cols-1 tablet:grid-cols-12 gap-md auto-rows-[320px]">
-          {/* Intelligent Journaling */}
-          <div className="tablet:col-span-8 glass-card p-md rounded-xl flex flex-col justify-between overflow-hidden relative group">
-            <div className="relative z-10">
-              <span className="material-symbols-outlined text-primary text-[32px] mb-base">book_5</span>
-              <h3 className="font-headline-lg text-headline-lg mb-base">Intelligent Journaling</h3>
-              <p className="font-body-md text-secondary max-w-md">
-                Beyond text on a screen. Comrade analyzes your emotional patterns over time, helping you uncover insights into your daily well-being through guided reflection.
-              </p>
-            </div>
-            <div className="absolute bottom-0 right-0 w-1/2 h-full opacity-10 group-hover:opacity-20 transition-opacity pointer-events-none">
-              <Image
-                className="w-full h-full object-cover"
-                alt="Abstract visualization of a digital diary"
-                width={100}
-                height={100}
-                src={"/images/intelligent-journaling.png"}
-              />
-            </div>
-            <Link href="/write" className="relative z-10 self-start font-label-md text-primary mt-md flex items-center gap-xs hover:underline">
-              Learn more <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-            </Link>
+    <section
+      id="features"
+      className="tablet:px-8 bg-[var(--dark-bg)] px-4 py-24"
+    >
+      <div className="section-wrapper">
+        <RevealOnScroll className="section-header">
+          <div className="pill-badge">
+            <span>Introducing Comrade</span>
           </div>
 
-          {/* Voice / Hold */}
-          <Link href="/talk" className="tablet:col-span-4 bg-primary text-on-primary p-md rounded-xl flex flex-col items-center justify-center text-center shadow-md hover:scale-[1.01] transition-transform cursor-pointer">
-            <div className="w-24 h-24 rounded-full bg-white/20 flex items-center justify-center mb-md animate-pulse">
-              <span className="material-symbols-outlined text-[48px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                mic
-              </span>
-            </div>
-            <h3 className="font-headline-lg text-headline-lg mb-xs text-on-primary">Hold to Speak</h3>
-            <p className="font-body-md opacity-80 mb-md text-on-primary">
-              Natural voice conversations that feel like talking to a real friend.
-            </p>
-            <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden">
-              <div className="h-full bg-white w-1/3 animate-[shimmer_2s_infinite]"></div>
-            </div>
-          </Link>
+          <h2 className="font-instrument w-full max-w-[620px] text-center text-[36px] leading-[1.15] font-normal text-white sm:text-[48px] md:text-[54px]">
+            Journal, Chat,{" "}
+            <span className="text-[var(--text-muted-grey)]">
+              and talk to your best friend.
+            </span>
+          </h2>
+        </RevealOnScroll>
 
-          {/* AskComrade */}
-          <Link href="/chat" className="tablet:col-span-4 glass-card p-md rounded-xl flex flex-col justify-end hover:scale-[1.01] transition-transform cursor-pointer">
-            <span className="material-symbols-outlined text-primary text-[32px] mb-base">chat_bubble</span>
-            <h3 className="font-headline-lg text-headline-lg mb-base">AskComrade</h3>
-            <p className="font-body-md text-secondary">
-              Real-time empathetic support whenever you need a sounding board or a quiet moment of clarity.
-            </p>
-          </Link>
+        <div className="tablet:grid-cols-12 grid auto-rows-[340px] grid-cols-1 gap-6">
+          {/* Card 1: Intelligent Journaling */}
+          <RevealOnScroll className="tablet:col-span-5 flex">
+            <div
+              className="dark-gradient-card group relative flex w-full cursor-pointer flex-col justify-between overflow-hidden rounded-[32px] p-8 shadow-xl transition-all duration-300 hover:border-white/30"
+            >
+              <div>
+                <h3 className="font-satoshi mb-2 text-[22px] font-medium tracking-tight text-white">
+                  Intelligent Journaling
+                </h3>
+                <p className="font-satoshi max-w-[320px] text-[14px] leading-relaxed text-white/60">
+                  Beyond text on a screen. Comrade analyzes your emotional
+                  patterns over time.
+                </p>
+              </div>
 
-          {/* Emotional Insights */}
-          <Link href="/mind" className="tablet:col-span-8 glass-card p-md rounded-xl flex flex-col tablet:flex-row items-center gap-md hover:scale-[1.01] transition-transform cursor-pointer">
-            <div className="flex-1">
-              <h3 className="font-headline-lg text-headline-lg mb-base">Emotional Cartography</h3>
-              <p className="font-body-md text-secondary">
-                Visualize your internal landscape. See how your moods shift across weeks and months with beautiful, data-driven visualizations.
-              </p>
+              <div className="mt-8 w-full max-w-[300px] self-center">
+                <div className="flex items-center justify-between rounded-full bg-white px-5 py-3.5 shadow-2xl transition-transform duration-300 group-hover:scale-[1.02]">
+                  <div className="font-satoshi flex items-center gap-2.5 text-sm font-medium text-black/80">
+                    <svg
+                      className="h-4 w-4 shrink-0 text-black/60"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        d="M12 3v3m0 12v3M3 12h3m12 0h3m-3.5-6.5l-2.1 2.1m-8.8 8.8l-2.1 2.1m0-13l2.1 2.1m8.8 8.8l2.1 2.1"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    <span className="text-black/50">Today</span>
+                    <span className="text-black font-normal transition-all duration-300">
+                      {PROMPTS[promptIndex]}
+                    </span>
+                    <span className="animate-pulse font-semibold text-black">
+                      |
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="w-1/3 aspect-video bg-surface-container rounded-lg overflow-hidden border border-outline-variant/30 shrink-0 relative">
-              <Image
-                className="object-cover"
-                alt="Emotional trends chart visualization"
-                src="/images/emotional-cartography .jpg"
-                fill
-                sizes="33vw"
-              />
+          </RevealOnScroll>
+
+          {/* Card 2: Emotional Cartography */}
+          <RevealOnScroll className="tablet:col-span-7 flex">
+            <div
+              className="dark-gradient-card group relative flex w-full cursor-pointer flex-col justify-between overflow-hidden rounded-[32px] p-8 shadow-xl transition-all duration-300 hover:border-white/30"
+            >
+              <div>
+                <h3 className="font-satoshi mb-2 text-[22px] font-medium tracking-tight text-white">
+                  Emotional Cartography
+                </h3>
+                <p className="font-satoshi max-w-[420px] text-[14px] leading-relaxed text-white/60">
+                  Visualize your internal landscape. See how your moods shift
+                  across weeks and months with beautiful, data-driven
+                  visualizations.
+                </p>
+              </div>
+
+              <div className="relative flex h-44 w-full items-end justify-end overflow-hidden pr-4 pb-0">
+                <div className="absolute right-32 -bottom-6 h-52 w-40 -rotate-8 transform overflow-hidden rounded-[20px] border border-white/15 bg-[#161616] shadow-2xl transition-transform duration-500 group-hover:-rotate-12">
+                  <Image
+                    src="https://framerusercontent.com/images/aX7MTNtljvKLZgoAQcYqRLk9iSs.png"
+                    alt="Cartography preview 1"
+                    fill
+                    className="object-cover object-bottom"
+                  />
+                </div>
+                <div className="absolute right-16 -bottom-6 z-10 h-52 w-40 rotate-0 transform overflow-hidden rounded-[20px] border border-white/15 bg-[#161616] shadow-2xl transition-transform duration-500 group-hover:-translate-y-1">
+                  <Image
+                    src="https://framerusercontent.com/images/WiXK9IxjSYae5vhRgnPTaFtm6M.png"
+                    alt="Cartography preview 2"
+                    fill
+                    className="object-cover object-bottom"
+                  />
+                </div>
+                <div className="absolute right-0 -bottom-6 z-20 h-52 w-40 rotate-6 transform overflow-hidden rounded-[20px] border border-white/15 bg-[#161616] shadow-2xl transition-transform duration-500 group-hover:rotate-8">
+                  <Image
+                    src="https://framerusercontent.com/images/fF3Mc4fgVZTZxt8trElosIucYU.png"
+                    alt="Cartography preview 3"
+                    fill
+                    className="object-cover object-bottom"
+                  />
+                </div>
+              </div>
             </div>
-          </Link>
+          </RevealOnScroll>
+
+          {/* Card 3: Ask Comrade */}
+          <RevealOnScroll className="tablet:col-span-4 flex">
+            <div
+              className="dark-gradient-card group relative flex w-full cursor-pointer flex-col justify-between overflow-hidden rounded-[32px] p-8 shadow-xl transition-all duration-300 hover:border-white/30"
+            >
+              <div>
+                <h3 className="font-satoshi mb-2 text-[22px] font-medium tracking-tight text-white">
+                  Ask Comrade
+                </h3>
+                <p className="font-satoshi max-w-[220px] text-[14px] leading-relaxed text-white/60">
+                  Empathetic support whenever you need a sounding board moment
+                  of clarity.
+                </p>
+              </div>
+
+              <div className="absolute right-0 bottom-0 h-36 w-48 overflow-hidden rounded-tl-3xl">
+                <Image
+                  src="https://framerusercontent.com/images/imfcpiKB8yuozI4ETpHn68JuY.png"
+                  alt="Autumn landscape tree framing"
+                  fill
+                  className="object-cover object-right-top transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+            </div>
+          </RevealOnScroll>
+
+          {/* Card 4: Hold to Speak */}
+          <RevealOnScroll className="tablet:col-span-4 flex">
+            <div
+              className="dark-gradient-card group relative flex w-full cursor-pointer flex-col justify-between overflow-hidden rounded-[32px] p-8 shadow-xl transition-all duration-300 hover:border-white/30"
+            >
+              <div>
+                <h3 className="font-satoshi mb-2 text-[22px] font-medium tracking-tight text-white">
+                  Hold to Speak
+                </h3>
+                <p className="font-satoshi text-[14px] leading-relaxed text-white/60">
+                  Natural voice conversations that feel like talking to a real
+                  friend.
+                </p>
+              </div>
+
+              <div className="flex h-20 items-end justify-end gap-1.5 pb-2 pr-4">
+                <span className="h-6 w-1.5 animate-pulse rounded-full bg-white/40"></span>
+                <span className="h-10 w-1.5 animate-pulse rounded-full bg-white/60 delay-75"></span>
+                <span className="h-14 w-1.5 animate-pulse rounded-full bg-white/90 delay-150"></span>
+                <span className="h-10 w-1.5 animate-pulse rounded-full bg-white/70 delay-200"></span>
+                <span className="h-16 w-1.5 animate-pulse rounded-full bg-white/90 delay-300"></span>
+                <span className="h-8 w-1.5 animate-pulse rounded-full bg-white/50"></span>
+                <span className="h-5 w-1.5 animate-pulse rounded-full bg-white/30"></span>
+              </div>
+            </div>
+          </RevealOnScroll>
+
+          {/* Card 5: Keyframe Control */}
+          <RevealOnScroll className="tablet:col-span-4 flex">
+            <div className="dark-gradient-card group relative flex w-full flex-col justify-between overflow-hidden rounded-[32px] p-8 shadow-xl transition-all duration-300 hover:border-white/30">
+              <div>
+                <h3 className="font-satoshi mb-2 text-[22px] font-medium tracking-tight text-white">
+                  Keyframe Control
+                </h3>
+                <p className="font-satoshi text-[14px] leading-relaxed text-white/60">
+                  Guide scenes with reference frames, camera cues, pacing, and
+                  visual direction.
+                </p>
+              </div>
+
+              <div className="relative flex h-32 w-full items-end justify-end pr-2 pb-2">
+                <div className="flex h-28 w-28 -rotate-6 transform flex-col items-center justify-center gap-1.5 rounded-2xl border border-white/15 bg-white/10 shadow-lg backdrop-blur-md transition-transform duration-300 group-hover:-rotate-8">
+                  <span className="text-xl font-bold text-white">+</span>
+                  <span className="font-satoshi text-[10px] font-semibold tracking-wider text-white/80 uppercase">
+                    START FRAME
+                  </span>
+                </div>
+                <div className="-ml-8 flex h-28 w-28 rotate-3 transform flex-col items-center justify-center gap-1.5 rounded-2xl border border-white/20 bg-white/15 shadow-xl backdrop-blur-md transition-transform duration-300 group-hover:rotate-6">
+                  <span className="text-xl font-bold text-white">+</span>
+                  <span className="font-satoshi text-[10px] font-semibold tracking-wider text-white/80 uppercase">
+                    END FRAME
+                  </span>
+                </div>
+              </div>
+            </div>
+          </RevealOnScroll>
         </div>
       </div>
     </section>
   );
 }
+
