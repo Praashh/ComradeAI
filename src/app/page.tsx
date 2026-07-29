@@ -22,26 +22,26 @@ export const metadata: Metadata = {
 
 function FeedbackSection() {
   return (
-    <section className="tablet:px-8 flex flex-col items-center justify-center border-t border-white/10 bg-[var(--dark-bg)] px-4 py-16 text-center">
-      <div className="animate-fade-in flex max-w-md flex-col items-center gap-4">
-        <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[var(--accent-neon)]/20 bg-[var(--accent-neon)]/10 text-[var(--accent-neon)]">
-          <span className="material-symbols-outlined text-[24px]">
+    <section className="tablet:px-8 flex flex-col items-center justify-center border-t border-white/5 bg-[var(--dark-bg)] px-4 py-20 text-center">
+      <div className="flex max-w-md flex-col items-center gap-4">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/80 shadow-md">
+          <span className="material-symbols-outlined text-[22px]">
             rate_review
           </span>
         </div>
-        <h3 className="font-instrument text-[28px] font-normal text-white">
+        <h3 className="font-instrument text-[28px] sm:text-[34px] font-normal text-white">
           Have thoughts to share?
         </h3>
-        <p className="font-satoshi text-sm leading-relaxed text-[var(--text-muted-grey)]">
+        <p className="font-satoshi text-sm leading-relaxed text-white/60">
           We want to make Comrade AI your perfect digital sanctuary. Share your
           ideas, improvements, or report bugs directly to our core team.
         </p>
         <FeedbackDialog>
           <button
             type="button"
-            className="neon-btn font-satoshi mt-2 cursor-pointer rounded-full px-6 py-2.5 text-xs font-semibold tracking-wider uppercase transition-all"
+            className="font-satoshi mt-2 cursor-pointer rounded-full bg-white px-7 py-3 text-xs font-semibold tracking-wider uppercase text-[#0a0a0a] shadow-lg transition-all hover:bg-white/90 active:scale-95"
           >
-            GIVE FEEDBACK
+            Give Feedback
           </button>
         </FeedbackDialog>
       </div>
