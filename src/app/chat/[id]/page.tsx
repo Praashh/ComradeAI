@@ -28,13 +28,13 @@ function MessageBubble({ message }: { message: Message }) {
 
   return (
     <div className={`flex flex-col ${isUser ? "items-end" : "items-start"} mb-6`}>
-      <span className={`text-[10px] font-bold tracking-widest uppercase mb-1.5 ${isUser ? "text-secondary" : "text-primary"}`}>
+      <span className={`text-[10px] font-bold tracking-widest uppercase mb-1.5 ${isUser ? "text-white/40" : "text-white/80"}`}>
         {isUser ? "YOU" : "COMRADE AI"}
       </span>
       <div
-        className={`max-w-[70%] rounded-[24px] px-6 py-4 text-[0.95rem] leading-relaxed shadow-[0_2px_8px_rgba(0,0,0,0.02)] ${isUser
-          ? "bg-surface-container-high text-on-surface rounded-br-none border border-black/5"
-          : "bg-primary-container text-on-primary-container rounded-bl-none border border-black/5"
+        className={`max-w-[70%] rounded-[24px] px-6 py-4 text-[0.95rem] leading-relaxed shadow-lg ${isUser
+          ? "bg-white text-black font-medium rounded-br-none"
+          : "bg-[#161618] text-white/90 rounded-bl-none border border-white/12"
           }`}
       >
         <p className="whitespace-pre-wrap">{message.content}</p>
@@ -147,48 +147,41 @@ function ChatView({ conversationId }: { conversationId: number }) {
   );
 
   return (
-    <SidebarProvider className="landing-theme layout-locked h-dvh overflow-hidden bg-background text-on-background">
+    <SidebarProvider className="landing-theme layout-locked h-dvh overflow-hidden bg-[#0a0a0a] text-white">
       <AppSidebar />
-      <SidebarInset className="!h-dvh !max-h-dvh flex flex-col overflow-hidden">
+      <SidebarInset className="!h-dvh !max-h-dvh flex flex-col overflow-hidden bg-[#0a0a0a]">
         {/* Top Shell Navigation */}
-        <header className="w-full shrink-0 z-50 bg-surface/70 backdrop-blur-xl border-b border-black/5 flex justify-between items-center px-md py-sm shadow-sm">
+        <header className="w-full shrink-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/10 flex justify-between items-center px-4 py-3 sm:px-6 shadow-sm">
           <div className="flex items-center gap-2">
             <SidebarTrigger />
-            <Link href="/" className="font-display-md text-display-md font-semibold text-primary tablet:hidden">
-              Comrade AI
+            <Link href="/" className="font-instrument text-xl font-normal text-white tablet:hidden">
+              ComradeAI
             </Link>
           </div>
-          <div className="flex items-center gap-md">
-            <div className="hidden tablet:flex gap-md items-center">
-              <Link href="/write" className="text-secondary hover:text-primary transition-colors font-body-md">Journal</Link>
-              <Link href="/chat" className="text-primary border-b-2 border-primary font-body-md">Chat</Link>
-              <Link href="/talk" className="text-secondary hover:text-primary transition-colors font-body-md">Voice</Link>
-            </div>
-            <div className="flex items-center">
-              <UserButton appearance={{ elements: { userButtonAvatarBox: "w-[32px] h-[32px] border border-black/5" } }} />
-            </div>
+          <div className="flex items-center">
+            <UserButton appearance={{ elements: { userButtonAvatarBox: "w-[32px] h-[32px] border border-white/20" } }} />
           </div>
         </header>
 
         {/* Main Content */}
-        <div className="flex flex-1 min-h-0 overflow-hidden bg-background">
+        <div className="flex flex-1 min-h-0 overflow-hidden bg-[#0a0a0a]">
           {isLoading ? (
             <ChatSkeleton />
           ) : (
-            <section className="flex-1 min-w-0 min-h-0 flex flex-col bg-surface-container-lowest/50 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-[256px] h-[256px] bg-primary/5 rounded-full blur-3xl -mr-[128px] -mt-[128px] pointer-events-none"></div>
+            <section className="flex-1 min-w-0 min-h-0 flex flex-col bg-[#0d0d0d] relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-[256px] h-[256px] bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
 
               {/* Chat header */}
-              <div className="shrink-0 px-6 py-4 border-b border-black/5 flex items-center gap-sm z-10">
+              <div className="shrink-0 px-6 py-4 border-b border-white/10 flex items-center gap-3 z-10 bg-[#0a0a0a]/60 backdrop-blur-md">
                 <button
                   type="button"
                   onClick={() => router.push("/chat")}
-                  className="material-symbols-outlined p-[8px] hover:bg-surface-container rounded-full text-secondary transition-colors cursor-pointer"
+                  className="material-symbols-outlined p-2 hover:bg-white/10 rounded-full text-white/70 hover:text-white transition-colors cursor-pointer"
                   title="Back to Chats"
                 >
                   arrow_back
                 </button>
-                <h1 className="font-display text-headline-lg font-semibold text-on-surface truncate">
+                <h1 className="font-instrument text-xl font-normal text-white truncate">
                   {data?.conversation.title ?? "New conversation"}
                 </h1>
               </div>
@@ -198,21 +191,21 @@ function ChatView({ conversationId }: { conversationId: number }) {
                 <div className="mx-auto max-w-2xl">
                   {latestJournal && (
                     <div className="flex justify-center mb-8">
-                      <div className="inline-flex items-center gap-2 border border-black/5 bg-surface-container-low/80 backdrop-blur-md rounded-full px-4 py-2 text-xs">
-                        <span className="material-symbols-outlined text-sm text-secondary">link</span>
-                        <span className="text-secondary font-medium">
-                          Referenced Context: <strong className="text-on-surface font-semibold">&ldquo;{latestJournal.title ?? "Untitled Entry"}&rdquo;</strong>
+                      <div className="inline-flex items-center gap-2 border border-white/12 bg-white/5 backdrop-blur-md rounded-full px-4 py-2 text-xs">
+                        <span className="material-symbols-outlined text-sm text-white/60">link</span>
+                        <span className="text-white/60 font-medium">
+                          Referenced Context: <strong className="text-white font-semibold">&ldquo;{latestJournal.title ?? "Untitled Entry"}&rdquo;</strong>
                         </span>
-                        <span className="text-black/10 mx-1">|</span>
-                        <Link href={`/write/${latestJournal.id}`} className="text-primary font-bold hover:underline">View Journal</Link>
+                        <span className="text-white/20 mx-1">|</span>
+                        <Link href={`/write/${latestJournal.id}`} className="text-white font-semibold underline hover:text-white/80">View Journal</Link>
                       </div>
                     </div>
                   )}
 
                   {data?.messages.length === 0 && !optimisticMessage && (
                     <div className="text-center py-12">
-                      <ChatCircleDots size={40} weight="duotone" className="mx-auto mb-3 text-primary/40" />
-                      <p className="text-sm text-secondary italic">Ask Comrade anything about your journals and thoughts.</p>
+                      <ChatCircleDots size={40} weight="duotone" className="mx-auto mb-3 text-white/30" />
+                      <p className="text-sm text-white/50 italic">Ask Comrade anything about your journals and thoughts.</p>
                     </div>
                   )}
 
@@ -220,8 +213,8 @@ function ChatView({ conversationId }: { conversationId: number }) {
 
                   {optimisticMessage && (
                     <div className="flex flex-col items-end mb-6">
-                      <span className="text-[10px] font-bold tracking-widest uppercase mb-1.5 text-secondary">YOU</span>
-                      <div className="max-w-[70%] rounded-[24px] rounded-br-none px-6 py-4 text-[0.95rem] leading-relaxed shadow-[0_2px_8px_rgba(0,0,0,0.02)] bg-surface-container-high text-on-surface border border-black/5">
+                      <span className="text-[10px] font-bold tracking-widest uppercase mb-1.5 text-white/40">YOU</span>
+                      <div className="max-w-[70%] rounded-[24px] rounded-br-none px-6 py-4 text-[0.95rem] leading-relaxed shadow-lg bg-white text-black font-medium">
                         <p className="whitespace-pre-wrap">{optimisticMessage}</p>
                       </div>
                     </div>
@@ -229,10 +222,10 @@ function ChatView({ conversationId }: { conversationId: number }) {
 
                   {sendMessage.isPending && (
                     <div className="flex flex-col items-start mb-6">
-                      <span className="text-[10px] font-bold tracking-widest uppercase mb-1.5 text-primary">COMRADE AI</span>
-                      <div className="bg-primary/10 border border-primary/5 rounded-[24px] rounded-bl-none px-6 py-4 flex items-center gap-2">
-                        <CircleNotch size={16} weight="bold" className="animate-spin text-primary" />
-                        <span className="text-sm text-primary italic">Comrade is thinking...</span>
+                      <span className="text-[10px] font-bold tracking-widest uppercase mb-1.5 text-white/80">COMRADE AI</span>
+                      <div className="bg-[#161618] border border-white/12 rounded-[24px] rounded-bl-none px-6 py-4 flex items-center gap-2 text-white">
+                        <CircleNotch size={16} weight="bold" className="animate-spin text-white" />
+                        <span className="text-sm text-white/80 italic">Comrade is thinking...</span>
                       </div>
                     </div>
                   )}
@@ -247,7 +240,7 @@ function ChatView({ conversationId }: { conversationId: number }) {
                       type="button"
                       key={idx}
                       onClick={() => handleSuggestionClick(sug)}
-                      className="bg-surface-container-lowest border border-black/5 hover:bg-surface-container transition-colors rounded-full px-4 py-2 text-xs font-semibold text-primary cursor-pointer shadow-sm"
+                      className="bg-white/5 border border-white/10 hover:bg-white/15 transition-colors rounded-full px-4 py-2 text-xs font-medium text-white/80 hover:text-white cursor-pointer shadow-sm"
                     >
                       {sug}
                     </button>
@@ -256,10 +249,10 @@ function ChatView({ conversationId }: { conversationId: number }) {
               )}
 
               {/* Input area */}
-              <div className="shrink-0 border-t border-black/5 px-6 py-4 bg-background z-10">
-                <div className="mx-auto max-w-2xl flex items-end gap-2 bg-surface-container rounded-3xl px-4 py-2 shadow-sm border border-black/5">
-                  <button type="button" className="w-8 h-8 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container-high transition-colors cursor-pointer" title="Add files">
-                    <Plus size={20} weight="bold" />
+              <div className="shrink-0 border-t border-white/10 px-6 py-4 bg-[#0a0a0a] z-10">
+                <div className="mx-auto max-w-2xl flex items-end gap-2 bg-[#141416] rounded-3xl px-4 py-2 shadow-xl border border-white/12">
+                  <button type="button" className="w-8 h-8 flex items-center justify-center rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-colors cursor-pointer" title="Add files">
+                    <Plus size={18} weight="bold" />
                   </button>
                   <textarea
                     ref={inputRef}
@@ -269,7 +262,7 @@ function ChatView({ conversationId }: { conversationId: number }) {
                     placeholder="Speak your mind, I'm listening..."
                     aria-label="Type a message"
                     rows={1}
-                    className="flex-1 resize-none bg-transparent border-none px-2 py-1 text-on-surface text-[0.95rem] placeholder:text-secondary placeholder:italic focus:ring-0 focus:outline-none overflow-y-auto"
+                    className="flex-1 resize-none bg-transparent border-none px-2 py-1 text-white text-[0.95rem] placeholder:text-white/40 placeholder:italic focus:ring-0 focus:outline-none overflow-y-auto"
                     style={{ maxHeight: "120px" }}
                     onInput={(e) => {
                       const target = e.target as HTMLTextAreaElement;
@@ -277,14 +270,14 @@ function ChatView({ conversationId }: { conversationId: number }) {
                       target.style.height = `${Math.min(target.scrollHeight, 120)}px`;
                     }}
                   />
-                  <button type="button" onClick={() => router.push("/talk")} className="w-8 h-8 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container-high transition-colors cursor-pointer" title="Voice Call">
+                  <button type="button" onClick={() => router.push("/talk")} className="w-8 h-8 flex items-center justify-center rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-colors cursor-pointer" title="Voice Call">
                     <span className="material-symbols-outlined text-[20px]">mic</span>
                   </button>
                   <button
                     type="button"
                     onClick={handleSend}
                     disabled={!input.trim() || sendMessage.isPending}
-                    className="w-8 h-8 flex items-center justify-center rounded-full bg-primary text-on-primary hover:bg-primary/95 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer shrink-0"
+                    className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-black hover:bg-white/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer shrink-0"
                     title="Send message"
                   >
                     <PaperPlaneRight size={16} weight="fill" />

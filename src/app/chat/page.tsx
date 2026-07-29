@@ -59,22 +59,22 @@ function ConversationList({ activeId }: { activeId?: number }) {
           return (
             <div
               key={conv.id}
-              className={`relative p-md rounded-2xl transition-all cursor-pointer border ${
+              className={`relative p-3.5 rounded-[18px] transition-all cursor-pointer border ${
                 isActive
-                  ? "bg-surface-container-lowest border-black/5 card-shadow"
-                  : "bg-surface hover:bg-surface-container border-transparent"
+                  ? "bg-white/15 border-white/20 shadow-lg text-white"
+                  : "bg-white/5 hover:bg-white/10 border-white/10 text-white/80"
               }`}
             >
-              <Link href={`/chat/${conv.id}`} className="absolute inset-0 rounded-2xl">
+              <Link href={`/chat/${conv.id}`} className="absolute inset-0 rounded-[18px]">
                 <span className="sr-only">Open {conv.title ?? "New conversation"}</span>
               </Link>
-              <div className="relative flex justify-between items-center mb-[4px]">
-                <h3 className={`font-title-md text-title-md truncate flex-1 transition-colors ${isActive ? "text-primary font-semibold" : ""}`}>
+              <div className="relative flex justify-between items-center">
+                <h3 className={`font-satoshi text-sm truncate flex-1 transition-colors ${isActive ? "text-white font-medium" : "text-white/80"}`}>
                   {conv.title ?? "New conversation"}
                 </h3>
                 <button
                   type="button"
-                  className="relative z-10 p-1 rounded hover:bg-surface-container text-secondary hover:text-primary transition-all cursor-pointer shrink-0 ml-2"
+                  className="relative z-10 p-1.5 rounded-lg hover:bg-white/10 text-white/50 hover:text-white transition-all cursor-pointer shrink-0 ml-2"
                   title="Delete"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -152,85 +152,72 @@ export default function ChatPage() {
   }, []);
 
   return (
-    <SidebarProvider className="landing-theme layout-locked h-dvh overflow-hidden bg-background text-on-background">
+    <SidebarProvider className="landing-theme layout-locked h-dvh overflow-hidden bg-[#0a0a0a] text-white">
       <AppSidebar />
-      <SidebarInset className="!h-dvh !max-h-dvh flex flex-col overflow-hidden">
+      <SidebarInset className="!h-dvh !max-h-dvh flex flex-col overflow-hidden bg-[#0a0a0a]">
         {/* Top Shell Navigation */}
-        <header className="w-full shrink-0 z-50 bg-surface/70 backdrop-blur-xl border-b border-black/5 flex justify-between items-center px-md py-sm shadow-sm">
+        <header className="w-full shrink-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/10 flex justify-between items-center px-4 py-3 sm:px-6 shadow-sm">
           <div className="flex items-center gap-2">
             <SidebarTrigger />
-            <Link href="/" className="font-display-md text-display-md font-semibold text-primary tablet:hidden">
-              Comrade AI
+            <Link href="/" className="font-instrument text-xl font-normal text-white tablet:hidden">
+              ComradeAI
             </Link>
           </div>
-          <div className="flex items-center gap-md">
-            <div className="hidden tablet:flex gap-md items-center">
-              <Link href="/write" className="text-secondary hover:text-primary transition-colors font-body-md">
-                Journal
-              </Link>
-              <Link href="/chat" className="text-primary border-b-2 border-primary font-body-md">
-                Chat
-              </Link>
-              <Link href="/talk" className="text-secondary hover:text-primary transition-colors font-body-md">
-                Voice
-              </Link>
-            </div>
-            <div className="flex items-center">
-              <UserButton
-                appearance={{
-                  elements: {
-                    userButtonAvatarBox: "w-[32px] h-[32px] border border-black/5",
-                  },
-                }}
-              />
-            </div>
+          <div className="flex items-center">
+            <UserButton
+              appearance={{
+                elements: {
+                  userButtonAvatarBox: "w-[32px] h-[32px] border border-white/20",
+                },
+              }}
+            />
           </div>
         </header>
 
         {/* Main Workspace Frame */}
-        <div className="flex flex-1 min-h-0 overflow-hidden bg-background">
+        <div className="flex flex-1 min-h-0 overflow-hidden bg-[#0a0a0a]">
           {/* Chats Archive entries list column */}
-          <section className="w-full tablet:w-[320px] lg:w-[384px] shrink-0 border-r border-black/5 flex flex-col overflow-hidden">
-            <div className="p-md bg-surface/30">
-              <div className="flex justify-between items-center mb-sm">
-                <h2 className="font-headline-lg text-headline-lg">Chats</h2>
+          <section className="w-full tablet:w-[320px] lg:w-[384px] shrink-0 border-r border-white/10 flex flex-col overflow-hidden bg-[#0a0a0a]">
+            <div className="p-4 bg-white/5 border-b border-white/10">
+              <div className="flex justify-between items-center">
+                <h2 className="font-instrument text-xl font-normal text-white">Chats</h2>
                 <button
                   type="button"
-                  className="p-1 rounded hover:bg-surface-container text-secondary hover:text-primary transition-colors cursor-pointer"
+                  className="p-1.5 rounded-full hover:bg-white/10 text-white/70 hover:text-white transition-colors cursor-pointer"
                   title="New Chat"
                   onClick={() => createConversation.mutate({})}
                   disabled={createConversation.isPending}
                 >
-                  <Plus size={20} weight="bold" />
+                  <Plus size={18} weight="bold" />
                 </button>
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-sm pb-[40px]">
+            <div className="flex-1 overflow-y-auto p-3 space-y-2">
               <ConversationList />
             </div>
           </section>
 
           {/* Empty state chat view */}
-          <section className="flex-1 min-w-0 flex flex-col items-center justify-center bg-surface-container-lowest/50 p-lg text-center relative">
-            <div className="absolute top-0 right-0 w-[256px] h-[256px] bg-primary/5 rounded-full blur-3xl -mr-[128px] -mt-[128px] pointer-events-none"></div>
+          <section className="flex-1 min-w-0 flex flex-col items-center justify-center bg-[#0d0d0d] p-8 text-center relative">
+            <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-white/5 rounded-full blur-3xl pointer-events-none" />
             <div className="max-w-md z-10">
               <ChatCircleDots
-                size={64}
-                className="mx-auto mb-md text-primary/40"
+                size={56}
+                className="mx-auto mb-4 text-white/30"
                 weight="duotone"
               />
-              <h3 className="font-display-md text-display-md text-on-background mb-sm">
+              <h3 className="font-instrument text-[32px] font-normal text-white mb-2">
                 Ask Comrade
               </h3>
-              <p className="font-body-lg text-secondary mb-lg">
-                Select a conversation from the sidebar or start a new chat with Comrade AI.
+              <p className="font-satoshi text-sm text-white/60 mb-6 leading-relaxed">
+                Select a conversation from the list or start a new chat to reflect with Comrade AI.
               </p>
               <button
                 type="button"
                 onClick={() => createConversation.mutate({})}
                 disabled={createConversation.isPending}
-                className="bg-primary text-on-primary font-semibold px-[24px] py-[12px] rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-95 cursor-pointer"
+                className="font-satoshi bg-white text-black font-semibold px-6 py-2.5 rounded-full hover:bg-white/90 transition-all active:scale-95 cursor-pointer shadow-lg"
               >
                 New Chat
               </button>

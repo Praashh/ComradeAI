@@ -43,8 +43,7 @@ export default function BentoGrid() {
         <div className="tablet:grid-cols-12 grid auto-rows-[340px] grid-cols-1 gap-6">
           {/* Card 1: Intelligent Journaling */}
           <RevealOnScroll className="tablet:col-span-5 flex">
-            <Link
-              href="/write"
+            <div
               className="dark-gradient-card group relative flex w-full cursor-pointer flex-col justify-between overflow-hidden rounded-[32px] p-8 shadow-xl transition-all duration-300 hover:border-white/30"
             >
               <div>
@@ -82,13 +81,12 @@ export default function BentoGrid() {
                   </div>
                 </div>
               </div>
-            </Link>
+            </div>
           </RevealOnScroll>
 
           {/* Card 2: Emotional Cartography */}
           <RevealOnScroll className="tablet:col-span-7 flex">
-            <Link
-              href="/mind"
+            <div
               className="dark-gradient-card group relative flex w-full cursor-pointer flex-col justify-between overflow-hidden rounded-[32px] p-8 shadow-xl transition-all duration-300 hover:border-white/30"
             >
               <div>
@@ -128,13 +126,12 @@ export default function BentoGrid() {
                   />
                 </div>
               </div>
-            </Link>
+            </div>
           </RevealOnScroll>
 
           {/* Card 3: Ask Comrade */}
           <RevealOnScroll className="tablet:col-span-4 flex">
-            <Link
-              href="/chat"
+            <div
               className="dark-gradient-card group relative flex w-full cursor-pointer flex-col justify-between overflow-hidden rounded-[32px] p-8 shadow-xl transition-all duration-300 hover:border-white/30"
             >
               <div>
@@ -155,13 +152,12 @@ export default function BentoGrid() {
                   className="object-cover object-right-top transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
-            </Link>
+            </div>
           </RevealOnScroll>
 
           {/* Card 4: Hold to Speak */}
           <RevealOnScroll className="tablet:col-span-4 flex">
-            <Link
-              href="/talk"
+            <div
               className="dark-gradient-card group relative flex w-full cursor-pointer flex-col justify-between overflow-hidden rounded-[32px] p-8 shadow-xl transition-all duration-300 hover:border-white/30"
             >
               <div>
@@ -183,7 +179,7 @@ export default function BentoGrid() {
                 <span className="h-8 w-1.5 animate-pulse rounded-full bg-white/50"></span>
                 <span className="h-5 w-1.5 animate-pulse rounded-full bg-white/30"></span>
               </div>
-            </Link>
+            </div>
           </RevealOnScroll>
 
           {/* Card 5: Keyframe Control */}
