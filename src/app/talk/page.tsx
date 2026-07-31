@@ -6,6 +6,7 @@ import { UserButton } from "@clerk/nextjs";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/app/_components/AppSidebar";
 import VoiceAgent from "@/app/_components/VoiceAgent";
+import { MobileBottomNav } from "@/app/_components/MobileBottomNav";
 
 export default function TalkPage() {
   useEffect(() => {
@@ -42,10 +43,11 @@ export default function TalkPage() {
         </header>
 
         {/* Main content */}
-        <main className="flex-1 min-h-0 flex items-center justify-center overflow-y-auto bg-[#0a0a0a]">
+        <main className="flex-1 min-h-0 flex items-center justify-center overflow-y-auto bg-[#0a0a0a] p-4 pb-20 tablet:pb-4">
           <VoiceAgent />
         </main>
       </SidebarInset>
+      <MobileBottomNav />
     </SidebarProvider>
   );
 }

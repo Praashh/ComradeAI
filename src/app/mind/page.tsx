@@ -6,6 +6,7 @@ import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/app/_components/AppSidebar";
+import { MobileBottomNav } from "@/app/_components/MobileBottomNav";
 import { api } from "@/trpc/react";
 import type {
   GraphApiDocument,
@@ -129,7 +130,7 @@ export default function MindPage() {
         </header>
 
         {/* Graph Canvas */}
-        <main className="flex-1 min-h-0 overflow-hidden relative bg-[#0a0a0a]">
+        <main className="flex-1 min-h-0 overflow-hidden relative bg-[#0a0a0a] pb-16 tablet:pb-0">
           <MemoryGraph
             documents={documents}
             isLoading={isLoading}
@@ -152,6 +153,7 @@ export default function MindPage() {
           </MemoryGraph>
         </main>
       </SidebarInset>
+      <MobileBottomNav />
     </SidebarProvider>
   );
 }

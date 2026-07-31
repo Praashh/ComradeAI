@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/app/_components/AppSidebar";
+import { MobileBottomNav } from "@/app/_components/MobileBottomNav";
 
 function ConversationList({ activeId }: { activeId?: number }) {
   const { conversations, isLoading, refetch } = useConversations();
@@ -37,7 +38,7 @@ function ConversationList({ activeId }: { activeId?: number }) {
 
   if (isLoading) {
     return (
-      <div className="p-4 text-center text-sm text-secondary italic">
+      <div className="p-4 text-center text-sm text-white/40 italic">
         Loading chats...
       </div>
     );
@@ -45,7 +46,7 @@ function ConversationList({ activeId }: { activeId?: number }) {
 
   if (!conversations.length) {
     return (
-      <p className="text-sm text-secondary italic px-md py-sm">
+      <p className="text-sm text-white/40 italic p-3 text-center">
         No conversations yet.
       </p>
     );
@@ -98,17 +99,16 @@ function ConversationList({ activeId }: { activeId?: number }) {
           if (!open) setDeleteTarget(null);
         }}
       >
-        <DialogContent className="!w-[calc(100%-2rem)] sm:!w-[400px] !max-w-[400px] !rounded-[12px] !border !border-[var(--rule-soft)] !p-6 !shadow-[0_8px_40px_rgba(33,28,22,0.12)] !ring-0 flex flex-col gap-6 font-body select-none">
+        <DialogContent className="!w-[calc(100%-2rem)] sm:!w-[400px] !max-w-[400px] !rounded-[24px] !border !border-white/15 !bg-[#121212] !p-6 !shadow-2xl !shadow-black/90 !ring-0 flex flex-col gap-6 font-satoshi select-none text-white">
           <DialogHeader>
-            <DialogTitle>Delete conversation</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete &ldquo;{deleteTarget?.title}
-              &rdquo;? This action cannot be undone.
+            <DialogTitle className="text-xl font-medium tracking-tight text-white font-satoshi">Delete conversation</DialogTitle>
+            <DialogDescription className="text-sm text-white/60 font-satoshi mt-1">
+              Are you sure you want to delete &ldquo;{deleteTarget?.title}&rdquo;? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
+          <DialogFooter className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-2">
             <DialogClose
-              className="px-5 py-2.5 rounded-full border border-black/10 bg-surface-container text-on-surface text-sm font-medium hover:bg-surface-container-high transition-colors cursor-pointer"
+              className="px-5 py-2.5 rounded-full border border-white/15 bg-white/5 text-white text-sm font-medium hover:bg-white/10 transition-colors cursor-pointer"
             >
               Cancel
             </DialogClose>
@@ -120,7 +120,7 @@ function ConversationList({ activeId }: { activeId?: number }) {
                   deleteConversation.mutate({ id: deleteTarget.id });
                 }
               }}
-              className="px-5 py-2.5 rounded-full bg-red text-white text-sm font-semibold hover:bg-red-d transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-5 py-2.5 rounded-full bg-red text-white text-sm font-semibold hover:bg-red-d transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
             >
               {deleteConversation.isPending ? "Deleting..." : "Delete"}
             </button>
@@ -177,7 +177,7 @@ export default function ChatPage() {
         {/* Main Workspace Frame */}
         <div className="flex flex-1 min-h-0 overflow-hidden bg-[#0a0a0a]">
           {/* Chats Archive entries list column */}
-          <section className="w-full tablet:w-[320px] lg:w-[384px] shrink-0 border-r border-white/10 flex flex-col overflow-hidden bg-[#0a0a0a]">
+          <section className="w-full tablet:w-[320px] lg:w-[384px] shrink-0 border-r border-white/10 flex flex-col overflow-hidden bg-[#0a0a0a] flex-1 tablet:flex-initial">
             <div className="p-4 bg-white/5 border-b border-white/10">
               <div className="flex justify-between items-center">
                 <h2 className="font-instrument text-xl font-normal text-white">Chats</h2>
@@ -193,13 +193,13 @@ export default function ChatPage() {
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-3 space-y-2">
+            <div className="flex-1 overflow-y-auto p-3 pb-28 space-y-2">
               <ConversationList />
             </div>
           </section>
 
           {/* Empty state chat view */}
-          <section className="flex-1 min-w-0 flex flex-col items-center justify-center bg-[#0d0d0d] p-8 text-center relative">
+          <section className="hidden tablet:flex flex-1 min-w-0 flex-col items-center justify-center bg-[#0d0d0d] p-8 text-center relative">
             <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-white/5 rounded-full blur-3xl pointer-events-none" />
             <div className="max-w-md z-10">
               <ChatCircleDots
@@ -225,6 +225,20 @@ export default function ChatPage() {
           </section>
         </div>
       </SidebarInset>
+
+      {/* Mobile Bottom Navigation Bar */}
+      <MobileBottomNav />
+
+      {/* Mobile Floating Action Button */}
+      <button
+        type="button"
+        onClick={() => createConversation.mutate({})}
+        disabled={createConversation.isPending}
+        className="tablet:hidden fixed right-6 bottom-20 w-14 h-14 bg-white text-black rounded-full shadow-xl flex items-center justify-center z-50 cursor-pointer hover:scale-105 active:scale-95 transition-transform"
+        title="New Chat"
+      >
+        <Plus size={24} weight="bold" />
+      </button>
     </SidebarProvider>
   );
 }

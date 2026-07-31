@@ -8,6 +8,7 @@ import { UserButton } from "@clerk/nextjs";
 import { api } from "@/trpc/react";
 import { useJournals } from "@/lib/journals-context";
 import NewJournalDialog from "@/app/_components/NewJournalDialog";
+import { MobileBottomNav } from "@/app/_components/MobileBottomNav";
 import { MilkdownEditorClient } from "@/app/_components/MilkdownEditorClient";
 import type { MilkdownEditorHandle } from "@/app/_components/MilkdownEditor";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
@@ -148,7 +149,7 @@ function ArchiveColumn({
   onSelectEntry: (id: number) => void;
 }) {
   return (
-    <section className={`w-full tablet:w-[320px] lg:w-[384px] shrink-0 border-r border-white/10 flex flex-col overflow-hidden transition-all duration-300 bg-[#0a0a0a] ${activeJournalId || focusMode ? "hidden" : "flex"}`}>
+    <section className={`w-full tablet:w-[320px] lg:w-[384px] shrink-0 border-r border-white/10 flex flex-col overflow-hidden transition-all duration-300 bg-[#0a0a0a] ${activeJournalId || focusMode ? "hidden" : "flex flex-1 tablet:flex-initial"}`}>
       <div className="p-4 bg-white/5 border-b border-white/10">
         <h2 className="font-instrument text-xl font-normal text-white mb-3">Archive</h2>
         <div className="relative">
@@ -166,7 +167,7 @@ function ArchiveColumn({
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-3 space-y-2">
+      <div className="flex-1 overflow-y-auto p-3 pb-28 space-y-2">
         {journalsLoading ? (
           <div className="p-4 text-center text-sm text-white/40 italic">Loading archive...</div>
         ) : filteredJournals.length === 0 ? (
@@ -402,7 +403,7 @@ export default function JournalDashboard({ activeJournalId }: JournalDashboardPr
                   </div>
 
                   {/* Canvas Area */}
-                  <div className="flex-1 overflow-y-auto px-4 tablet:px-8 py-6 w-full max-w-3xl z-10">
+                  <div className="flex-1 overflow-y-auto px-4 tablet:px-8 py-6 pb-28 w-full max-w-3xl z-10">
                     <div className="mb-4">
                       <span className="text-xs uppercase tracking-widest text-white/40 font-mono">
                         {getFormattedDate(journal?.createdAt)}
@@ -432,7 +433,7 @@ export default function JournalDashboard({ activeJournalId }: JournalDashboardPr
                 </section>
               )
             ) : (
-              <section className="flex-1 min-w-0 flex flex-col items-center justify-center bg-[#0d0d0d] p-8 text-center relative">
+              <section className="hidden tablet:flex flex-1 min-w-0 flex-col items-center justify-center bg-[#0d0d0d] p-8 text-center relative">
                 <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-white/5 rounded-full blur-3xl pointer-events-none" />
                 <div className="max-w-md z-10">
                   <span className="material-symbols-outlined text-[56px] text-white/30 mb-4">
@@ -457,24 +458,7 @@ export default function JournalDashboard({ activeJournalId }: JournalDashboardPr
       </SidebarInset>
 
       {/* Mobile Bottom Navigation Bar */}
-      <nav className="tablet:hidden fixed bottom-0 left-0 right-0 bg-[#0a0a0a]/90 backdrop-blur-xl border-t border-white/10 px-6 py-3 flex justify-around items-center z-50">
-        <button type="button" onClick={() => router.push("/write")} className="flex flex-col items-center gap-1 text-white cursor-pointer">
-          <span className="material-symbols-outlined">book_5</span>
-          <span className="text-[10px] font-bold">Journal</span>
-        </button>
-        <button type="button" onClick={() => router.push("/chat")} className="flex flex-col items-center gap-1 text-white/50 cursor-pointer">
-          <span className="material-symbols-outlined">chat_bubble</span>
-          <span className="text-[10px] font-bold">Chat</span>
-        </button>
-        <button type="button" onClick={() => router.push("/talk")} className="flex flex-col items-center gap-1 text-white/50 cursor-pointer">
-          <span className="material-symbols-outlined">mic</span>
-          <span className="text-[10px] font-bold">Voice</span>
-        </button>
-        <button type="button" onClick={() => router.push("/mind")} className="flex flex-col items-center gap-1 text-white/50 cursor-pointer">
-          <span className="material-symbols-outlined">hub</span>
-          <span className="text-[10px] font-bold">Mind</span>
-        </button>
-      </nav>
+      <MobileBottomNav />
 
       {/* Mobile Floating Action Button */}
       <NewJournalDialog>

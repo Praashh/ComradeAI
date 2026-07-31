@@ -14,6 +14,7 @@ import {
 } from "@phosphor-icons/react";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/app/_components/AppSidebar";
+import { MobileBottomNav } from "@/app/_components/MobileBottomNav";
 
 type Message = {
   id: number;
@@ -45,24 +46,36 @@ function MessageBubble({ message }: { message: Message }) {
 
 function ChatSkeleton() {
   return (
-    <div className="flex-1 min-h-0 flex flex-col">
-      <div className="shrink-0 px-6 py-4 border-b border-black/5 bg-background">
-        <div className="h-6 w-48 bg-surface-container rounded animate-pulse" />
+    <div className="flex-1 min-h-0 flex flex-col bg-[#0d0d0d] relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-[256px] h-[256px] bg-white/5 rounded-full blur-3xl pointer-events-none" />
+
+      {/* Header skeleton */}
+      <div className="shrink-0 px-6 py-4 border-b border-white/10 flex items-center gap-3 z-10 bg-[#0a0a0a]/60">
+        <div className="w-8 h-8 rounded-full bg-white/10 animate-pulse" />
+        <div className="h-5 w-44 bg-white/10 rounded-md animate-pulse" />
       </div>
-      <div className="flex-1 overflow-y-auto px-6 py-6 bg-surface-container-lowest/50">
+
+      {/* Message list skeleton */}
+      <div className="flex-1 overflow-y-auto px-6 py-8 z-10">
         <div className="mx-auto max-w-2xl space-y-6">
           <div className="flex flex-col items-end">
-            <div className="h-3 w-10 bg-surface-container rounded animate-pulse mb-1.5" />
-            <div className="max-w-[75%] rounded-[24px] rounded-br-none px-6 py-4 bg-surface-container-high animate-pulse w-48 h-12" />
+            <div className="h-3 w-10 bg-white/10 rounded animate-pulse mb-1.5" />
+            <div className="max-w-[75%] rounded-[24px] rounded-br-none px-6 py-4 bg-white/20 animate-pulse w-52 h-14" />
           </div>
           <div className="flex flex-col items-start">
-            <div className="h-3 w-20 bg-surface-container rounded animate-pulse mb-1.5" />
-            <div className="max-w-[75%] rounded-[24px] rounded-bl-none px-6 py-4 bg-primary/20 animate-pulse w-72 h-16" />
+            <div className="h-3 w-20 bg-white/10 rounded animate-pulse mb-1.5" />
+            <div className="max-w-[75%] rounded-[24px] rounded-bl-none px-6 py-4 bg-white/5 border border-white/10 animate-pulse w-80 h-20" />
+          </div>
+          <div className="flex flex-col items-end">
+            <div className="h-3 w-10 bg-white/10 rounded animate-pulse mb-1.5" />
+            <div className="max-w-[75%] rounded-[24px] rounded-br-none px-6 py-4 bg-white/20 animate-pulse w-64 h-14" />
           </div>
         </div>
       </div>
-      <div className="shrink-0 border-t border-black/5 px-6 py-4 bg-background">
-        <div className="mx-auto max-w-2xl h-[46px] bg-surface-container rounded-full animate-pulse" />
+
+      {/* Input area skeleton */}
+      <div className="shrink-0 border-t border-white/10 px-4 sm:px-6 py-3 pb-20 tablet:pb-4 bg-[#0a0a0a] z-10">
+        <div className="mx-auto max-w-2xl h-[48px] bg-[#141416] border border-white/12 rounded-3xl animate-pulse" />
       </div>
     </div>
   );
@@ -249,7 +262,7 @@ function ChatView({ conversationId }: { conversationId: number }) {
               )}
 
               {/* Input area */}
-              <div className="shrink-0 border-t border-white/10 px-6 py-4 bg-[#0a0a0a] z-10">
+              <div className="shrink-0 border-t border-white/10 px-4 sm:px-6 py-3 pb-20 tablet:pb-4 bg-[#0a0a0a] z-10">
                 <div className="mx-auto max-w-2xl flex items-end gap-2 bg-[#141416] rounded-3xl px-4 py-2 shadow-xl border border-white/12">
                   <button type="button" className="w-8 h-8 flex items-center justify-center rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-colors cursor-pointer" title="Add files">
                     <Plus size={18} weight="bold" />
@@ -288,6 +301,7 @@ function ChatView({ conversationId }: { conversationId: number }) {
           )}
         </div>
       </SidebarInset>
+      <MobileBottomNav />
     </SidebarProvider>
   );
 }

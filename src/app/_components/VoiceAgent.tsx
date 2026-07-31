@@ -141,32 +141,32 @@ export default function VoiceAgent() {
   return (
     <div className="flex w-full max-w-[420px] flex-col items-center px-[var(--pad)]">
       {/* Call card */}
-      <div className="call-card flex w-full flex-col items-center rounded-2xl border border-black/5 bg-surface-container px-8 py-12 shadow-[0_8px_40px_rgba(0,0,0,0.04)]">
+      <div className="call-card flex w-full flex-col items-center rounded-[28px] border border-white/12 bg-[#121212] px-5 sm:px-8 py-8 sm:py-12 shadow-2xl shadow-black/90 text-white font-satoshi">
         {isLoading ? (
           <div className="flex w-full flex-col items-center">
-            <Skeleton className="mb-8 h-[120px] w-[120px] rounded-full bg-rule-soft" />
-            <Skeleton className="mb-2 h-7 w-32 rounded-md bg-rule-soft" />
-            <Skeleton className="mb-8 h-4 w-24 rounded-md bg-rule-soft" />
-            <Skeleton className="mb-6 h-3 w-40 rounded-md bg-rule-soft" />
-            <Skeleton className="h-[56px] w-[56px] rounded-full bg-rule-soft" />
+            <Skeleton className="mb-8 h-[120px] w-[120px] rounded-full bg-white/10" />
+            <Skeleton className="mb-2 h-7 w-32 rounded-md bg-white/10" />
+            <Skeleton className="mb-8 h-4 w-24 rounded-md bg-white/10" />
+            <Skeleton className="mb-6 h-3 w-40 rounded-md bg-white/10" />
+            <Skeleton className="h-[56px] w-[56px] rounded-full bg-white/10" />
           </div>
         ) : quotaExhausted && callState !== "active" ? (
           /* ---- Upgrade card ---- */
           <div className="flex w-full flex-col items-center">
             <div className="relative mb-8">
-              <div className="flex h-[120px] w-[120px] items-center justify-center rounded-full border-2 border-black/10 bg-surface transition-all duration-500">
-                <span className="font-display-md text-[3.2rem] leading-none text-secondary">
+              <div className="flex h-[120px] w-[120px] items-center justify-center rounded-full border-2 border-white/20 bg-white/5 transition-all duration-500">
+                <span className="font-instrument text-[3.2rem] leading-none text-white">
                   {activeSpeakerName[0]}
                 </span>
               </div>
             </div>
-            <h2 className="mb-[8px] font-display-md text-[2.2rem] leading-none text-primary">
+            <h2 className="mb-[8px] font-instrument text-[2.2rem] leading-none text-white">
               {activeSpeakerName}
             </h2>
-            <p className="mb-4 text-center font-body-md text-body-md text-secondary">
+            <p className="mb-4 text-center font-satoshi text-sm text-white/70">
               You&apos;ve used your 5 free minutes
             </p>
-            <p className="mb-6 text-center font-body-md text-label-md text-secondary/70">
+            <p className="mb-6 text-center font-satoshi text-xs text-white/50">
               Upgrade to keep talking with {activeSpeakerName}
             </p>
             <button
@@ -185,13 +185,13 @@ export default function VoiceAgent() {
                   callState === "active"
                     ? isWarning
                       ? "border-[var(--red)]"
-                      : "border-primary"
+                      : "border-white"
                     : callState === "connecting"
-                      ? "border-secondary"
-                      : "border-black/10"
-                } bg-surface transition-all duration-500`}
+                      ? "border-white/40"
+                      : "border-white/20"
+                } bg-white/5 transition-all duration-500`}
               >
-                <span className="font-display-md text-[3.2rem] leading-none text-primary">
+                <span className="font-instrument text-[3.2rem] leading-none text-white">
                   {activeSpeakerName[0]}
                 </span>
               </div>
@@ -207,14 +207,14 @@ export default function VoiceAgent() {
             </div>
 
             {/* Name */}
-            <h2 className="mb-[8px] font-display-md text-[2.2rem] leading-none text-primary">
+            <h2 className="mb-[8px] font-instrument text-[2.2rem] leading-none text-white">
               {activeSpeakerName}
             </h2>
 
             {/* Status text */}
             <p
-              className={`mb-8 font-body-md text-label-md uppercase tracking-[0.08em] ${
-                isWarning ? "call-timer-warning" : "text-secondary"
+              className={`mb-8 font-satoshi text-xs uppercase tracking-[0.08em] ${
+                isWarning ? "call-timer-warning" : "text-white/60"
               }`}
             >
               {callState === "idle" && "Ready to talk"}
@@ -228,7 +228,7 @@ export default function VoiceAgent() {
 
             {/* Quota indicator when idle */}
             {callState === "idle" && quota != null && (
-              <p className="mb-2 -mt-4 font-body-md text-label-md text-secondary/60">
+              <p className="mb-2 -mt-4 font-satoshi text-xs text-white/50">
                 {formatDuration(remaining)} remaining
               </p>
             )}
@@ -254,7 +254,7 @@ export default function VoiceAgent() {
 
             {/* Character subtitle */}
             {callState === "idle" && (
-              <p className="mb-6 -mt-1 font-body-md text-body-md italic text-secondary text-center">
+              <p className="mb-6 -mt-1 font-satoshi text-sm italic text-white/60 text-center">
                 {activeCharacter.title}
               </p>
             )}
