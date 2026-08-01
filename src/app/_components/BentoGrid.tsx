@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import RevealOnScroll from "./RevealOnScroll";
+import {MagicWandIcon} from "@phosphor-icons/react";
 
 const PROMPTS = [
   "worked through ideas...",
@@ -59,18 +60,7 @@ export default function BentoGrid() {
               <div className="mt-8 w-full max-w-[300px] self-center">
                 <div className="flex items-center justify-between rounded-full bg-white px-5 py-3.5 shadow-2xl transition-transform duration-300 group-hover:scale-[1.02]">
                   <div className="font-satoshi flex items-center gap-2.5 text-sm font-medium text-black/80">
-                    <svg
-                      className="h-4 w-4 shrink-0 text-black/60"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path
-                        d="M12 3v3m0 12v3M3 12h3m12 0h3m-3.5-6.5l-2.1 2.1m-8.8 8.8l-2.1 2.1m0-13l2.1 2.1m8.8 8.8l2.1 2.1"
-                        strokeLinecap="round"
-                      />
-                    </svg>
+                    <MagicWandIcon size={20} /> 
                     <span className="text-black/50">Today</span>
                     <span className="text-black font-normal transition-all duration-300">
                       {PROMPTS[promptIndex]}
