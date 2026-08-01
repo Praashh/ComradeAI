@@ -30,10 +30,10 @@ describe("Hero", () => {
     );
   });
 
-  it("renders the CTA button linking to /sign-up", () => {
+  it("renders the CTA button linking to /write", () => {
     render(<Hero />);
     const link = screen.getByRole("link", { name: /Start your journey/ });
-    expect(link).toHaveAttribute("href", "/sign-up");
+    expect(link).toHaveAttribute("href", "/write");
   });
 });
 
