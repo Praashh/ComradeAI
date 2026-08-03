@@ -44,9 +44,9 @@ export default function HowItWorks() {
 
           <h2 className="font-instrument w-full max-w-[620px] text-center text-[36px] leading-[1.15] font-normal text-white sm:text-[48px] md:text-[54px]">
             <span className="text-[var(--text-muted-grey)]">From </span>
-            reflection to connection{" "}
+            your thoughts to feeling heard{" "}
             <span className="text-[var(--text-muted-grey)]">
-              in three simple steps.
+              in three simple ways.
             </span>
           </h2>
         </RevealOnScroll>
@@ -56,12 +56,15 @@ export default function HowItWorks() {
             <RevealOnScroll key={idx} className="flex">
               <div className="dark-gradient-card group relative flex w-full flex-col justify-between overflow-hidden rounded-[32px] p-6 shadow-xl transition-all duration-300 hover:border-white/30">
                 {/* UI Mockup Container */}
-                <div className="relative mb-6 h-[280px] w-full overflow-hidden rounded-[24px] border border-white/10 bg-[#0d0d0d]">
+                <div
+                  className="relative mb-6 h-[280px] w-full overflow-hidden rounded-[24px] border border-white/10 bg-[#0d0d0d]"
+                  style={{ clipPath: "inset(0 round 24px)" }}
+                >
                   <Image
                     src={step.mockup}
                     alt={step.alt}
                     fill
-                    className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+                    className="object-cover object-top"
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/40 via-transparent to-transparent" />
                 </div>

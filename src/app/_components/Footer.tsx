@@ -73,8 +73,8 @@ export default function Footer() {
           </Link>
 
           <p className="font-satoshi mt-3 mb-6 max-w-xs text-[14px] leading-relaxed text-white/50">
-            AI image and video generation for campaigns, product stories, ads,
-            and social content.
+            Your AI journaling companion for reflection, emotional support, and
+            personal growth.
           </p>
 
           {/* Social Icons */}

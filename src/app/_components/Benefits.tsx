@@ -134,9 +134,9 @@ export default function Benefits() {
           </div>
 
           <h2 className="font-instrument w-full max-w-[720px] text-center text-[36px] leading-[1.15] font-normal text-white sm:text-[48px] md:text-[54px]">
-            Faster production, sharper concepts,{" "}
+            Deeper self-awareness, genuine support,{" "}
             <span className="text-[var(--text-muted-grey)]">
-              and campaign assets ready in minutes.
+              and a companion who truly understands you.
             </span>
           </h2>
         </RevealOnScroll>

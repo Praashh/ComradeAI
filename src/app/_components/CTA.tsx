@@ -24,13 +24,13 @@ export default function CTA() {
             {/* CTA Foreground Content */}
             <div className="relative z-20 max-w-md">
               <h2 className="font-instrument text-[36px] font-normal leading-[1.12] text-white sm:text-[46px] md:text-[52px]">
-                Start creating with <br />
-                ComradeAI today
+                Start your journey with <br />
+                Comrade AI today
               </h2>
 
               <p className="font-satoshi mt-4 mb-8 max-w-sm text-[14px] leading-relaxed text-white/70 sm:text-[15px]">
-                Generate your next image, video concept, product shot, or
-                campaign scene with AI in seconds.
+                Journal your thoughts, chat through your feelings, or talk it
+                out — your AI companion is always here for you.
               </p>
 
               <Link href="/sign-up">

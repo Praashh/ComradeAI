@@ -172,31 +172,47 @@ export default function BentoGrid() {
             </div>
           </RevealOnScroll>
 
-          {/* Card 5: Keyframe Control */}
+          {/* Card 5: Mind Graph */}
           <RevealOnScroll className="tablet:col-span-4 flex">
             <div className="dark-gradient-card group relative flex w-full flex-col justify-between overflow-hidden rounded-[32px] p-8 shadow-xl transition-all duration-300 hover:border-white/30">
               <div>
                 <h3 className="font-satoshi mb-2 text-[22px] font-medium tracking-tight text-white">
-                  Keyframe Control
+                  Mind Graph
                 </h3>
                 <p className="font-satoshi text-[14px] leading-relaxed text-white/60">
-                  Guide scenes with reference frames, camera cues, pacing, and
-                  visual direction.
+                  See your memories and emotions as a living, connected knowledge
+                  graph that grows with you.
                 </p>
               </div>
 
-              <div className="relative flex h-32 w-full items-end justify-end pr-2 pb-2">
-                <div className="flex h-28 w-28 -rotate-6 transform flex-col items-center justify-center gap-1.5 rounded-2xl border border-white/15 bg-white/10 shadow-lg backdrop-blur-md transition-transform duration-300 group-hover:-rotate-8">
-                  <span className="text-xl font-bold text-white">+</span>
-                  <span className="font-satoshi text-[10px] font-semibold tracking-wider text-white/80 uppercase">
-                    START FRAME
-                  </span>
+              <div className="relative flex h-32 w-full items-center justify-center">
+                {/* Central node */}
+                <div className="absolute left-1/2 top-1/2 z-10 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-white/15 shadow-lg backdrop-blur-md transition-transform duration-300 group-hover:scale-110">
+                  <span className="material-symbols-outlined text-[18px] text-white/90">hub</span>
                 </div>
-                <div className="-ml-8 flex h-28 w-28 rotate-3 transform flex-col items-center justify-center gap-1.5 rounded-2xl border border-white/20 bg-white/15 shadow-xl backdrop-blur-md transition-transform duration-300 group-hover:rotate-6">
-                  <span className="text-xl font-bold text-white">+</span>
-                  <span className="font-satoshi text-[10px] font-semibold tracking-wider text-white/80 uppercase">
-                    END FRAME
-                  </span>
+                {/* Connecting lines (SVG) */}
+                <svg className="absolute inset-0 h-full w-full" viewBox="0 0 200 128" fill="none">
+                  <line x1="100" y1="64" x2="42" y2="28" stroke="white" strokeOpacity="0.12" strokeWidth="1" />
+                  <line x1="100" y1="64" x2="158" y2="24" stroke="white" strokeOpacity="0.12" strokeWidth="1" />
+                  <line x1="100" y1="64" x2="38" y2="100" stroke="white" strokeOpacity="0.12" strokeWidth="1" />
+                  <line x1="100" y1="64" x2="164" y2="96" stroke="white" strokeOpacity="0.12" strokeWidth="1" />
+                  <line x1="100" y1="64" x2="100" y2="14" stroke="white" strokeOpacity="0.10" strokeWidth="1" />
+                </svg>
+                {/* Orbiting nodes */}
+                <div className="absolute left-[14%] top-[14%] flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-white/10 text-[10px] text-white/70 shadow-md transition-transform duration-500 group-hover:-translate-y-1">
+                  😊
+                </div>
+                <div className="absolute right-[14%] top-[10%] flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/10 text-[10px] text-white/70 shadow-md transition-transform duration-500 group-hover:translate-x-1">
+                  💭
+                </div>
+                <div className="absolute left-[12%] bottom-[10%] flex h-7 w-7 items-center justify-center rounded-full border border-white/15 bg-white/10 text-[10px] text-white/70 shadow-md transition-transform duration-500 group-hover:translate-y-1">
+                  📝
+                </div>
+                <div className="absolute right-[12%] bottom-[14%] flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-white/10 text-[10px] text-white/70 shadow-md transition-transform duration-500 group-hover:translate-x-1">
+                  🧠
+                </div>
+                <div className="absolute left-1/2 top-[2%] flex h-6 w-6 -translate-x-1/2 items-center justify-center rounded-full border border-white/10 bg-white/8 text-[9px] text-white/60 shadow-sm transition-transform duration-500 group-hover:-translate-y-1">
+                  ✨
                 </div>
               </div>
             </div>

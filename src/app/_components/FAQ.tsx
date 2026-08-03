@@ -5,37 +5,37 @@ import RevealOnScroll from "./RevealOnScroll";
 
 const FAQS_LEFT = [
   {
-    question: "What can I create with ComradeAI?",
+    question: "What exactly is Comrade AI?",
     answer:
-      "ComradeAI allows you to generate high-resolution AI images, cinematic video clips, storyboards, and custom visual assets using simple text prompts and reference frames.",
+      "Comrade AI is your personal AI companion that you can journal with, chat with, and talk to via voice. It remembers your conversations, understands your emotional patterns, and helps you reflect, grow, and feel heard.",
   },
   {
-    question: "Do I need design or video skills?",
+    question: "Is my journal private and secure?",
     answer:
-      "No technical background is needed. Our intuitive prompt editor, visual presets, and automated keyframes handle composition, lighting, and motion for you.",
+      "Absolutely. Your journals and conversations are encrypted and never shared with third parties. We don't sell your data or use it for advertising — your thoughts stay yours alone.",
   },
   {
-    question: "Does ComradeAI support both images and video?",
+    question: "How does the voice conversation work?",
     answer:
-      "Yes! You can create standalone images, animate static visuals into video clips, or build multi-frame keyframe sequences seamlessly.",
+      "Just hold to speak and have a natural, real-time conversation with your AI companion. It's like calling a friend who truly listens. Free users get 5 minutes of voice time to try it out.",
   },
 ];
 
 const FAQS_RIGHT = [
   {
-    question: "Is there a free plan available?",
+    question: "Is there a free plan?",
     answer:
-      "Yes, our Starter plan is 100% free forever and includes 100 monthly credits to test image generation and basic editing features.",
+      "Yes! Comrade AI is free to get started. You can journal as much as you want, chat with your AI companion, and try voice conversations with 5 free minutes included.",
   },
   {
-    question: "Can I use ComradeAI for commercial work?",
+    question: "How does the AI remember me?",
     answer:
-      "Yes, all assets generated on Pro and Studio plans come with full commercial rights for ads, social media, product launches, and client work.",
+      "Comrade AI uses a semantic memory system that learns from your journal entries and conversations over time. The more you share, the better it understands you and provides personalized, meaningful responses.",
   },
   {
-    question: "How do credits work?",
+    question: "Can I see my emotional patterns over time?",
     answer:
-      "Credits are used whenever you generate an image or render a video. Monthly credits renew at the start of each billing cycle, and additional credit top-ups are available anytime.",
+      "Yes! The Mind Graph and Emotional Cartography features visualize your mood shifts, recurring themes, and growth patterns across weeks and months with beautiful data-driven insights.",
   },
 ];
 
