@@ -115,41 +115,57 @@ export default function Footer() {
         </div>
 
         {/* Right Side: Navigation Links */}
-        <div className="flex flex-col text-left">
-          <h4 className="font-satoshi mb-4 text-[14px] font-medium text-white">
-            Navigation
-          </h4>
-          <div className="font-satoshi space-y-2.5 text-[14px] text-white/60">
-            <Link
-              href="#features"
-              className="block transition-colors hover:text-white"
-            >
-              Features
-            </Link>
-            <Link
-              href="#how-it-works"
-              className="block transition-colors hover:text-white"
-            >
-              Use Cases
-            </Link>
-            <Link
-              href="#testimonials"
-              className="block transition-colors hover:text-white"
-            >
-              Testimonials
-            </Link>
-            <Link
-              href="#pricing"
-              className="block transition-colors hover:text-white"
-            >
-              Pricing
-            </Link>
-            <Link
-              href="#faq"
-              className="block transition-colors hover:text-white"
-            >
-              FAQ
-            </Link>
+        <div className="flex gap-16 flex-wrap">
+          <div className="flex flex-col text-left">
+            <h4 className="font-satoshi mb-4 text-[14px] font-medium text-white">
+              Navigation
+            </h4>
+            <div className="font-satoshi space-y-2.5 text-[14px] text-white/60">
+              <Link
+                href="#features"
+                className="block transition-colors hover:text-white"
+              >
+                Features
+              </Link>
+              <Link
+                href="#how-it-works"
+                className="block transition-colors hover:text-white"
+              >
+                Use Cases
+              </Link>
+              <Link
+                href="#testimonials"
+                className="block transition-colors hover:text-white"
+              >
+                Testimonials
+              </Link>
+              <Link
+                href="#pricing"
+                className="block transition-colors hover:text-white"
+              >
+                Pricing
+              </Link>
+              <Link
+                href="#faq"
+                className="block transition-colors hover:text-white"
+              >
+                FAQ
+              </Link>
+            </div>
+          </div>
+
+          <div className="flex flex-col text-left">
+            <h4 className="font-satoshi mb-4 text-[14px] font-medium text-white">
+              Legal
+            </h4>
+            <div className="font-satoshi space-y-2.5 text-[14px] text-white/60">
+              <Link
+                href="/privacy"
+                className="block transition-colors hover:text-white"
+              >
+                Privacy Policy
+              </Link>
+            </div>
           </div>
         </div>
       </div>
