@@ -26,8 +26,8 @@ const NAV_ITEMS = [
 ];
 
 const FOOTER_ITEMS = [
-  { label: "Help", href: "/onboarding", icon: "help" },
-  { label: "Privacy", href: "/onboarding", icon: "security" },
+  { label: "Help", href: "https://x.com/10xpraash", icon: "help" },
+  { label: "Privacy", href: "/privacy", icon: "security" },
 ];
 
 export function AppSidebar() {
