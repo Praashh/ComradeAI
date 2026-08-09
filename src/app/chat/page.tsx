@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { UserButton } from "@clerk/nextjs";
 import { useConversations } from "@/lib/conversations-context";
 import { api } from "@/trpc/react";
 import { ChatCircleDots, Plus, Trash } from "@phosphor-icons/react";
@@ -16,9 +15,8 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
-import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/app/_components/AppSidebar";
-import { MobileBottomNav } from "@/app/_components/MobileBottomNav";
+import { AppShell } from "@/app/_components/AppShell";
+import { useLayoutLock } from "@/hooks/use-layout-lock";
 
 function ConversationList({ activeId }: { activeId?: number }) {
   const { conversations, isLoading, refetch } = useConversations();
@@ -141,93 +139,60 @@ export default function ChatPage() {
     },
   });
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    document.body.classList.add("layout-locked");
-    document.documentElement.classList.add("layout-locked");
-    return () => {
-      document.body.classList.remove("layout-locked");
-      document.documentElement.classList.remove("layout-locked");
-    };
-  }, []);
+  useLayoutLock();
 
   return (
-    <SidebarProvider className="landing-theme layout-locked h-dvh overflow-hidden bg-[#0a0a0a] text-white">
-      <AppSidebar />
-      <SidebarInset className="!h-dvh !max-h-dvh flex flex-col overflow-hidden bg-[#0a0a0a]">
-        {/* Top Shell Navigation */}
-        <header className="w-full shrink-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/10 flex justify-between items-center px-4 py-3 sm:px-6 shadow-sm">
-          <div className="flex items-center gap-2">
-            <SidebarTrigger />
-            <Link href="/" className="font-instrument text-xl font-normal text-white tablet:hidden">
-              ComradeAI
-            </Link>
-          </div>
-          <div className="flex items-center">
-            <UserButton
-              appearance={{
-                elements: {
-                  userButtonAvatarBox: "w-[32px] h-[32px] border border-white/20",
-                },
-              }}
-            />
-          </div>
-        </header>
-
-        {/* Main Workspace Frame */}
-        <div className="flex flex-1 min-h-0 overflow-hidden bg-[#0a0a0a]">
-          {/* Chats Archive entries list column */}
-          <section className="w-full tablet:w-[320px] lg:w-[384px] shrink-0 border-r border-white/10 flex flex-col overflow-hidden bg-[#0a0a0a] flex-1 tablet:flex-initial">
-            <div className="p-4 bg-white/5 border-b border-white/10">
-              <div className="flex justify-between items-center">
-                <h2 className="font-instrument text-xl font-normal text-white">Chats</h2>
-                <button
-                  type="button"
-                  className="p-1.5 rounded-full hover:bg-white/10 text-white/70 hover:text-white transition-colors cursor-pointer"
-                  title="New Chat"
-                  onClick={() => createConversation.mutate({})}
-                  disabled={createConversation.isPending}
-                >
-                  <Plus size={18} weight="bold" />
-                </button>
-              </div>
-            </div>
-
-            <div className="flex-1 overflow-y-auto p-3 pb-28 space-y-2">
-              <ConversationList />
-            </div>
-          </section>
-
-          {/* Empty state chat view */}
-          <section className="hidden tablet:flex flex-1 min-w-0 flex-col items-center justify-center bg-[#0d0d0d] p-8 text-center relative">
-            <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-white/5 rounded-full blur-3xl pointer-events-none" />
-            <div className="max-w-md z-10">
-              <ChatCircleDots
-                size={56}
-                className="mx-auto mb-4 text-white/30"
-                weight="duotone"
-              />
-              <h3 className="font-instrument text-[32px] font-normal text-white mb-2">
-                Ask Comrade
-              </h3>
-              <p className="font-satoshi text-sm text-white/60 mb-6 leading-relaxed">
-                Select a conversation from the list or start a new chat to reflect with Comrade AI.
-              </p>
+    <AppShell>
+      {/* Main Workspace Frame */}
+      <div className="flex flex-1 min-h-0 overflow-hidden bg-[#0a0a0a]">
+        {/* Chats Archive entries list column */}
+        <section className="w-full tablet:w-[320px] lg:w-[384px] shrink-0 border-r border-white/10 flex flex-col overflow-hidden bg-[#0a0a0a] flex-1 tablet:flex-initial">
+          <div className="p-4 bg-white/5 border-b border-white/10">
+            <div className="flex justify-between items-center">
+              <h2 className="font-instrument text-xl font-normal text-white">Chats</h2>
               <button
                 type="button"
+                className="p-1.5 rounded-full hover:bg-white/10 text-white/70 hover:text-white transition-colors cursor-pointer"
+                title="New Chat"
                 onClick={() => createConversation.mutate({})}
                 disabled={createConversation.isPending}
-                className="font-satoshi bg-white text-black font-semibold px-6 py-2.5 rounded-full hover:bg-white/90 transition-all active:scale-95 cursor-pointer shadow-lg"
               >
-                New Chat
+                <Plus size={18} weight="bold" />
               </button>
             </div>
-          </section>
-        </div>
-      </SidebarInset>
+          </div>
 
-      {/* Mobile Bottom Navigation Bar */}
-      <MobileBottomNav />
+          <div className="flex-1 overflow-y-auto p-3 pb-28 space-y-2">
+            <ConversationList />
+          </div>
+        </section>
+
+        {/* Empty state chat view */}
+        <section className="hidden tablet:flex flex-1 min-w-0 flex-col items-center justify-center bg-[#0d0d0d] p-8 text-center relative">
+          <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-white/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="max-w-md z-10">
+            <ChatCircleDots
+              size={56}
+              className="mx-auto mb-4 text-white/30"
+              weight="duotone"
+            />
+            <h3 className="font-instrument text-[32px] font-normal text-white mb-2">
+              Ask Comrade
+            </h3>
+            <p className="font-satoshi text-sm text-white/60 mb-6 leading-relaxed">
+              Select a conversation from the list or start a new chat to reflect with Comrade AI.
+            </p>
+            <button
+              type="button"
+              onClick={() => createConversation.mutate({})}
+              disabled={createConversation.isPending}
+              className="font-satoshi bg-white text-black font-semibold px-6 py-2.5 rounded-full hover:bg-white/90 transition-all active:scale-95 cursor-pointer shadow-lg"
+            >
+              New Chat
+            </button>
+          </div>
+        </section>
+      </div>
 
       {/* Mobile Floating Action Button */}
       <button
@@ -239,6 +204,6 @@ export default function ChatPage() {
       >
         <Plus size={24} weight="bold" />
       </button>
-    </SidebarProvider>
+    </AppShell>
   );
 }

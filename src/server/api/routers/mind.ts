@@ -11,10 +11,7 @@ export const mindRouter = createTRPCRouter({
       }),
     )
     .query(async ({ input, ctx }) => {
-      const userId = ctx.session.userId;
-      if (!userId) {
-        throw new Error("Unauthorized");
-      }
+      const userId = ctx.session.userId!;
 
       const response = await fetch(
         "https://api.supermemory.ai/v3/documents/documents",

@@ -1,21 +1,9 @@
 import { z } from "zod";
 import { protectedProcedure, createTRPCRouter } from "@/server/api/trpc";
 import { db } from "@/db/drizzle";
-import { journals, users } from "@/db/schema";
+import { journals } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
-
-async function getUserId(clerkId: string) {
-  const user = await db
-    .select({ id: users.id })
-    .from(users)
-    .where(eq(users.clerkId, clerkId))
-    .then((rows) => rows[0]);
-
-  if (!user) {
-    throw new Error("User not found");
-  }
-  return user.id;
-}
+import { getUserIdByClerkId } from "@/server/api/helpers/get-user-id";
 
 export const journalRouter = createTRPCRouter({
   create: protectedProcedure
@@ -28,7 +16,7 @@ export const journalRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const userId = await getUserId(ctx.session.userId!);
+      const userId = await getUserIdByClerkId(ctx.session.userId!);
 
       const [journal] = await db
         .insert(journals)
@@ -48,7 +36,7 @@ export const journalRouter = createTRPCRouter({
   get: protectedProcedure
     .input(z.object({ id: z.number() }))
     .query(async ({ input, ctx }) => {
-      const userId = await getUserId(ctx.session.userId!);
+      const userId = await getUserIdByClerkId(ctx.session.userId!);
 
       const journal = await db
         .select()
@@ -73,7 +61,7 @@ export const journalRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      const userId = await getUserId(ctx.session.userId!);
+      const userId = await getUserIdByClerkId(ctx.session.userId!);
 
       const [updated] = await db
         .update(journals)
@@ -92,7 +80,7 @@ export const journalRouter = createTRPCRouter({
     }),
 
   getAllJournals: protectedProcedure.query(async ({ ctx }) => {
-    const userId = await getUserId(ctx.session.userId!);
+    const userId = await getUserIdByClerkId(ctx.session.userId!);
 
     const allJournals = await db
       .select()
