@@ -88,18 +88,19 @@ export const conversationRouter = createTRPCRouter({
 
       if (!conversation) throw new Error("Conversation not found");
 
-      // Save user message
-      const [userMessage] = await db
-        .insert(messages)
-        .values({
-          conversationId: input.conversationId,
-          role: "user",
-          content: input.content,
-        })
-        .returning();
+      // Save user message and Recall memories and user profile for context
 
-      // Recall memories and user profile for context
-      const chatContext = await retrieveChatContext(input.content, clerkId);
+      const [[userMessage], chatContext] = await Promise.all([
+        db
+          .insert(messages)
+          .values({
+            conversationId: input.conversationId,
+            role: "user",
+            content: input.content,
+          })
+          .returning(),
+        retrieveChatContext(input.content, clerkId)
+      ])
 
       // Fetch conversation history for Groq
       const history = await db

@@ -16,12 +16,11 @@ export const feedbackRouter = createTRPCRouter({
     )
     .mutation(async ({ input, ctx }) => {
       // Get DB user details
-      const userId = await getUserIdByClerkId(ctx.session.userId!);
-      const dbUser = await db
+      const [userId, dbUser] = await Promise.all([getUserIdByClerkId(ctx.session.userId!), db
         .select({ email: users.email })
         .from(users)
         .where(eq(users.clerkId, ctx.session.userId!))
-        .then((rows) => rows[0]);
+        .then((rows) => rows[0])])
 
       const email = dbUser?.email ?? "unknown";
 
