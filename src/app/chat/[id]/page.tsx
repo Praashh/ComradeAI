@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect, useCallback, use } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { UserButton } from "@clerk/nextjs";
 import { useConversations } from "@/lib/conversations-context";
 import { api } from "@/trpc/react";
 import {
@@ -12,9 +11,8 @@ import {
   PaperPlaneRight,
   CircleNotch,
 } from "@phosphor-icons/react";
-import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/app/_components/AppSidebar";
-import { MobileBottomNav } from "@/app/_components/MobileBottomNav";
+import { AppShell } from "@/app/_components/AppShell";
+import { useLayoutLock } from "@/hooks/use-layout-lock";
 
 type Message = {
   id: number;
@@ -127,15 +125,7 @@ function ChatView({ conversationId }: { conversationId: number }) {
 
   useEffect(() => { scrollToBottom(); }, [data?.messages, optimisticMessage, scrollToBottom]);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    document.body.classList.add("layout-locked");
-    document.documentElement.classList.add("layout-locked");
-    return () => {
-      document.body.classList.remove("layout-locked");
-      document.documentElement.classList.remove("layout-locked");
-    };
-  }, []);
+  useLayoutLock();
 
   const handleSend = useCallback(() => {
     const trimmed = input.trim();
@@ -160,24 +150,9 @@ function ChatView({ conversationId }: { conversationId: number }) {
   );
 
   return (
-    <SidebarProvider className="landing-theme layout-locked h-dvh overflow-hidden bg-[#0a0a0a] text-white">
-      <AppSidebar />
-      <SidebarInset className="!h-dvh !max-h-dvh flex flex-col overflow-hidden bg-[#0a0a0a]">
-        {/* Top Shell Navigation */}
-        <header className="w-full shrink-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/10 flex justify-between items-center px-4 py-3 sm:px-6 shadow-sm">
-          <div className="flex items-center gap-2">
-            <SidebarTrigger />
-            <Link href="/" className="font-instrument text-xl font-normal text-white tablet:hidden">
-              ComradeAI
-            </Link>
-          </div>
-          <div className="flex items-center">
-            <UserButton appearance={{ elements: { userButtonAvatarBox: "w-[32px] h-[32px] border border-white/20" } }} />
-          </div>
-        </header>
-
-        {/* Main Content */}
-        <div className="flex flex-1 min-h-0 overflow-hidden bg-[#0a0a0a]">
+    <AppShell>
+      {/* Main Content */}
+      <div className="flex flex-1 min-h-0 overflow-hidden bg-[#0a0a0a]">
           {isLoading ? (
             <ChatSkeleton />
           ) : (
@@ -300,9 +275,7 @@ function ChatView({ conversationId }: { conversationId: number }) {
             </section>
           )}
         </div>
-      </SidebarInset>
-      <MobileBottomNav />
-    </SidebarProvider>
+    </AppShell>
   );
 }
 

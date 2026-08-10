@@ -8,11 +8,7 @@ const memoryInstance = Memory.getInstance();
 export const memoryRouter = createTRPCRouter({
     saveMemory: protectedProcedure.input(z.object({ journalText: z.string() })).mutation(async ({ input, ctx }) => {
         const { journalText } = input;
-        const userId = ctx.session.userId;
-
-        if (!userId) {
-            throw new Error("Unauthorized");
-        }
+        const userId = ctx.session.userId!;
 
         try {
             const result = await memoryInstance.saveInMemory(journalText, userId)
@@ -32,11 +28,7 @@ export const memoryRouter = createTRPCRouter({
 
     recallMemory: protectedProcedure.input(z.object({ journalText: z.string() })).query(async ({ input, ctx }) => {
         const { journalText } = input;
-        const userId = ctx.session.userId;
-
-        if (!userId) {
-            throw new Error("Unauthorized");
-        }
+        const userId = ctx.session.userId!;
 
         try {
             const result = await memoryInstance.recallMemory(journalText, userId)

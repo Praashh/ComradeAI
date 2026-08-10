@@ -4,6 +4,24 @@ import { useState } from "react";
 import Link from "next/link";
 import RevealOnScroll from "./RevealOnScroll";
 
+function CheckIcon() {
+  return (
+    <svg
+      className="h-4 w-4 shrink-0 text-white/80"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M5 13l4 4L19 7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export default function Pricing() {
   const [isYearly, setIsYearly] = useState(false);
 
@@ -98,51 +116,15 @@ export default function Pricing() {
 
                 <ul className="font-satoshi space-y-3 text-[14px] text-white/80">
                   <li className="flex items-center gap-3">
-                    <svg
-                      className="h-4 w-4 shrink-0 text-white/80"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M5 13l4 4L19 7"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                    <CheckIcon />
                     Unlimited journals
                   </li>
                   <li className="flex items-center gap-3">
-                    <svg
-                      className="h-4 w-4 shrink-0 text-white/80"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M5 13l4 4L19 7"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                    <CheckIcon />
                     Unlimited chat support
                   </li>
                   <li className="flex items-center gap-3">
-                    <svg
-                      className="h-4 w-4 shrink-0 text-white/80"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M5 13l4 4L19 7"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                    <CheckIcon />
                     5 min call with your AI best friend
                   </li>
                 </ul>
@@ -195,51 +177,15 @@ export default function Pricing() {
 
                 <ul className="font-satoshi space-y-3 text-[14px] text-white/80">
                   <li className="flex items-center gap-3">
-                    <svg
-                      className="h-4 w-4 shrink-0 text-white/80"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M5 13l4 4L19 7"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                    <CheckIcon />
                     Unlimited journals
                   </li>
                   <li className="flex items-center gap-3">
-                    <svg
-                      className="h-4 w-4 shrink-0 text-white/80"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M5 13l4 4L19 7"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                    <CheckIcon />
                     Unlimited chat support
                   </li>
                   <li className="flex items-center gap-3">
-                    <svg
-                      className="h-4 w-4 shrink-0 text-white/80"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M5 13l4 4L19 7"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                    <CheckIcon />
                     30 hour call with your AI best friend
                   </li>
                 </ul>
@@ -284,67 +230,19 @@ export default function Pricing() {
 
                 <ul className="font-satoshi space-y-3 text-[14px] text-white/80">
                   <li className="flex items-center gap-3">
-                    <svg
-                      className="h-4 w-4 shrink-0 text-white/80"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M5 13l4 4L19 7"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                    <CheckIcon />
                     Unlimited journals
                   </li>
                   <li className="flex items-center gap-3">
-                    <svg
-                      className="h-4 w-4 shrink-0 text-white/80"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M5 13l4 4L19 7"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                    <CheckIcon />
                     Unlimited chat support
                   </li>
                   <li className="flex items-center gap-3">
-                    <svg
-                      className="h-4 w-4 shrink-0 text-white/80"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M5 13l4 4L19 7"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                    <CheckIcon />
                     Unlimited call with your AI best friend
                   </li>
                   <li className="flex items-center gap-3">
-                    <svg
-                      className="h-4 w-4 shrink-0 text-white/80"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M5 13l4 4L19 7"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                    <CheckIcon />
                     Custom AI best friend
                   </li>
                 </ul>
@@ -356,4 +254,3 @@ export default function Pricing() {
     </section>
   );
 }
-
