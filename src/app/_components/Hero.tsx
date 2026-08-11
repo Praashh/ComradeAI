@@ -128,18 +128,34 @@ export default function Hero() {
             ref={subtitleRef}
             className="font-satoshi max-w-[440px] text-center text-[14px] leading-[1.45] font-normal text-white/80 sm:text-[15px]"
           >
-            {subtitleText.split("").map((char, i) => (
-              <span
-                key={i}
-                className="hero-char inline-block"
-                style={{
-                  opacity: 0.001,
-                  filter: "blur(10px)",
-                  transform: "translateY(20px)",
-                  whiteSpace: char === " " ? "pre" : undefined,
-                }}
-              >
-                {char === " " ? "\u00A0" : char}
+            {subtitleText.split(" ").map((word, wi) => (
+              <span key={wi} className="inline-block whitespace-nowrap">
+                {word.split("").map((char, ci) => (
+                  <span
+                    key={ci}
+                    className="hero-char inline-block"
+                    style={{
+                      opacity: 0.001,
+                      filter: "blur(10px)",
+                      transform: "translateY(20px)",
+                    }}
+                  >
+                    {char}
+                  </span>
+                ))}
+                {wi < subtitleText.split(" ").length - 1 && (
+                  <span
+                    className="hero-char inline-block"
+                    style={{
+                      opacity: 0.001,
+                      filter: "blur(10px)",
+                      transform: "translateY(20px)",
+                      whiteSpace: "pre",
+                    }}
+                  >
+                    {"\u00A0"}
+                  </span>
+                )}
               </span>
             ))}
           </p>
