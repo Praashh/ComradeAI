@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import RevealOnScroll from "./RevealOnScroll";
-import {MagicWandIcon} from "@phosphor-icons/react";
+import { MagicWandIcon } from "@phosphor-icons/react";
 
 const PROMPTS = [
   "worked through ideas...",
@@ -59,7 +59,7 @@ export default function BentoGrid() {
               <div className="mt-8 w-full max-w-[300px] self-center">
                 <div className="flex items-center justify-between rounded-full bg-white px-5 py-3.5 shadow-2xl transition-transform duration-300 group-hover:scale-[1.02]">
                   <div className="font-satoshi flex items-center gap-2.5 text-sm font-medium text-black/80">
-                    <MagicWandIcon size={20} /> 
+                    <MagicWandIcon size={20} />
                     <span className="text-black/50">Today</span>
                     <span className="text-black font-normal transition-all duration-300">
                       {PROMPTS[promptIndex]}
@@ -92,7 +92,7 @@ export default function BentoGrid() {
               <div className="relative flex h-44 w-full items-end justify-end overflow-hidden pr-4 pb-0">
                 <div className="absolute right-32 -bottom-6 h-52 w-40 -rotate-8 transform overflow-hidden rounded-[20px] border border-white/15 bg-[#161616] shadow-2xl transition-transform duration-500 group-hover:-rotate-12">
                   <Image
-                    src="https://framerusercontent.com/images/aX7MTNtljvKLZgoAQcYqRLk9iSs.png"
+                    src="/images/1.png"
                     alt="Cartography preview 1"
                     fill
                     className="object-cover object-bottom"
@@ -100,7 +100,7 @@ export default function BentoGrid() {
                 </div>
                 <div className="absolute right-16 -bottom-6 z-10 h-52 w-40 rotate-0 transform overflow-hidden rounded-[20px] border border-white/15 bg-[#161616] shadow-2xl transition-transform duration-500 group-hover:-translate-y-1">
                   <Image
-                    src="https://framerusercontent.com/images/WiXK9IxjSYae5vhRgnPTaFtm6M.png"
+                    src="/images/2.png"
                     alt="Cartography preview 2"
                     fill
                     className="object-cover object-bottom"
@@ -108,7 +108,7 @@ export default function BentoGrid() {
                 </div>
                 <div className="absolute right-0 -bottom-6 z-20 h-52 w-40 rotate-6 transform overflow-hidden rounded-[20px] border border-white/15 bg-[#161616] shadow-2xl transition-transform duration-500 group-hover:rotate-8">
                   <Image
-                    src="https://framerusercontent.com/images/fF3Mc4fgVZTZxt8trElosIucYU.png"
+                    src="/images/3.png"
                     alt="Cartography preview 3"
                     fill
                     className="object-cover object-bottom"
@@ -133,9 +133,9 @@ export default function BentoGrid() {
                 </p>
               </div>
 
-              <div className="absolute right-0 bottom-0 h-36 w-48 overflow-hidden rounded-tl-3xl">
+              <div className="absolute -right-10 bottom-0 h-36 w-48 overflow-hidden rounded-tl-3xl">
                 <Image
-                  src="https://framerusercontent.com/images/imfcpiKB8yuozI4ETpHn68JuY.png"
+                  src="/images/ask.png"
                   alt="Autumn landscape tree framing"
                   fill
                   className="object-cover object-right-top transition-transform duration-500 group-hover:scale-105"

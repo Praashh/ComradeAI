@@ -12,7 +12,7 @@ export default function CTA() {
           <div className="group relative flex min-h-[380px] w-full flex-col justify-center overflow-hidden rounded-[36px] border border-white/12 p-8 shadow-2xl sm:min-h-[420px] sm:p-12 md:p-16">
             {/* Background Image: Lake & Autumn Red Tree Sunset Landscape */}
             <Image
-              src="/images/cta-bg.png"
+              src="/images/cta.png"
               alt="ComradeAI landscape CTA background"
               fill
               className="object-cover object-right-bottom transition-transform duration-700 group-hover:scale-[1.02]"
