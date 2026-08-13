@@ -6,6 +6,7 @@
       "dependencies": {
         "@base-ui/react": "^1.5.0",
         "@clerk/nextjs": "^7.4.2",
+        "@dodopayments/nextjs": "^0.3.7",
         "@livekit/components-react": "^2.9.21",
         "@livekit/components-styles": "^1.2.0",
         "@milkdown/crepe": "^7.21.1",
@@ -20,6 +21,7 @@
         "@vercel/analytics": "^2.0.1",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
+        "dodopayments": "^2.45.1",
         "dotenv": "^17.4.2",
         "drizzle-orm": "^0.45.2",
         "groq-sdk": "^1.2.1",
@@ -32,6 +34,7 @@
         "server-only": "^0.0.1",
         "shadcn": "^4.8.3",
         "sonner": "^2.0.7",
+        "standardwebhooks": "^1.0.0",
         "superjson": "^2.2.1",
         "supermemory": "^4.21.1",
         "svix": "^1.95.1",
@@ -223,6 +226,10 @@
     "@csstools/css-syntax-patches-for-csstree": ["@csstools/css-syntax-patches-for-csstree@1.1.5", "", { "peerDependencies": { "css-tree": "^3.2.1" }, "optionalPeers": ["css-tree"] }, "sha512-oNjBvzLq2GPZtJphCjLqXow/cHySHSgtxvKZb7OqSZ/xHgw6NWNhfad+6AB9cLeVm6eA9d/qMll3JdEHjy6M+A=="],
 
     "@csstools/css-tokenizer": ["@csstools/css-tokenizer@4.0.0", "", {}, "sha512-QxULHAm7cNu72w97JUNCBFODFaXpbDg+dP8b/oWFAZ2MTRppA3U00Y2L1HqaS4J6yBqxwa/Y3nMBaxVKbB/NsA=="],
+
+    "@dodopayments/core": ["@dodopayments/core@0.3.13", "", { "dependencies": { "dodopayments": "^2.42.2", "standardwebhooks": "^1.0.0" }, "peerDependencies": { "zod": "^3.25.0 || ^4.0.0" } }, "sha512-s7c3V5p0P31GCmmC1zyE/N7KK2FNB/PZdD/D6ZnMM8glGM3bdzZGFXjFzchMvwRyefeUz+FBRKSw9tbc/tXhVg=="],
+
+    "@dodopayments/nextjs": ["@dodopayments/nextjs@0.3.7", "", { "dependencies": { "@dodopayments/core": "^0.3.13" }, "peerDependencies": { "next": "^14.0.0 || ^15.0.0 || ^16.0.0", "zod": "^3.25.0 || ^4.0.0" } }, "sha512-X3BDTeJh0/Oo8GbVg12OPNcKaVkclIpyjqO0pDzadCbC/7Isy/1Ytem03uv8ntqiQyg0hjycDQZXQ2H1H77svw=="],
 
     "@dotenvx/dotenvx": ["@dotenvx/dotenvx@1.69.2", "", { "dependencies": { "commander": "^11.1.0", "dotenv": "^17.2.1", "eciesjs": "^0.4.10", "enquirer": "^2.4.1", "execa": "^5.1.1", "fdir": "^6.2.0", "ignore": "^5.3.0", "object-treeify": "1.1.33", "picomatch": "^4.0.4", "which": "^4.0.0", "yocto-spinner": "^1.1.0" }, "bin": { "dotenvx": "src/cli/dotenvx.js" } }, "sha512-60Vh31k5bAAPq57Isx+Iopl2FrZQzZyUc4kh/OESgXiwhrKXqdxEn3JGTGSawng1DkkeC4jofFq1VpPJqNQx4w=="],
 
@@ -999,6 +1006,8 @@
     "diff": ["diff@8.0.4", "", {}, "sha512-DPi0FmjiSU5EvQV0++GFDOJ9ASQUVFh5kD+OzOnYdi7n3Wpm9hWWGfB/O2blfHcMVTL5WkQXSnRiK9makhrcnw=="],
 
     "doctrine": ["doctrine@2.1.0", "", { "dependencies": { "esutils": "^2.0.2" } }, "sha512-35mSku4ZXK0vfCuHEDAwt55dg2jNajHZ1odvF+8SSr82EsZY4QmXfuWso8oEd8zRhVObSN18aM0CjSdoBX7zIw=="],
+
+    "dodopayments": ["dodopayments@2.45.1", "", { "dependencies": { "standardwebhooks": "^1.0.0" }, "bin": { "dodopayments": "bin/cli" } }, "sha512-BQrzo/jF5L/oQnV7qfIDCFp/1kmJR4oUk8jgWbo+D8KHas9tT74XViTslKU+/cM5mPVNaUQ9lnPj2XLVpXTTSA=="],
 
     "dom-accessibility-api": ["dom-accessibility-api@0.6.3", "", {}, "sha512-7ZgogeTnjuHbo+ct10G9Ffp0mif17idi0IyWNVA/wcwcm7NPOD/WEHVP3n7n3MhXqxoIYm8d6MuZohYWIZ4T3w=="],
 

@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useAuth } from "@clerk/nextjs";
 import RevealOnScroll from "./RevealOnScroll";
+import { PRODUCTS } from "@/lib/products";
+import { useRouter } from "next/navigation";
 
 function CheckIcon() {
   return (
@@ -24,6 +27,41 @@ function CheckIcon() {
 
 export default function Pricing() {
   const [isYearly, setIsYearly] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { isSignedIn } = useAuth();
+  const router = useRouter();
+
+  const proProductId = isYearly
+    ? PRODUCTS.pro_yearly.productId
+    : PRODUCTS.pro_monthly.productId;
+
+  const handleCheckout = async () => {
+    if (!isSignedIn) {
+      router.push("/sign-up");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId: proProductId }),
+      });
+
+      const data = (await res.json()) as { checkout_url?: string };
+
+      if (data.checkout_url) {
+        window.location.href = data.checkout_url;
+      } else {
+        console.error("No checkout URL returned", data);
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <section
@@ -158,14 +196,14 @@ export default function Pricing() {
                   Extended monthly talk time for regular calls with your AI best friend.
                 </p>
 
-                <Link href="/sign-up" className="block w-full">
-                  <button
-                    type="button"
-                    className="font-satoshi w-full cursor-pointer rounded-full bg-white py-3 text-[14px] font-semibold text-black transition-all hover:bg-white/90 active:scale-98 shadow-lg"
-                  >
-                    Upgrade to Pro
-                  </button>
-                </Link>
+                <button
+                  type="button"
+                  onClick={handleCheckout}
+                  disabled={isLoading}
+                  className="font-satoshi w-full cursor-pointer rounded-full bg-white py-3 text-[14px] font-semibold text-black transition-all hover:bg-white/90 active:scale-98 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isLoading ? "Processing..." : "Upgrade to Pro"}
+                </button>
 
                 {/* Divider */}
                 <div className="relative my-6 flex items-center justify-center">
