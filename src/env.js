@@ -18,6 +18,10 @@ export const env = createEnv({
     LIVEKIT_API_KEY: z.string(),
     LIVEKIT_API_SECRET: z.string(),
     FEEDBACK_WEBHOOK_URL: z.string(),
+    DODO_PAYMENTS_API_KEY: z.string(),
+    DODO_PAYMENTS_WEBHOOK_KEY: z.string(),
+    DODO_PAYMENTS_RETURN_URL: z.string(),
+    DODO_PAYMENTS_ENVIRONMENT: z.enum(["test_mode", "live_mode"]),
   },
 
   /**
@@ -57,6 +61,10 @@ export const env = createEnv({
     LIVEKIT_API_KEY: process.env.LIVEKIT_API_KEY,
     LIVEKIT_API_SECRET: process.env.LIVEKIT_API_SECRET,
     FEEDBACK_WEBHOOK_URL: process.env.FEEDBACK_WEBHOOK_URL,
+    DODO_PAYMENTS_API_KEY: process.env.DODO_PAYMENTS_API_KEY,
+    DODO_PAYMENTS_WEBHOOK_KEY: process.env.DODO_PAYMENTS_WEBHOOK_KEY,
+    DODO_PAYMENTS_RETURN_URL: process.env.DODO_PAYMENTS_RETURN_URL,
+    DODO_PAYMENTS_ENVIRONMENT: process.env.DODO_PAYMENTS_ENVIRONMENT,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

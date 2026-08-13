@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useAuth } from "@clerk/nextjs";
 import RevealOnScroll from "./RevealOnScroll";
+import { PRODUCTS } from "@/lib/products";
 
 function CheckIcon() {
   return (
@@ -24,6 +26,13 @@ function CheckIcon() {
 
 export default function Pricing() {
   const [isYearly, setIsYearly] = useState(false);
+  const { isSignedIn } = useAuth();
+
+  const proProductId = isYearly
+    ? PRODUCTS.pro_yearly.productId
+    : PRODUCTS.pro_monthly.productId;
+
+  const checkoutUrl = `/api/checkout?productId=${proProductId}`;
 
   return (
     <section
@@ -158,14 +167,25 @@ export default function Pricing() {
                   Extended monthly talk time for regular calls with your AI best friend.
                 </p>
 
-                <Link href="/sign-up" className="block w-full">
-                  <button
-                    type="button"
-                    className="font-satoshi w-full cursor-pointer rounded-full bg-white py-3 text-[14px] font-semibold text-black transition-all hover:bg-white/90 active:scale-98 shadow-lg"
-                  >
-                    Upgrade to Pro
-                  </button>
-                </Link>
+                {isSignedIn ? (
+                  <a href={checkoutUrl} className="block w-full">
+                    <button
+                      type="button"
+                      className="font-satoshi w-full cursor-pointer rounded-full bg-white py-3 text-[14px] font-semibold text-black transition-all hover:bg-white/90 active:scale-98 shadow-lg"
+                    >
+                      Upgrade to Pro
+                    </button>
+                  </a>
+                ) : (
+                  <Link href="/sign-up" className="block w-full">
+                    <button
+                      type="button"
+                      className="font-satoshi w-full cursor-pointer rounded-full bg-white py-3 text-[14px] font-semibold text-black transition-all hover:bg-white/90 active:scale-98 shadow-lg"
+                    >
+                      Upgrade to Pro
+                    </button>
+                  </Link>
+                )}
 
                 {/* Divider */}
                 <div className="relative my-6 flex items-center justify-center">

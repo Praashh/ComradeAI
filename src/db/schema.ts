@@ -28,6 +28,14 @@ export const users = pgTable("users", {
 
   voiceSecondsUsed: integer("voice_seconds_used").default(0).notNull(),
 
+  // Subscription / billing fields (Dodo Payments)
+  subscriptionPlan: text("subscription_plan").default("free").notNull(),
+  subscriptionId: text("subscription_id"),
+  dodoCustId: text("dodo_customer_id"),
+  subscriptionStatus: text("subscription_status"),
+  subscriptionStartedAt: timestamp("subscription_started_at"),
+  subscriptionEndsAt: timestamp("subscription_ends_at"),
+
   comradeSummary: text("mira_summary"),
   comradeSummaryUpdatedAt: timestamp("mira_summary_updated_at"),
 
