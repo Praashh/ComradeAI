@@ -11,7 +11,7 @@ import {
 
 const memoryInstance = Memory.getInstance();
 
-const CHAT_MODEL = "llama-3.3-70b-versatile";
+const CHAT_MODEL = "openai/gpt-oss-120b";
 
 // ── Memory & Profile Retrieval ───────────────────────────────────────
 
