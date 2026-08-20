@@ -2,9 +2,13 @@
 
 import { useState, useCallback } from "react";
 import Link from "next/link";
+import { useAuth } from "@clerk/nextjs";
 
 export default function Masthead() {
+  const { isSignedIn } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const destination = isSignedIn ? "/write" : "/sign-up";
 
   const toggleMenu = useCallback(() => {
     setMenuOpen((prev) => !prev);
@@ -67,7 +71,7 @@ export default function Masthead() {
               <span className="material-symbols-outlined">menu</span>
             </button>
 
-            <Link href="/sign-up" className="tablet:block hidden">
+            <Link href={destination} className="tablet:block hidden">
               <button
                 type="button"
                 className="font-satoshi cursor-pointer rounded-full border border-white/20 bg-white/10 px-5 py-2 text-[13px] font-medium text-white transition-all hover:bg-white/15 active:scale-95"

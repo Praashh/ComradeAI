@@ -2,9 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useAuth } from "@clerk/nextjs";
 import RevealOnScroll from "./RevealOnScroll";
 
 export default function CTA() {
+  const { isSignedIn } = useAuth();
+  const destination = isSignedIn ? "/write" : "/sign-up";
+
   return (
     <section id="cta" className="tablet:px-8 bg-[var(--dark-bg)] px-4 py-24">
       <div className="section-wrapper">
@@ -33,7 +37,7 @@ export default function CTA() {
                 out — your AI companion is always here for you.
               </p>
 
-              <Link href="/sign-up">
+              <Link href={destination}>
                 <button
                   type="button"
                   className="font-satoshi cursor-pointer rounded-full bg-white px-7 py-3 text-[14px] font-semibold text-black shadow-xl transition-all hover:bg-white/90 active:scale-95"

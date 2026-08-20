@@ -284,6 +284,7 @@ describe("conversation router", () => {
       vi.mocked(db.update).mockReturnValue(updateChain as never);
 
       // Memory mocks
+      mockSaveInMemory.mockResolvedValue({ id: "doc_123" });
       mockRecallMemory.mockResolvedValue({
         results: [{ chunks: [{ content: "Past memory" }] }],
       });
@@ -349,6 +350,20 @@ describe("conversation router", () => {
       expect(systemMsg.content).toContain("User is a developer");
     });
 
+    it("saves user message to Supermemory in background", async () => {
+      setupSendMessageMocks({ conversationTitle: "Existing Title" });
+
+      await caller.conversation.sendMessage({
+        conversationId: 1,
+        content: "My favorite agent in Valorant is Jett",
+      });
+
+      expect(mockSaveInMemory).toHaveBeenCalledWith(
+        "My favorite agent in Valorant is Jett",
+        "user_test_123",
+      );
+    });
+
     it("auto-generates title on first message when no title exists", async () => {
       setupSendMessageMocks({
         conversationTitle: null,
@@ -371,6 +386,27 @@ describe("conversation router", () => {
 
       // Groq called twice: response + title
       expect(mockGroqCreate).toHaveBeenCalledTimes(2);
+    });
+
+    it("falls back to truncated message when title generation returns null", async () => {
+      setupSendMessageMocks({
+        conversationTitle: null,
+        historyLength: 0,
+      });
+
+      // Groq generates response but title generation fails (returns null)
+      mockGroqCreate
+        .mockResolvedValueOnce({
+          choices: [{ message: { content: "You're doing great!" } }],
+        })
+        .mockRejectedValueOnce(new Error("Title generation failed"));
+
+      await caller.conversation.sendMessage({
+        conversationId: 1,
+        content: "My favorite agent in Valorant is Jett and I love playing ranked",
+      });
+
+      expect(db.update).toHaveBeenCalled();
     });
 
     it("skips title generation when conversation already has a title", async () => {
@@ -429,6 +465,62 @@ describe("conversation router", () => {
     });
   });
 
+  describe("updateTitle", () => {
+    it("updates conversation title successfully", async () => {
+      const mockConversation = {
+        id: 1,
+        userId: 1,
+        title: "New Custom Title",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      // getUserId
+      const selectChain = mockChain([{ id: 1 }]);
+      vi.mocked(db.select).mockReturnValue(selectChain as never);
+
+      // update
+      const updateChain = mockChain(undefined);
+      (updateChain.returning as ReturnType<typeof vi.fn>).mockResolvedValue([
+        mockConversation,
+      ]);
+      vi.mocked(db.update).mockReturnValue(updateChain as never);
+
+      const result = await caller.conversation.updateTitle({
+        id: 1,
+        title: "New Custom Title",
+      });
+
+      expect(result.conversation).toEqual(mockConversation);
+      expect(result.conversation.title).toBe("New Custom Title");
+    });
+
+    it("throws when conversation to update is not found", async () => {
+      const selectChain = mockChain([{ id: 1 }]);
+      vi.mocked(db.select).mockReturnValue(selectChain as never);
+
+      const updateChain = mockChain(undefined);
+      (updateChain.returning as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+      vi.mocked(db.update).mockReturnValue(updateChain as never);
+
+      await expect(
+        caller.conversation.updateTitle({
+          id: 999,
+          title: "Non-existent",
+        }),
+      ).rejects.toThrow("Conversation not found");
+    });
+
+    it("rejects empty title (Zod validation)", async () => {
+      await expect(
+        caller.conversation.updateTitle({
+          id: 1,
+          title: "",
+        }),
+      ).rejects.toThrow();
+    });
+  });
+
   describe("delete", () => {
     it("deletes a conversation", async () => {
       // getUserId
@@ -450,6 +542,9 @@ describe("conversation router", () => {
       await expect(unauthCaller.conversation.getAll()).rejects.toThrow(
         "Unauthorized",
       );
+      await expect(
+        unauthCaller.conversation.updateTitle({ id: 1, title: "Test" }),
+      ).rejects.toThrow("Unauthorized");
     });
   });
 });

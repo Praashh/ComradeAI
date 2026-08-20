@@ -6,9 +6,51 @@ import Footer from "@/app/_components/Footer";
 import SmoothScroll from "@/app/_components/SmoothScroll";
 import RevealOnScroll from "@/app/_components/RevealOnScroll";
 
-const LAST_UPDATED = "August 8, 2026";
+const LAST_UPDATED = "August 20, 2026";
+
+const GUARANTEES = [
+  {
+    icon: "visibility_off",
+    title: "Zero Developer Viewing",
+    desc: "We will never view, inspect, browse, or eavesdrop on your private chats, journal entries, or voice transcripts. Your reflections are strictly between you and your AI companion.",
+  },
+  {
+    icon: "do_not_disturb_on",
+    title: "Never Sold or Monetized",
+    desc: "We do not sell, rent, trade, or broker your personal data, messages, or habits to advertisers, data brokers, or third parties under any circumstances.",
+  },
+  {
+    icon: "psychology_alt",
+    title: "No Public AI Training",
+    desc: "Your personal conversations and reflections are never used to train public, foundation, or open-source AI models. Your thoughts remain your own.",
+  },
+  {
+    icon: "lock",
+    title: "Strict Tenant Isolation",
+    desc: "All your data is encrypted at rest (AES-256) and in transit (TLS 1.3). Your semantic memory is isolated strictly to your unique account container.",
+  },
+];
 
 const SECTIONS = [
+  {
+    id: "our-guarantee",
+    icon: "verified_user",
+    title: "Our Absolute Privacy Commitments",
+    content: [
+      {
+        subtitle: "No Human Surveillance",
+        text: "The developer and team cannot and will not read your journals, chat logs, or memories. There is no internal back-office dashboard or admin tool for anyone to browse your conversations.",
+      },
+      {
+        subtitle: "Zero Data Selling",
+        text: "We will never sell or monetize your personal information or conversations. Our business model is based purely on software subscriptions, not selling user data or attention.",
+      },
+      {
+        subtitle: "Private Model Inference",
+        text: "When you interact with Comrade AI, your inputs are passed strictly to generate real-time responses through secure enterprise APIs with zero-data-retention commitments. Your data is not stored or repurposed to train general AI models.",
+      },
+    ],
+  },
   {
     id: "information-we-collect",
     icon: "database",
@@ -16,15 +58,15 @@ const SECTIONS = [
     content: [
       {
         subtitle: "Account Information",
-        text: "When you create an account, we collect your name, email address, and authentication credentials through our identity provider (Clerk). We do not store passwords directly.",
+        text: "When you create an account, we collect your name, email address, and authentication credentials through our identity provider (Clerk). We never store or see your passwords directly.",
       },
       {
         subtitle: "Journal & Conversation Data",
-        text: "Your journal entries, chat messages, and voice conversation transcripts are stored securely to provide our core service — understanding you and offering personalized support.",
+        text: "Your journal entries, chat messages, and voice transcripts are encrypted and stored in private databases and secure memory containers solely to provide you with your personal companion experience.",
       },
       {
-        subtitle: "Usage Data",
-        text: "We collect anonymous, aggregated usage analytics (via Vercel Analytics) such as page views and feature usage to improve the product. This data cannot be traced back to you personally.",
+        subtitle: "Usage Analytics",
+        text: "We collect strictly anonymized, aggregated telemetry (via Vercel Analytics) such as performance metrics to keep the app fast and reliable. This data contains no personal content and cannot identify you.",
       },
     ],
   },
@@ -35,15 +77,15 @@ const SECTIONS = [
     content: [
       {
         subtitle: "Personalization",
-        text: "Your journals and conversations are used exclusively to power your AI companion's memory and understanding. This data is never used to train general-purpose models or shared with third parties.",
+        text: "Your journals and conversations are used exclusively to power your AI companion's memory and empathetic responses. No one else has access to this contextual stream.",
       },
       {
-        subtitle: "Service Improvement",
-        text: "Aggregated, anonymized usage patterns help us improve features, fix bugs, and enhance user experience. Individual content is never reviewed by humans unless you explicitly request support.",
+        subtitle: "No Developer Snooping",
+        text: "Individual content is never accessed or reviewed by humans. Automated systems operate with strict least-privilege policies to ensure your thoughts stay confidential.",
       },
       {
-        subtitle: "Communication",
-        text: "We may send you service-related emails such as account verification, security alerts, and important product updates. We will never send unsolicited marketing emails.",
+        subtitle: "Essential Communication",
+        text: "We only send critical account notifications (e.g. security alerts or subscription receipts). We will never spam you or share your email with marketing firms.",
       },
     ],
   },
@@ -53,84 +95,84 @@ const SECTIONS = [
     title: "Data Protection & Security",
     content: [
       {
-        subtitle: "Encryption",
-        text: "All data is encrypted in transit using TLS 1.3 and at rest using AES-256 encryption. Your journal entries and conversations are protected at every step of their lifecycle.",
+        subtitle: "Enterprise-Grade Encryption",
+        text: "All data is encrypted in transit using modern TLS 1.3 and at rest using AES-256. Database records and semantic vector indexes are protected at every tier.",
       },
       {
-        subtitle: "Infrastructure",
-        text: "Our services are hosted on secure, SOC 2 compliant infrastructure. We leverage industry-standard security practices including regular audits, access controls, and monitoring.",
+        subtitle: "Secure Infrastructure",
+        text: "Hosted on SOC 2 compliant cloud infrastructure with continuous monitoring, automated security patches, and strict perimeter firewalls.",
       },
       {
         subtitle: "Access Controls",
-        text: "Only you can access your personal data. Our team cannot read your journals or conversations. Administrative access to infrastructure is restricted, audited, and protected by multi-factor authentication.",
+        text: "Strict cryptographic and container-level access barriers prevent cross-user leakage. Administrative access to raw databases requires hardware multi-factor authentication and is heavily audited.",
       },
     ],
   },
   {
     id: "your-rights",
     icon: "person",
-    title: "Your Rights & Controls",
+    title: "Your Rights & Total Control",
     content: [
       {
-        subtitle: "Data Export",
-        text: "You can request a full export of all your data at any time. We'll provide your information in a standard, machine-readable format within 30 days of your request.",
+        subtitle: "Instant Data Deletion",
+        text: "You can delete individual conversations, journals, or your entire account at any moment. When deleted, all associated chat history and semantic memories are permanently and irreversibly purged from our databases.",
       },
       {
-        subtitle: "Data Deletion",
-        text: "You can delete your account and all associated data at any time. Upon deletion, all your journals, conversations, and AI memory are permanently and irreversibly removed from our systems within 30 days.",
+        subtitle: "Full Data Export",
+        text: "You own your data. You can request a complete export of your journals and conversations at any time in standard machine-readable JSON/Markdown format.",
       },
       {
-        subtitle: "Opt-Out",
-        text: "You can opt out of anonymous analytics collection at any time through your account settings without affecting your access to any features.",
+        subtitle: "Opt-Out of Analytics",
+        text: "You can disable anonymous telemetry in your account settings at any time without impacting your companion features or AI memory.",
       },
     ],
   },
   {
     id: "third-parties",
     icon: "group",
-    title: "Third-Party Services",
+    title: "Third-Party Service Providers",
     content: [
       {
-        subtitle: "AI Processing",
-        text: "We use third-party AI providers to power conversations. Your data is sent to these providers solely for generating responses and is not retained by them beyond the immediate request, in accordance with their data processing agreements.",
+        subtitle: "Enterprise AI Inference",
+        text: "AI processing uses enterprise privacy endpoints with strict contractual zero-retention policies. Your private thoughts are not used to train models.",
       },
       {
-        subtitle: "Authentication",
-        text: "We use Clerk for secure authentication. Clerk processes your login credentials under their own privacy policy and does not have access to your journal or conversation content.",
+        subtitle: "Authentication (Clerk)",
+        text: "Clerk manages authentication securely. Clerk handles login credentials and never has access to your journal entries or chat conversations.",
       },
       {
-        subtitle: "Analytics",
-        text: "Vercel Analytics collects anonymized, aggregate usage data. No personally identifiable information or content is shared with analytics providers.",
+        subtitle: "Payment Processing",
+        text: "Payment details are processed directly by certified PCI-DSS compliant providers (Dodo Payments). We never handle or store your credit card information.",
       },
     ],
   },
   {
     id: "cookies",
     icon: "cookie",
-    title: "Cookies & Local Storage",
+    title: "Cookies & Tracking",
     content: [
       {
-        subtitle: "Essential Cookies",
-        text: "We use strictly necessary cookies for authentication and session management. These cookies are required for the service to function and cannot be disabled.",
+        subtitle: "Essential Cookies Only",
+        text: "We only use essential cookies strictly necessary for authenticating your session and keeping you logged in.",
       },
       {
-        subtitle: "No Tracking Cookies",
-        text: "We do not use advertising cookies, tracking pixels, or any form of cross-site tracking. We are not an ad company and will never monetize your browsing behavior.",
+        subtitle: "Zero Advertising Trackers",
+        text: "We do not use advertising trackers, Meta Pixels, Google Ads trackers, or cross-site tracking technologies. We never track you across the web.",
       },
     ],
   },
   {
     id: "changes",
     icon: "history",
-    title: "Changes to This Policy",
+    title: "Policy Changes & Integrity",
     content: [
       {
-        subtitle: "Notification",
-        text: "We will notify you of any material changes to this privacy policy via email and an in-app notification at least 30 days before changes take effect. Continued use of the service after changes constitutes acceptance.",
+        subtitle: "Advance Notice",
+        text: "Any material changes to our privacy policy will be announced via email and in-app notice at least 30 days prior. We will never quietly weaken our privacy protections.",
       },
       {
-        subtitle: "Version History",
-        text: "We maintain a complete history of changes to this policy. You can request previous versions at any time by contacting us.",
+        subtitle: "Direct Contact",
+        text: "You can contact our engineering team directly at any time regarding security questions, audits, or data requests.",
       },
     ],
   },
@@ -167,16 +209,48 @@ export default function PrivacyPage() {
                 </span>
               </h1>
 
-              <p className="font-satoshi mx-auto mt-4 max-w-[440px] text-center text-[14px] leading-[1.45] font-normal text-white/80 sm:text-[15px]">
-                Comrade AI is built on the belief that your most personal
-                thoughts deserve the highest level of protection. Here&apos;s
-                exactly how we handle your data.
+              <p className="font-satoshi mx-auto mt-4 max-w-[500px] text-center text-[14px] leading-[1.45] font-normal text-white/80 sm:text-[15px]">
+                Comrade AI is built on the core principle that your thoughts and conversations are completely private. We never sell, view, or use your data for advertising or model training.
               </p>
 
               <p className="font-satoshi mt-6 text-[12px] font-semibold tracking-wider text-white/40 uppercase">
                 Last updated — {LAST_UPDATED}
               </p>
             </RevealOnScroll>
+          </section>
+
+          {/* Core Guarantees Callout Grid */}
+          <section className="tablet:px-8 border-t border-white/5 bg-[#0a0a0a] px-4 py-16">
+            <div className="section-wrapper">
+              <RevealOnScroll className="mb-10 text-center">
+                <h2 className="font-instrument text-[28px] font-normal text-white sm:text-[36px]">
+                  Our Ironclad Data Protection Guarantees
+                </h2>
+                <p className="font-satoshi text-sm text-white/60 mt-2 max-w-lg mx-auto">
+                  A transparent contract between you and Comrade AI.
+                </p>
+              </RevealOnScroll>
+
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                {GUARANTEES.map((g, i) => (
+                  <RevealOnScroll key={i} className="flex">
+                    <div className="dark-gradient-card group relative flex w-full flex-col justify-start rounded-[24px] border border-white/12 p-6 shadow-xl transition-all duration-300 hover:border-white/30">
+                      <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 border border-white/10 transition-colors group-hover:border-white/20 group-hover:bg-white/10">
+                        <span className="material-symbols-outlined text-[20px] text-white">
+                          {g.icon}
+                        </span>
+                      </div>
+                      <h3 className="font-satoshi text-[16px] font-medium text-white mb-2">
+                        {g.title}
+                      </h3>
+                      <p className="font-satoshi text-[13px] leading-relaxed text-white/60">
+                        {g.desc}
+                      </p>
+                    </div>
+                  </RevealOnScroll>
+                ))}
+              </div>
+            </div>
           </section>
 
           {/* Policy Sections */}

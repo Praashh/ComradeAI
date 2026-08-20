@@ -4,11 +4,14 @@ import { db } from "@/db/drizzle";
 import { conversations, messages } from "@/db/schema";
 import { eq, and, asc, desc } from "drizzle-orm";
 import { getUserIdByClerkId } from "@/server/api/helpers/get-user-id";
+import { Memory } from "@/lib/memory";
 import {
   retrieveChatContext,
   generateChatResponse,
   generateConversationTitle,
 } from "@/server/api/services/chat-service";
+
+const memoryInstance = Memory.getInstance();
 
 export const conversationRouter = createTRPCRouter({
   create: protectedProcedure
@@ -63,6 +66,37 @@ export const conversationRouter = createTRPCRouter({
       return { conversation, messages: allMessages };
     }),
 
+  updateTitle: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        title: z.string().min(1, "Title cannot be empty").max(100, "Title is too long"),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const userId = await getUserIdByClerkId(ctx.session.userId!);
+
+      const [updated] = await db
+        .update(conversations)
+        .set({
+          title: input.title.trim(),
+          updatedAt: new Date(),
+        })
+        .where(
+          and(
+            eq(conversations.id, input.id),
+            eq(conversations.userId, userId),
+          ),
+        )
+        .returning();
+
+      if (!updated) {
+        throw new Error("Conversation not found");
+      }
+
+      return { conversation: updated };
+    }),
+
   sendMessage: protectedProcedure
     .input(
       z.object({
@@ -89,7 +123,6 @@ export const conversationRouter = createTRPCRouter({
       if (!conversation) throw new Error("Conversation not found");
 
       // Save user message and Recall memories and user profile for context
-
       const [[userMessage], chatContext] = await Promise.all([
         db
           .insert(messages)
@@ -99,8 +132,15 @@ export const conversationRouter = createTRPCRouter({
             content: input.content,
           })
           .returning(),
-        retrieveChatContext(input.content, clerkId)
-      ])
+        retrieveChatContext(input.content, clerkId),
+      ]);
+
+      // Save user thought / context into Supermemory asynchronously
+      void Promise.resolve(
+        memoryInstance.saveInMemory(input.content, clerkId),
+      ).catch((err) => {
+        console.error(`[CHAT:MEMORY_SAVE] Failed to save chat memory: ${String(err)}`);
+      });
 
       // Fetch conversation history for Groq
       const history = await db
@@ -128,13 +168,15 @@ export const conversationRouter = createTRPCRouter({
 
       // Auto-generate title on first user message
       if (!conversation.title && history.length <= 1) {
-        const title = await generateConversationTitle(input.content);
-        if (title) {
-          await db
-            .update(conversations)
-            .set({ title, updatedAt: new Date() })
-            .where(eq(conversations.id, input.conversationId));
+        let title = await generateConversationTitle(input.content);
+        if (!title?.trim()) {
+          const trimmed = input.content.trim();
+          title = trimmed.length > 32 ? `${trimmed.slice(0, 32)}...` : trimmed;
         }
+        await db
+          .update(conversations)
+          .set({ title, updatedAt: new Date() })
+          .where(eq(conversations.id, input.conversationId));
       } else {
         await db
           .update(conversations)
