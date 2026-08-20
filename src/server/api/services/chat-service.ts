@@ -197,14 +197,21 @@ export async function generateConversationTitle(
         {
           role: "system",
           content:
-            "Generate a short title (3-5 words max) for this conversation. Return only the title, nothing else.",
+            "Generate a short, descriptive title (2-5 words max) for this conversation based on the user's first message. Return ONLY the plain title text without quotes, markdown, or punctuation prefix.",
         },
         { role: "user", content: userContent },
       ],
       temperature: 0.5,
       max_tokens: 20,
     });
-    return titleCompletion.choices[0]?.message?.content?.trim() ?? null;
+    const rawTitle = titleCompletion.choices[0]?.message?.content?.trim();
+    if (!rawTitle) return null;
+    // Strip leading/trailing quotes and clean extra whitespace
+    const cleaned = rawTitle
+      .replace(/^["'`]+|["'`]+$/g, "")
+      .replace(/^(Title:\s*)/i, "")
+      .trim();
+    return cleaned || null;
   } catch {
     console.log("[CHAT]: Title generation failed");
     return null;

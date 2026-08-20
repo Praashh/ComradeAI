@@ -10,9 +10,9 @@ const FAQS_LEFT = [
       "Comrade AI is your personal AI companion that you can journal with, chat with, and talk to via voice. It remembers your conversations, understands your emotional patterns, and helps you reflect, grow, and feel heard.",
   },
   {
-    question: "Is my journal private and secure?",
+    question: "Are my chats, journals, and voice calls private and secure?",
     answer:
-      "Absolutely. Your journals and conversations are encrypted and never shared with third parties. We don't sell your data or use it for advertising — your thoughts stay yours alone.",
+      "Absolutely. All data is encrypted at rest (AES-256) and in transit (TLS 1.3). The developer and team cannot and will not view your personal chats or journals. We never sell your data, use it for advertising, or train public AI models on your private thoughts.",
   },
   {
     question: "How does the voice conversation work?",
