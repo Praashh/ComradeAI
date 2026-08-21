@@ -22,6 +22,10 @@ jobs:
       LIVEKIT_API_SECRET: dummy_livekit_secret
       LIVEKIT_URL: dummy_livekit_url
       FEEDBACK_WEBHOOK_URL: dummy_feedback_webhook_url
+      DODO_PAYMENTS_API_KEY: dummy_dodo_payment_api_key
+      DODO_PAYMENTS_WEBHOOK_KEY: dummy_dodo_payment_webhook_key
+      DODO_PAYMENTS_RETURN_URL: dummy_dodo_payment_return_url
+      DODO_PAYMENTS_ENVIRONMENT: test_mode
 
     steps:
       - name: Checkout
