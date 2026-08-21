@@ -222,6 +222,7 @@ export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   const handleSubmit = useCallback(
     async (e: FormEvent) => {
@@ -250,7 +251,11 @@ export default function SignUpPage() {
   );
 
   const handleGoogleSignUp = useCallback(async () => {
-    if (!isLoaded || !signUp) return;
+    if (!isLoaded || !signUp || googleLoading) return;
+
+    setGoogleLoading(true);
+    setError("");
+
     try {
       await signUp.authenticateWithRedirect({
         strategy: "oauth_google",
@@ -258,12 +263,13 @@ export default function SignUpPage() {
         redirectUrlComplete: "/onboarding",
       });
     } catch (err: unknown) {
+      setGoogleLoading(false);
       const clerkError = err as { errors?: Array<{ longMessage?: string; message?: string }> };
       setError(
         clerkError.errors?.[0]?.longMessage ?? "Could not connect to Google.",
       );
     }
-  }, [isLoaded, signUp]);
+  }, [isLoaded, signUp, googleLoading]);
 
   if (step === "verify" && signUp) {
     return (
@@ -286,10 +292,20 @@ export default function SignUpPage() {
         type="button"
         className="auth-social-btn"
         onClick={handleGoogleSignUp}
+        disabled={googleLoading || loading || !isLoaded}
         id="sign-up-google"
       >
-        <GoogleIcon />
-        Continue with Google
+        {googleLoading ? (
+          <>
+            <span className="auth-spinner" />
+            Connecting to Google…
+          </>
+        ) : (
+          <>
+            <GoogleIcon />
+            Continue with Google
+          </>
+        )}
       </button>
 
       <div className="auth-divider">

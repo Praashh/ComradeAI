@@ -57,6 +57,7 @@ export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   const handleSubmit = useCallback(
     async (e: FormEvent) => {
@@ -91,7 +92,10 @@ export default function SignInPage() {
   );
 
   const handleGoogleSignIn = useCallback(async () => {
-    if (!isLoaded || !signIn) return;
+    if (!isLoaded || !signIn || googleLoading) return;
+
+    setGoogleLoading(true);
+    setError("");
 
     try {
       await signIn.authenticateWithRedirect({
@@ -100,12 +104,13 @@ export default function SignInPage() {
         redirectUrlComplete: "/chat",
       });
     } catch (err: unknown) {
+      setGoogleLoading(false);
       const clerkError = err as { errors?: Array<{ longMessage?: string; message?: string }> };
       setError(
         clerkError.errors?.[0]?.longMessage ?? "Could not connect to Google.",
       );
     }
-  }, [isLoaded, signIn]);
+  }, [isLoaded, signIn, googleLoading]);
 
   return (
     <div className="auth-card">
@@ -117,10 +122,20 @@ export default function SignInPage() {
         type="button"
         className="auth-social-btn"
         onClick={handleGoogleSignIn}
+        disabled={googleLoading || loading || !isLoaded}
         id="sign-in-google"
       >
-        <GoogleIcon />
-        Continue with Google
+        {googleLoading ? (
+          <>
+            <span className="auth-spinner" />
+            Connecting to Google…
+          </>
+        ) : (
+          <>
+            <GoogleIcon />
+            Continue with Google
+          </>
+        )}
       </button>
 
       <div className="auth-divider">
