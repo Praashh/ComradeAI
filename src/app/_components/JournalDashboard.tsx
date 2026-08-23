@@ -70,9 +70,8 @@ function ArchiveColumn({
   onSelectEntry: (id: number) => void;
 }) {
   return (
-    <section className={`w-full tablet:w-[320px] lg:w-[384px] shrink-0 border-r border-white/10 flex flex-col overflow-hidden transition-all duration-300 bg-[#0a0a0a] ${
-      focusMode ? "hidden" : activeJournalId ? "hidden tablet:flex" : "flex flex-1 tablet:flex-initial"
-    }`}>
+    <section className={`w-full tablet:w-[320px] lg:w-[384px] shrink-0 border-r border-white/10 flex flex-col overflow-hidden transition-all duration-300 bg-[#0a0a0a] ${focusMode ? "hidden" : activeJournalId ? "hidden tablet:flex" : "flex flex-1 tablet:flex-initial"
+      }`}>
       <div className="p-4 bg-white/5 border-b border-white/10">
         <h2 className="font-instrument text-xl font-normal text-white mb-3">Archive</h2>
         <div className="relative">
@@ -283,8 +282,8 @@ export default function JournalDashboard({ activeJournalId }: JournalDashboardPr
                       type="button"
                       onClick={() => setFocusMode(!focusMode)}
                       className={`material-symbols-outlined p-2 rounded-full transition-colors cursor-pointer ${focusMode
-                          ? "bg-white text-black"
-                          : "hover:bg-white/10 text-white/70 hover:text-white"
+                        ? "bg-white text-black"
+                        : "hover:bg-white/10 text-white/70 hover:text-white"
                         }`}
                       title={focusMode ? "Exit Focus Mode" : "Focus Mode"}
                     >
@@ -338,7 +337,7 @@ export default function JournalDashboard({ activeJournalId }: JournalDashboardPr
                 </p>
                 <NewJournalDialog>
                   <button type="button" className="font-satoshi bg-white text-black font-semibold px-6 py-2.5 rounded-full hover:bg-white/90 transition-all active:scale-95 cursor-pointer shadow-lg">
-                    Create First Entry
+                    Create a journal
                   </button>
                 </NewJournalDialog>
               </div>
