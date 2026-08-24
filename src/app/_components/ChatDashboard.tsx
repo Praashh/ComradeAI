@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dialog";
 import { AppShell } from "@/app/_components/AppShell";
 import { useLayoutLock } from "@/hooks/use-layout-lock";
+import { toast } from "sonner";
 
 // Format timestamp helper
 function formatConversationDate(dateObj?: Date | string | null) {
@@ -63,18 +64,16 @@ function MessageBubble({ message }: { message: Message }) {
       className={`flex flex-col ${isUser ? "items-end" : "items-start"} mb-6`}
     >
       <span
-        className={`text-[10px] font-bold tracking-widest uppercase mb-1.5 ${
-          isUser ? "text-white/40" : "text-white/80"
-        }`}
+        className={`text-[10px] font-bold tracking-widest uppercase mb-1.5 ${isUser ? "text-white/40" : "text-white/80"
+          }`}
       >
         {isUser ? "YOU" : "COMRADE AI"}
       </span>
       <div
-        className={`max-w-[80%] sm:max-w-[70%] rounded-[24px] px-6 py-4 text-[0.95rem] leading-relaxed shadow-lg ${
-          isUser
+        className={`max-w-[80%] sm:max-w-[70%] rounded-[24px] px-6 py-4 text-[0.95rem] leading-relaxed shadow-lg ${isUser
             ? "bg-white text-black font-medium rounded-br-none"
             : "bg-[#161618] text-white/90 rounded-bl-none border border-white/12"
-        }`}
+          }`}
       >
         <p className="whitespace-pre-wrap">{message.content}</p>
       </div>
@@ -202,6 +201,15 @@ export default function ChatDashboard({
       { enabled: !!activeConversationId },
     );
 
+  // Guard: if a conversation ID was provided but the conversation doesn't exist, redirect back
+  useEffect(() => {
+    if (activeConversationId && !activeChatLoading && !activeChatData) {
+      toast.error("Conversation not found");
+      router.replace("/chat");
+    }
+  }, [activeConversationId, activeChatLoading, activeChatData, router]);
+
+
   const { data: journalsData } = api.journal.getAllJournals.useQuery();
   const latestJournal = journalsData?.journals?.[0];
 
@@ -305,11 +313,10 @@ export default function ChatDashboard({
         <main className="flex-1 flex flex-col tablet:flex-row overflow-hidden bg-[#0a0a0a]">
           {/* Chats Archive entries list column */}
           <section
-            className={`w-full tablet:w-[320px] lg:w-[384px] shrink-0 border-r border-white/10 flex flex-col overflow-hidden bg-[#0a0a0a] ${
-              activeConversationId
+            className={`w-full tablet:w-[320px] lg:w-[384px] shrink-0 border-r border-white/10 flex flex-col overflow-hidden bg-[#0a0a0a] ${activeConversationId
                 ? "hidden tablet:flex"
                 : "flex flex-1 tablet:flex-initial"
-            }`}
+              }`}
           >
             <div className="p-4 bg-white/5 border-b border-white/10 space-y-3">
               <div className="flex justify-between items-center">
@@ -361,11 +368,10 @@ export default function ChatDashboard({
                     <div
                       key={conv.id}
                       onClick={() => router.push(`/chat/${conv.id}`)}
-                      className={`group w-full text-left p-3.5 rounded-[18px] transition-all cursor-pointer border flex justify-between items-center gap-2 ${
-                        isActive
+                      className={`group w-full text-left p-3.5 rounded-[18px] transition-all cursor-pointer border flex justify-between items-center gap-2 ${isActive
                           ? "bg-white/15 border-white/20 shadow-lg text-white"
                           : "bg-white/5 hover:bg-white/10 border-white/10 text-white/80"
-                      }`}
+                        }`}
                     >
                       <div className="flex-1 min-w-0 pr-1">
                         <div className="flex justify-between items-center mb-1">
@@ -376,11 +382,10 @@ export default function ChatDashboard({
                           </span>
                         </div>
                         <h3
-                          className={`font-satoshi text-sm truncate transition-colors ${
-                            isActive
+                          className={`font-satoshi text-sm truncate transition-colors ${isActive
                               ? "text-white font-medium"
                               : "text-white/90 group-hover:text-white"
-                          }`}
+                            }`}
                         >
                           {title}
                         </h3>

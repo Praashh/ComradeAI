@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { api } from "@/trpc/react";
 import { useJournals } from "@/lib/journals-context";
 import NewJournalDialog from "@/app/_components/NewJournalDialog";
@@ -160,6 +161,14 @@ export default function JournalDashboard({ activeJournalId }: JournalDashboardPr
     { id: activeJournalId! },
     { enabled: !!activeJournalId }
   );
+
+  // Guard: if the journal ID was provided but the journal doesn't exist, redirect back
+  useEffect(() => {
+    if (activeJournalId && !activeLoading && !activeData) {
+      toast.error("Journal not found");
+      router.replace("/write");
+    }
+  }, [activeJournalId, activeLoading, activeData, router]);
 
   const saveJournal = api.journal.save.useMutation();
 
