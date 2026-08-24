@@ -112,13 +112,16 @@ export default function RootLayout({
         <body className="loaded bg-[#0a0a0a]" style={{ backgroundColor: "#0a0a0a" }}>
           <TRPCReactProvider>{children}</TRPCReactProvider>
           <Toaster
+            theme="dark"
             position="top-right"
             toastOptions={{
               style: {
-                background: "var(--paper-2)",
-                color: "var(--ink)",
-                border: "1px solid var(--rule-soft)",
-                fontFamily: "var(--body)",
+                background: "#161618",
+                color: "rgba(255,255,255,0.9)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                borderRadius: "16px",
+                fontSize: "0.875rem",
+                backdropFilter: "blur(12px)",
               },
             }}
           />
