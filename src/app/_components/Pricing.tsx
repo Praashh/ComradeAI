@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useAuth } from "@clerk/nextjs";
 import RevealOnScroll from "./RevealOnScroll";
 import { PRODUCTS } from "@/lib/products";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 function CheckIcon() {
   return (
@@ -135,7 +136,7 @@ export default function Pricing() {
                   Get started with unlimited journals, chat support, and quick AI companion calls.
                 </p>
 
-                <Link href="/sign-up" className="block w-full">
+                <Link href="/write" className="block w-full">
                   <button
                     type="button"
                     className="font-satoshi w-full cursor-pointer rounded-full border border-white/15 bg-white/5 py-3 text-[14px] font-medium text-white transition-all hover:bg-white/10 active:scale-98"
@@ -198,7 +199,14 @@ export default function Pricing() {
 
                 <button
                   type="button"
-                  onClick={handleCheckout}
+                  onClick={() => {
+                    toast.info("Currently, we are accepting private payments only, sliding into my DMs is the only way to go rn ");
+                    setIsLoading(true)
+                    setTimeout(() => {
+                      window.location.href = 'https://x.com/10xpraash';
+                      setIsLoading(false)
+                    }, 2000);
+                  }} // 29/08/2026 - Adding my x(dm) for now cuz dodo isn't verified
                   disabled={isLoading}
                   className="font-satoshi w-full cursor-pointer rounded-full bg-white py-3 text-[14px] font-semibold text-black transition-all hover:bg-white/90 active:scale-98 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >

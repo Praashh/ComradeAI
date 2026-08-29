@@ -114,8 +114,13 @@ export default function MindPage() {
         <header className="w-full shrink-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/10 flex justify-between items-center px-4 py-3 sm:px-6 shadow-sm">
           <div className="flex items-center gap-2">
             <SidebarTrigger />
-            <Link href="/" className="font-instrument text-xl font-normal text-white tablet:hidden">
-              ComradeAI
+            <Link href="/" className="group flex items-center gap-1.5 tablet:hidden">
+              <span className="font-instrument text-xl font-normal text-white">
+                ComradeAI
+              </span>
+              <span className="font-satoshi -translate-y-1 text-[8.5px] font-semibold tracking-wider uppercase px-1.5 py-[1.5px] leading-none rounded-full border border-white/15 bg-white/[0.08] text-white/60 select-none">
+                BETA
+              </span>
             </Link>
           </div>
           <div className="flex items-center">

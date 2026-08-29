@@ -27,10 +27,13 @@ export default function Masthead() {
         <div className="mx-auto flex w-full max-w-[1200px] items-center justify-between px-6 py-4">
           <Link
             href="/"
-            className="flex items-center gap-2 text-white transition-opacity hover:opacity-90"
+            className="group flex items-center gap-1.5 text-white transition-opacity hover:opacity-90"
           >
             <span className="font-instrument text-[22px] leading-none font-normal tracking-[0.01em] text-white">
               ComradeAI
+            </span>
+            <span className="font-satoshi -translate-y-1.5 text-[9px] font-semibold tracking-wider uppercase px-1.5 py-[2px] leading-none rounded-full border border-white/15 bg-white/[0.08] text-white/70 backdrop-blur-sm group-hover:border-white/25 group-hover:text-white/90 transition-all select-none">
+              BETA
             </span>
           </Link>
 

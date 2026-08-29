@@ -40,9 +40,12 @@ export function AppSidebar() {
         className="border-r border-white/10 bg-[#0a0a0a] text-white"
       >
         <SidebarHeader className="px-3 py-4 group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:py-3">
-          <Link href="/" className="flex items-center gap-2.5 overflow-hidden">
+          <Link href="/" className="group flex items-center gap-1.5 overflow-hidden">
             <span className="font-instrument font-normal text-white truncate text-lg tracking-tight group-data-[collapsible=icon]:hidden">
               ComradeAI
+            </span>
+            <span className="font-satoshi -translate-y-1 text-[8.5px] font-semibold tracking-wider uppercase px-1.5 py-[1.5px] leading-none rounded-full border border-white/15 bg-white/[0.08] text-white/60 group-data-[collapsible=icon]:hidden group-hover:border-white/25 group-hover:text-white/80 transition-all select-none">
+              BETA
             </span>
           </Link>
         </SidebarHeader>
