@@ -4,10 +4,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* ========== SATOSHI FONT (via @font-face, no npm package) ========== */
+/* ========== SATOSHI FONT (self-hosted) ========== */
 @font-face {
   font-family: "Satoshi";
-  src: url("https://framerusercontent.com/third-party-assets/fontshare/wf/TTX2Z3BF3P6Y5BQT3IV2VNOK6FL22KUT/7QYRJOI3JIMYHGY6CH7SOIFRQLZOLNJ6/KFIAZD4RUMEZIYV6FQ3T3GP5PDBDB6JY.woff2");
+  src: url("/fonts/satoshi-regular.woff2") format("woff2");
   font-display: swap;
   font-style: normal;
   font-weight: 400;
@@ -15,7 +15,7 @@
 
 @font-face {
   font-family: "Satoshi";
-  src: url("https://framerusercontent.com/third-party-assets/fontshare/wf/MPIFA4B3XXRNY2MJDGP6GOOOAF6EOCLO/W5E4ZFYPJ3V6JKMBGHB6YMITK6EWS2XA/QOMBWPST76ICDYF6WOBS7SQ7RBT67QW2.woff2");
+  src: url("/fonts/satoshi-regular-italic.woff2") format("woff2");
   font-display: swap;
   font-style: italic;
   font-weight: 400;
@@ -23,7 +23,7 @@
 
 @font-face {
   font-family: "Satoshi";
-  src: url("https://framerusercontent.com/third-party-assets/fontshare/wf/P2LQKHE6KA6ZP4AAGN72KDWMHH6ZH3TA/ZC32TK2P7FPS5GFTL46EU6KQJA24ZYDB/7AHDUZ4A7LFLVFUIFSARGIWCRQJHISQP.woff2");
+  src: url("/fonts/satoshi-medium.woff2") format("woff2");
   font-display: swap;
   font-style: normal;
   font-weight: 500;
@@ -31,7 +31,7 @@
 
 @font-face {
   font-family: "Satoshi";
-  src: url("https://framerusercontent.com/third-party-assets/fontshare/wf/NID3I7RITWZSKXRCJGOCMP5NOADJK6IG/2HLHGD7OBTWCOHW64YXOE5KFXHU4KJHM/ZHME2QIRFR7UPJ47NLY27RCAFY44CKZJ.woff2");
+  src: url("/fonts/satoshi-medium-italic.woff2") format("woff2");
   font-display: swap;
   font-style: italic;
   font-weight: 500;
@@ -39,7 +39,7 @@
 
 @font-face {
   font-family: "Satoshi";
-  src: url("https://framerusercontent.com/third-party-assets/fontshare/wf/LAFFD4SDUCDVQEXFPDC7C53EQ4ZELWQI/PXCT3G6LO6ICM5I3NTYENYPWJAECAWDD/GHM6WVH6MILNYOOCXHXB5GTSGNTMGXZR.woff2");
+  src: url("/fonts/satoshi-bold.woff2") format("woff2");
   font-display: swap;
   font-style: normal;
   font-weight: 700;
@@ -47,7 +47,7 @@
 
 @font-face {
   font-family: "Satoshi";
-  src: url("https://framerusercontent.com/third-party-assets/fontshare/wf/CDEBEFT2R7XKNGXSBBLZGMY4MMHZG75P/HEVKDGQCYDZ7Z6CDVR2ZQGBCTUD6ZARH/BKWEE3VKGTFABE37K2DTH625VUSN2N35.woff2");
+  src: url("/fonts/satoshi-bold-italic.woff2") format("woff2");
   font-display: swap;
   font-style: italic;
   font-weight: 700;

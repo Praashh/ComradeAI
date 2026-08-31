@@ -1,62 +1,35 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import Image from "next/image";
 import RevealOnScroll from "./RevealOnScroll";
 
 const TESTIMONIALS = [
   {
     quote:
-      "Comrade AI has completely transformed how I process my daily stress. It feels like having a compassionate friend who never judges.",
-    author: "Elena Rostova",
+      "Comrade AI has completely transforming how I process my daily stress. It feels like having a compassionate friend who never judges.",
+    author: "anonymous",
     role: "Product Designer",
-    avatar:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
-    rating: 5,
+    rating: 4,
   },
   {
     quote:
       "The voice mode is unbelievable. Talking out loud to Comrade on my evening walks helps me organize my thoughts better than anything else.",
-    author: "Marcus Chen",
-    role: "Software Architect",
-    avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80",
+    author: "Jack Chen",
+    role: "Software Engineer",
     rating: 5,
   },
   {
     quote:
       "Emotional Cartography opened my eyes to patterns I didn't even notice. I can track how my mood evolves throughout intense work sprints.",
-    author: "Sophia Patel",
-    role: "Creative Director",
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80",
-    rating: 5,
+    author: "Manish Shetty",
+    role: "Student",
+    rating: 4,
   },
   {
     quote:
       "Journaling on Comrade has become the highlight of my morning routine. It remembers context from weeks ago and connects the dots for me.",
     author: "Arjun Mehta",
     role: "Startup Founder",
-    avatar:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80",
-    rating: 5,
-  },
-  {
-    quote:
-      "I was skeptical at first, but the emotional intelligence of the responses is genuinely impressive. It helps me articulate feelings I can't put into words.",
-    author: "Lina Johansson",
-    role: "Therapist & Coach",
-    avatar:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&auto=format&fit=crop&q=80",
-    rating: 5,
-  },
-  {
-    quote:
-      "The privacy-first approach is what sold me. Knowing my thoughts are secure makes me so much more open in my reflections.",
-    author: "David Okafor",
-    role: "Security Engineer",
-    avatar:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&auto=format&fit=crop&q=80",
     rating: 5,
   },
 ];
@@ -113,17 +86,16 @@ export default function Testimonials() {
                 >
                   <div className="dark-gradient-card flex h-full w-full flex-col justify-between rounded-[40px] p-8 shadow-xl transition-all duration-300 hover:border-[var(--border-hover)]">
                     <div>
-                      <div className="mb-6 flex items-center gap-1 text-white/90">
-                        {Array.from({ length: item.rating }).map(
-                          (_, starIndex) => (
-                            <span
-                              key={starIndex}
-                              className="material-symbols-outlined text-[16px]"
-                            >
-                              star
-                            </span>
-                          ),
-                        )}
+                      <div className="mb-6 flex items-center gap-1">
+                        {Array.from({ length: 5 }).map((_, starIndex) => (
+                          <span
+                            key={starIndex}
+                            className={`material-symbols-outlined text-[16px] ${starIndex < item.rating ? "text-white" : "text-white/20"}`}
+                            style={starIndex < item.rating ? { fontVariationSettings: "'FILL' 1" } : undefined}
+                          >
+                            star
+                          </span>
+                        ))}
                       </div>
                       <p className="font-satoshi mb-8 text-[14px] leading-relaxed text-white/90 italic">
                         &ldquo;{item.quote}&rdquo;
@@ -131,14 +103,11 @@ export default function Testimonials() {
                     </div>
 
                     <div className="flex items-center gap-4 border-t border-white/10 pt-4">
-                      <Image
-                        src={item.avatar}
-                        alt={item.author}
-                        width={40}
-                        height={40}
-                        unoptimized
-                        className="h-10 w-10 rounded-full border border-white/20 object-cover"
-                      />
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 bg-gradient-to-br from-white/20 to-white/5">
+                        <span className="font-satoshi text-sm font-semibold text-white/90">
+                          {item.author.split(" ").map(n => n[0]).join("")}
+                        </span>
+                      </div>
                       <div>
                         <h4 className="font-satoshi text-sm font-medium text-[var(--text-pure-white)]">
                           {item.author}

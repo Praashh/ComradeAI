@@ -5,15 +5,6 @@
 import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
-const config = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "framerusercontent.com",
-      },
-    ],
-  },
-};
+const config = {};
 
 export default config;
